@@ -1,0 +1,8 @@
+{
+  "name": "project-architect",
+  "version": "1.0.0",
+  "description": "Project architecture planning and documentation generator. Interviews users in phases to capture vision, tech stack, and architecture decisions, then generates tailored planning documents and CLAUDE.md.",
+  "author": {
+    "name": "Vladimir"
+  }
+}

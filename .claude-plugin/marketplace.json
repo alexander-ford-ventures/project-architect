@@ -1,0 +1,14 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "local",
+  "owner": {
+    "name": "Vladimir"
+  },
+  "plugins": [
+    {
+      "name": "project-architect",
+      "source": "./",
+      "description": "Project architecture planning and documentation generator. Interviews users in phases to capture vision, tech stack, and architecture decisions, then generates tailored planning documents and CLAUDE.md."
+    }
+  ]
+}
