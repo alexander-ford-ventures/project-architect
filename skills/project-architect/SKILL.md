@@ -25,7 +25,7 @@ You orchestrate a 9-phase project bootstrap. You do not do the heavy lifting you
 
 ## State
 
-Persistent across the bootstrap: `docs/_architect_state.json`. Schema is in `docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md` (Section 11). Save after every batch, every agent dispatch, every commit. Delete only at end of Phase 6 cleanup.
+Persistent across the bootstrap: `docs/_architect_state.json`. Schema, lockfile protocol, and migration policy are documented in `references/state-schema.md`. Save after every batch, every agent dispatch, every commit. Delete only at end of Phase 6 cleanup.
 
 Lock file: `docs/_architect_state.lock` with `{pid, host, acquired_at}`. Held throughout the session. If a stale lock (>30 min old) exists at startup, offer to clear it.
 
@@ -442,7 +442,7 @@ If yes:
 ## Resumability checklist
 
 When resuming from `state.json`:
-1. Validate `schema_version` matches plugin version. If older, migrate per `docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md` (Section 11) migration policy.
+1. Validate `schema_version` matches plugin version. If older, migrate per `references/state-schema.md` migration policy.
 2. Check lock — if held by a different pid and `acquired_at > 30 min ago`, offer to clear.
 3. Re-run Preflight (model + effort).
 4. Print resume summary:
