@@ -38,7 +38,7 @@ This marketplace is registered under the alias `local` in
 ## Dependencies
 
 **Required:**
-- `commit-commands` (used for auto-commit cadence).
+- `commit-commands@claude-plugins-official` (used for auto-commit cadence).
 
 **Recommended:**
 - `superpowers` (for the optional `writing-plans` handoff).

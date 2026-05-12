@@ -4,6 +4,16 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.3] — 2026-05-12
+
+### Fixed
+
+- **`commit-commands` dependency resolved to wrong marketplace** (`/doctor` flagged this as a missing-dep error). Bare-string dependencies (`"dependencies": ["commit-commands"]`) resolve to `commit-commands@<same-marketplace-as-this-plugin>` = `commit-commands@local`, which doesn't exist. The actual installation lives in `commit-commands@claude-plugins-official`. Changed to the object form `{ "name": "commit-commands", "marketplace": "claude-plugins-official" }` per the canonical Claude Code plugin schema.
+
+### Notes
+
+- Bare strings in `dependencies` work only when the dep ships from the same marketplace as the dependent plugin. For cross-marketplace deps (the common case for plugins reusing Anthropic's official skills), use the object form with explicit `marketplace`.
+
 ## [2.0.2] — 2026-05-12
 
 ### Added
