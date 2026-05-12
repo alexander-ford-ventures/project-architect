@@ -1,256 +1,361 @@
 # Questioning Flow Reference
 
-Phased interview flow for project architecture discovery. Each phase builds on previous answers. Skip questions that are irrelevant based on prior answers.
+The interview is a tree: **universal kickoff** (always asked) → **per-type drill-down** (one branch) → **architecture deep dive** (per-area). Skip questions that prior answers render irrelevant.
 
 ## Table of Contents
-- [Phase 1: Vision & Scope](#phase-1-vision--scope)
-- [Phase 2: Tech Stack Decisions](#phase-2-tech-stack-decisions)
-- [Phase 3: Architecture Deep Dive](#phase-3-architecture-deep-dive)
-- [Question Routing Rules](#question-routing-rules)
+- [Universal Kickoff (Phase 0)](#universal-kickoff-phase-0)
+- [Per-Type Drill-Downs (Phase 1)](#per-type-drill-downs-phase-1)
+- [Tech Stack Drill-Downs (Phase 2)](#tech-stack-drill-downs-phase-2)
+- [Cost Modeling (Phase 2.5)](#cost-modeling-phase-25)
+- [Architecture Deep Dive (Phase 3)](#architecture-deep-dive-phase-3)
+- [Routing Rules](#routing-rules)
 
 ---
 
-## Phase 1: Vision & Scope
+## Universal Kickoff (Phase 0)
 
-Ask these first. Answers determine which Phase 2/3 questions to ask and which documents to generate.
+Always asked first, in 3 `AskUserQuestion` batches.
 
-### 1.1 Project Identity
-- What is the project name?
-- One-sentence description: what does it do and for whom?
-- What problem does it solve? Why does it need to exist?
+### Batch 1 — Identity & Type
+1. **Elevator pitch.** One sentence: what is it, who is it for, why does it exist? *(open-ended)*
+2. **Top-level project type.** *(multiple-choice from the taxonomy below)*
+3. **Sub-type within that category.** *(multiple-choice; options depend on Q2)*
 
-### 1.2 Project Type
-Determine the category (affects entire downstream flow):
-- **Web application** (SaaS, dashboard, marketplace, social platform, content site)
-- **Mobile application** (iOS, Android, cross-platform)
-- **Multi-platform system** (web + mobile + desktop + API)
-- **API / Backend service** (REST, GraphQL, gRPC, event-driven)
-- **CLI tool / Developer tool**
-- **Library / SDK / Package**
-- **Desktop application** (macOS, Windows, Linux, cross-platform)
-- **Embedded / IoT**
-- **AI/ML application** (model serving, RAG, agents)
-- **Other** (describe)
+### Batch 2 — Stage & Problem
+4. **Project stage.** *(multiple-choice: greenfield / extending existing / rewriting / migrating / PoC only)*
+5. **Primary problem & target users.** *(open-ended)*
 
-### 1.3 Target Users & Scale
-- Who are the primary users? (consumers, businesses, developers, internal team)
-- Expected scale: hobby/personal, startup MVP, growth-stage, enterprise?
-- Geographic scope: single region, multi-region, global?
-- Concurrent users estimate: <100, 100-10K, 10K-1M, 1M+?
+### Batch 3 — Constraints & Scale
+6. **Constraints.** *(multi-select: budget tight / regulated (GDPR/HIPAA/PCI-DSS/SOC2) / tight timeline / pre-existing tech mandates / open-source vs proprietary)*
+7. **Team & scale.** *(multiple-choice combining team size {solo / small / larger} × scale tier {hobby / MVP / growth / enterprise})*
+8. **Hard pre-existing decisions.** "Must be on AWS", "Must use Postgres", etc. *(open-ended)*
 
-### 1.4 Platforms & Clients
-Only ask if project type involves client applications:
-- Which platforms? (Web, iOS, Android, macOS, Windows, Linux)
-- Browser support requirements? (evergreen only, legacy IE support)
-- Offline capability needed?
-- PWA or native?
+After Batch 3: dispatch `research-scout` for **domain research** (similar projects, pitfalls for this type/domain, regulatory implications, market context). Findings → `docs/research/phase0-domain.md`.
 
-### 1.5 Constraints & Priorities
-- Budget constraints? (free tier only, moderate, enterprise budget)
-- Timeline: prototype/MVP or production-grade from day one?
-- Team size: solo developer, small team (2-5), larger team?
-- Regulatory requirements? (GDPR, HIPAA, SOC2, PCI-DSS, none)
-- Vendor lock-in tolerance: prefer open source, okay with managed services, no preference?
-- Any pre-existing decisions? (e.g., "must use PostgreSQL", "must deploy to AWS")
+### Top-level project type taxonomy
 
-### 1.6 Core Features (High-Level)
-- List the 3-5 most important features/capabilities
-- Any features explicitly out of scope for v1?
-- Real-time requirements? (chat, live updates, collaboration)
-- Content/media handling? (file uploads, images, video, documents)
-
----
-
-## Phase 2: Tech Stack Decisions
-
-Present options based on Phase 1 answers. For each category, list 2-4 options with one-line trade-off descriptions. Let the user decide.
-
-### 2.1 Languages & Runtime
-Ask based on project type:
-- **Web frontend**: TypeScript, JavaScript, Dart (Flutter Web)
-- **Web backend**: TypeScript/Node.js, Python, Go, Rust, Java/Kotlin, Ruby, Elixir, C#
-- **Mobile**: Swift (iOS), Kotlin (Android), React Native, Flutter, .NET MAUI
-- **Desktop**: Swift (macOS), C# (Windows), Rust, Electron, Tauri
-- **CLI**: Rust, Go, Python, TypeScript (with Bun/Node)
-
-### 2.2 Frontend Framework
-Skip if no frontend. Ask based on platform:
-- **Web**: Next.js, Nuxt, SvelteKit, Remix, Astro, plain React/Vue/Svelte
-- **Mobile**: SwiftUI, Jetpack Compose, React Native, Flutter, Expo
-- **Desktop**: SwiftUI, WPF/WinUI, Tauri, Electron
-
-### 2.3 Backend / API Framework
-Skip if purely client-side:
-- **Node.js**: Express, Fastify, Hono, NestJS, tRPC
-- **Python**: FastAPI, Django, Flask
-- **Go**: Gin, Echo, Chi, standard library
-- **Rust**: Axum, Actix-web, Rocket
-- **Serverless/Edge**: Cloudflare Workers, AWS Lambda, Vercel Functions, Supabase Edge Functions
-
-### 2.4 Database
-Skip if no data persistence needed:
-- **Relational**: PostgreSQL, MySQL, SQLite, CockroachDB
-- **Managed Postgres**: Supabase, Neon, PlanetScale (MySQL), Railway
-- **Document**: MongoDB, Firestore, DynamoDB
-- **Key-Value**: Redis, Upstash, Cloudflare KV
-- **Vector** (if AI/search): pgvector, Pinecone, Weaviate, Qdrant
-- **Edge/Embedded**: SQLite (Turso/Litestream), Cloudflare D1, Durable Objects
-
-### 2.5 ORM / Database Client
-Ask after database is chosen:
-- **TypeScript**: Drizzle, Prisma, Kysely, TypeORM
-- **Python**: SQLAlchemy, Django ORM, Tortoise
-- **Go**: GORM, sqlc, Ent
-- **Rust**: Diesel, SeaORM, sqlx
-
-### 2.6 Authentication
-Skip if no user accounts:
-- **Managed**: Clerk, Auth0, Supabase Auth, Firebase Auth, Kinde
-- **Self-hosted**: Better Auth, Lucia, NextAuth/Auth.js, Keycloak, Ory
-- **Enterprise SSO**: Okta, Azure AD, WorkOS
-- Follow up: Which auth methods? (email/password, OAuth providers, magic links, passkeys, MFA)
-
-### 2.7 Hosting & Deployment
-- **Frontend hosting**: Vercel, Cloudflare Pages, Netlify, AWS Amplify, self-hosted
-- **Backend hosting**: Cloudflare Workers, AWS (ECS/Lambda), GCP (Cloud Run), Railway, Fly.io, self-hosted
-- **Container orchestration** (if applicable): Kubernetes, Docker Compose, ECS
-- **CDN**: Cloudflare, CloudFront, Fastly, Vercel Edge
-
-### 2.8 Package Manager & Tooling
-- **JavaScript/TypeScript**: npm, pnpm, yarn, bun
-- **Python**: pip, uv, poetry, pdm
-- **Rust**: cargo
-- **Go**: go modules
-- **Monorepo tool** (if applicable): Turborepo, Nx, pnpm workspaces
-
-### 2.9 Styling & UI
-Skip if no frontend:
-- **CSS approach**: Tailwind CSS, CSS Modules, styled-components, vanilla CSS, UnoCSS
-- **Component library**: shadcn/ui, Radix, MUI, Ant Design, Chakra UI, Headless UI, none
-- **Design system**: custom, existing (Material, Apple HIG), none
-
-### 2.10 Payments & Billing
-Skip if no monetization:
-- Stripe, Lemon Squeezy, Paddle, RevenueCat (mobile), custom
-
-### 2.11 Email & Notifications
-Skip if not needed:
-- **Email**: Resend, SendGrid, Postmark, AWS SES, Plunk
-- **Push notifications**: OneSignal, Firebase Cloud Messaging, APNs
-- **Multi-channel**: Novu, Knock, Courier
-
-### 2.12 File Storage
-Skip if no file handling:
-- Cloudflare R2, AWS S3, Supabase Storage, Uploadthing, Minio
-
-### 2.13 AI / ML Integration
-Skip if no AI features:
-- **LLM provider**: Anthropic Claude, OpenAI, Google Gemini, local (Ollama)
-- **AI SDK**: Vercel AI SDK, LangChain, LlamaIndex, custom
-- **Embeddings/RAG**: pgvector, Pinecone, Weaviate
+```
+Web application          → SaaS | marketplace | content/blog | dashboard | social | portfolio
+                           | internal tool | e-commerce | course/LMS | community forum
+                           | wiki/knowledge base | newsletter platform
+Mobile application       → consumer | B2B | enterprise | utility | game (→ Game)
+                           | health & fitness | finance/banking | productivity
+                           | media (streaming/social)
+Multi-platform system    → web + mobile + desktop + API combined
+API / backend service    → REST | GraphQL | gRPC | WebSocket | event-driven | hybrid
+                           | webhook receiver | proxy/gateway | batch processor | scheduled service
+CLI tool                 → developer tool | system utility | data/CSV tool | network/security tool
+                           | package manager | build tool | scaffolder | REPL | productivity CLI
+Library / SDK / package  → SDK for a service | framework | utility lib | type lib
+                           | language binding / FFI | code generator | linter/formatter | test library
+Desktop application      → macOS | Windows | Linux | cross-platform
+                           | full app | menu bar / tray utility | system extension | daemon
+Browser extension        → Chrome/Edge | Firefox | Safari | cross-browser
+                           | productivity | content filter | DevTools | security/privacy
+Game                     → 2D | 3D | mobile | web | console | VR/AR
+AI/ML application        → model training | inference serving | RAG | agents | classical ML
+                           | computer vision | NLP | recommendation | time-series
+                           | reinforcement | multi-modal
+Data pipeline / ETL      → batch | streaming | hybrid
+                           | ETL | reverse-ETL | CDC | analytics pipeline | feature store
+Embedded / firmware/IoT  → MCU class (Cortex-M / RP2 / ESP32 / STM32) | edge gateway | hardware combo
+Infrastructure tool      → IaC | CLI for infra | platform / internal developer platform
+                           | cluster operator | observability/monitoring tool | CI/CD tool | networking
+Claude Code plugin       → command-focused | skill-focused | agent-focused | full plugin
+MCP server               → stdio | HTTP/SSE | Cloudflare Workers | other host
+                           | tool-focused | resource-focused | prompt-focused | full
+Web3 / smart contracts   → EVM (Solidity) | Solana (Rust/Anchor) | Move (Aptos/Sui) | Cairo (Starknet)
+Scientific / research    → numerical sim | data analysis (notebooks) | reproducible study
+                           | bioinformatics | geospatial/GIS
+AR / VR / spatial        → visionOS | Meta Quest | mobile AR (ARKit/ARCore) | WebXR
+Other                    → describe; route to closest neighbor
+```
 
 ---
 
-## Phase 3: Architecture Deep Dive
+## Per-Type Drill-Downs (Phase 1)
 
-Based on Phase 1 & 2 answers, dive deeper into areas that need architectural decisions.
+Adaptive — keep asking batches until each relevant area is locked. Typical 3–7 batches per project. Dispatch ad-hoc `research-scout` on red flags (see `research-prompts.md`). End-of-phase: `research-scout` for scope realism.
 
-### 3.1 Authentication Deep Dive
-Only if auth was selected:
-- Session management: JWT, session cookies, or hybrid?
-- Token storage strategy: httpOnly cookies, secure storage (mobile)?
-- Role-based access control (RBAC) or attribute-based (ABAC)?
-- Multi-tenancy model: shared DB, schema-per-tenant, DB-per-tenant?
-- OAuth providers to support: Google, GitHub, Apple, Microsoft, others?
+### Web application
+- Which platforms (web only / web + PWA / web + mobile)? Browser support floor?
+- Offline / sync requirements?
+- Public-facing vs auth-walled? Sign-up flow expectations?
+- Real-time features (chat, presence, live updates)?
+- Content / media handling (uploads, video, large files)?
+- Search needs (full-text, faceted, semantic)?
 
-### 3.2 Database Design Approach
-Only if database was selected:
-- Normalization level: fully normalized, practical denormalization, event-sourced?
-- Migration strategy: code-first (ORM generates), SQL-first, hybrid?
-- Key entities and their relationships (high-level ERD)?
-- Soft deletes or hard deletes?
-- Audit logging needs?
-- Multi-tenancy data isolation approach?
+### Mobile application
+- Platforms (iOS / Android / both / cross-platform)? Minimum OS versions?
+- Distribution (App Store + Play / TestFlight / enterprise / sideload)?
+- Offline capability and sync model?
+- Push notifications and background tasks?
+- Native integrations needed (camera, biometrics, payments, HealthKit, location)?
 
-### 3.3 API Design
-Only if building an API:
-- API style: REST, GraphQL, gRPC, tRPC, or hybrid?
-- Versioning strategy: URL path, header, none?
-- Rate limiting approach?
-- Pagination strategy: cursor-based, offset, keyset?
-- API documentation: OpenAPI/Swagger, GraphQL introspection, manual?
-- WebSocket or SSE for real-time?
+### Multi-platform system
+- Which platforms in scope (web / iOS / Android / macOS / Windows / Linux / API)?
+- Code-sharing strategy goal (max share / per-platform native UI)?
+- Sync / state model across clients?
+- Release cadence per platform?
 
-### 3.4 Security Architecture
-Ask if security was flagged as important or for enterprise/regulated projects:
-- Encryption at rest and in transit requirements?
-- Secret management: environment variables, vault (Infisical, HashiCorp Vault)?
-- Input validation and sanitization approach?
+### API / backend service
+- Consumers (internal-only / public-API / partner-only / SDK-distributed)?
+- Sync vs async vs event-driven boundary?
+- Auth required at the API edge?
+- Versioning policy (URL path / header / none)?
+- Rate-limiting needs?
+- Real-time delivery (WebSocket / SSE / polling)?
+
+### CLI tool
+- Distribution channel (homebrew / cargo / npm / pip / binary release / pkg manager combos)?
+- Interactive vs strictly scriptable? TTY assumptions?
+- Config file format (TOML / YAML / JSON / env)?
+- Plugin / extension model?
+- Cross-platform (Windows in scope)?
+- Telemetry policy (opt-in / opt-out / none)?
+
+### Library / SDK / package
+- Target consumers (other devs / specific platform / public)?
+- Public-API discipline (semver, deprecation policy)?
+- Bundled docs site (Mintlify / TypeDoc / Sphinx / Rustdoc)?
+- Example projects shipped alongside?
+- Tree-shaking / bundle-size targets?
+- TypeScript types shipped?
+
+### Desktop application
+- macOS / Windows / Linux / cross? Native vs Electron vs Tauri?
+- Distribution (App Store / Developer ID + notarization / direct download / package managers)?
+- Auto-update mechanism?
+- System integration (menu bar, tray, services, file associations, deep links)?
+- Sandboxing requirements?
+
+### Browser extension
+- Manifest V3? Cross-browser (Chrome / Firefox / Safari / Edge)?
+- Permissions (content scripts / activeTab / host permissions / declarativeNetRequest)?
+- DevTools panel / sidebar / popup?
+- Distribution (Chrome Web Store / Mozilla Add-ons / enterprise self-host)?
+- Data sync (chrome.storage.sync limits)?
+
+### Game
+- Engine (Unity / Unreal / Godot / custom / web-native)?
+- 2D / 3D / hybrid?
+- Single-player / multiplayer (netcode requirements)?
+- Platforms (mobile / PC / console / web / VR-AR)?
+- Monetization (paid / freemium / IAP / subscription / ads)?
+- Save / progression storage (local / cloud)?
+
+### AI/ML application
+- Training vs inference vs both?
+- Model source (own model / fine-tuned / API-only / open weights / mixture)?
+- Dataset handling and provenance?
+- Evaluation framework / benchmarks?
+- Inference latency targets?
+- Cost ceiling per request?
+- Vector store needs (RAG / semantic search)?
+
+### Data pipeline
+- Sources / sinks (databases, warehouses, APIs, files)?
+- Batch / streaming / hybrid?
+- Orchestrator (Airflow / Dagster / Prefect / Argo / cron / managed)?
+- Schedule / SLA?
+- Schema evolution policy?
+- Data quality / observability (Great Expectations / Soda / OpenLineage)?
+
+### Embedded / IoT
+- MCU class / SoC (Cortex-M / ESP32 / RP2 / STM32 / Linux SoC)?
+- RTOS? Bare-metal?
+- Power budget?
+- Connectivity (BLE / Wi-Fi / LoRa / cellular / none)?
+- OTA update mechanism?
+- Hardware combo (PCB design / off-the-shelf dev board)?
+
+### Infrastructure tool
+- Target users (own team / customers / OSS community)?
+- Cloud focus (multi-cloud / single)?
+- IaC integration (Terraform / Pulumi / CDK / CloudFormation / Crossplane)?
+- Operator / controller model (Kubernetes)?
+- Observability / logging / metrics?
+
+### Claude Code plugin
+- Components (skills / commands / agents / hooks / MCP servers / mix)?
+- Triggers (slash command / natural language / file change / event)?
+- Distribution (own marketplace / Anthropic marketplace / private)?
+- Configurable per project (`.claude/plugin-name.local.md`)?
+
+### MCP server
+- Host environment (stdio / HTTP+SSE / Cloudflare Workers / Vercel / other)?
+- Surface (tools / resources / prompts / mix)?
+- Auth model (OAuth / API key / none)?
+- Stateful (durable per-user) or stateless?
+- Languages (TypeScript / Python / Rust / Go)?
+
+### Web3 / smart contracts
+- Chain (Ethereum / L2s / Solana / Aptos / Sui / Starknet)?
+- Smart-contract language (Solidity / Rust / Move / Cairo)?
+- Indexing layer (The Graph / Goldsky / custom)?
+- Front-end integration (RainbowKit / wagmi / web3.js / ethers / web3.swift)?
+- Upgradeability pattern?
+- Audit budget / firm?
+
+### Scientific / research
+- Reproducibility requirements (environment freeze, seeds, container/Nix)?
+- Notebook vs scripts vs both?
+- Data scale (fits-in-RAM / out-of-core / cluster)?
+- Computation backend (NumPy / JAX / PyTorch / cuDF / Spark / Ray)?
+- Publication / pre-print artifacts?
+- Domain-specific tooling (bioinformatics, geospatial, etc.)?
+
+### AR / VR / spatial
+- Headset / device target (visionOS / Quest / smartphone AR / WebXR)?
+- Tracking / input (controllers / hand tracking / gaze / voice)?
+- Rendering engine (Unity / Unreal / RealityKit / Three.js / custom)?
+- Mixed-reality vs immersive?
+- Multi-user / shared sessions?
+- App-store distribution?
+
+---
+
+## Tech Stack Drill-Downs (Phase 2)
+
+For each category that applies (skip categories based on prior answers — see Routing Rules). See `tech-stack-options.md` for option tables.
+
+Grouped batches:
+1. **Language & runtime** (+ build/package manager)
+2. **Frontend framework** (skip if no frontend)
+3. **Backend framework** (skip if pure client-side)
+4. **Database + ORM** (skip if no persistence)
+5. **Authentication** (skip if no accounts)
+6. **Hosting (frontend + backend separately) + CDN**
+7. **Styling & UI** (skip if no frontend)
+8. **Payments** (skip if no monetization)
+9. **Email / notifications** (skip if not needed)
+10. **File storage** (skip if no files)
+11. **AI / ML integration** (skip if no AI features)
+12. **Observability stack** (skip if scale = hobby)
+13. **Testing stack**
+14. **CI / CD**
+
+For each major decision, the orchestrator files an ADR (one per major: language, framework choice, db engine, auth provider, host, etc.).
+
+End-of-phase: `research-scout` on stack-combination gotchas. Findings → `docs/research/phase2-stack.md`.
+
+---
+
+## Cost Modeling (Phase 2.5)
+
+1. Dispatch `research-scout` with the pricing-research prompt (see `research-prompts.md`).
+2. Walk the user through the findings: base costs, per-unit costs, hidden line items, free-tier limits.
+3. Optionally revise tech-stack decisions in light of cost reality (any revision spawns the `decision-revisor`).
+4. Capture cost estimates in `COST_MODEL.md` at MVP / growth / enterprise tiers.
+
+---
+
+## Architecture Deep Dive (Phase 3)
+
+Per-area drill-downs. Only ask about areas that apply (per prior phases). Each area concludes a "ready to record" question — if yes, file an ADR.
+
+### Auth (if auth chosen)
+- Session strategy (JWT / cookies / hybrid)?
+- Token storage (httpOnly / secure storage / both)?
+- RBAC / ABAC / simple permissions?
+- Multi-tenancy isolation model?
+- OAuth providers list?
+- Lockout / rate-limit policy?
+- MFA support (TOTP / passkeys / SMS)?
+
+### Database design (if DB chosen)
+- Normalization level (3NF / denormalized / event-sourced)?
+- Migration strategy (code-first / SQL-first / hybrid)?
+- Key entities + relationships (high-level ERD)?
+- Soft vs hard deletes?
+- Audit-logging needs?
+- Read replicas / sharding?
+- Multi-tenancy data isolation (shared DB / schema-per-tenant / DB-per-tenant)?
+
+### API design (if API)
+- Style (REST / GraphQL / gRPC / tRPC / hybrid)?
+- Versioning (URL path / header / none)?
+- Rate-limiting policy?
+- Pagination (cursor / offset / keyset)?
+- API docs (OpenAPI / GraphQL introspection / manual)?
+- Real-time channel (WebSocket / SSE / polling)?
+- Webhook outbound (events, retry, signature)?
+
+### Security architecture (if regulated OR security flagged)
+- Encryption at rest / in transit?
+- Secret management (env vars / Vault / Infisical / KMS)?
+- Input validation library / schema enforcement?
 - CORS policy?
-- CSP (Content Security Policy)?
-- Dependency vulnerability scanning?
-- Post-quantum cryptography needs?
-- Zero-knowledge / end-to-end encryption requirements?
+- CSP?
+- Dep-vuln scanning (Snyk / GitHub Advanced Security / Trivy)?
+- Post-quantum / E2E encryption needs?
+- Compliance gates (SOC2 / HIPAA / PCI-DSS / GDPR)?
 
-### 3.5 Frontend Architecture
-Only if frontend exists:
-- State management: React Context, Zustand, Redux, Jotai, signals?
-- Data fetching: TanStack Query, SWR, tRPC, Apollo (GraphQL)?
-- Routing approach: file-based (Next.js/Nuxt), manual?
-- SSR, SSG, CSR, or ISR strategy?
-- Internationalization (i18n) needed?
-- Accessibility (a11y) requirements?
-- Form handling: React Hook Form, Formik, native?
+### Frontend architecture (if frontend)
+- State management (Context / Zustand / Redux / Jotai / signals)?
+- Data fetching (TanStack Query / SWR / tRPC / Apollo)?
+- Routing model (file-based / manual)?
+- Rendering strategy (SSR / SSG / CSR / ISR / mix)?
+- i18n requirements?
+- a11y target (WCAG level)?
+- Form library?
+- Animation library?
 
-### 3.6 Testing Strategy
-- Unit testing framework: Vitest, Jest, pytest, Go testing?
-- Integration/API testing: Supertest, Playwright API testing?
-- E2E testing: Playwright, Cypress, Detox (mobile)?
-- Coverage target: percentage or critical paths only?
-- CI test automation?
+### Testing strategy
+- Unit framework (Vitest / Jest / pytest / cargo test / etc.)?
+- Integration / API test framework?
+- E2E framework (Playwright / Cypress / Detox / XCTest / Espresso)?
+- Coverage target?
+- CI integration cadence?
+- Visual / snapshot tests?
 
-### 3.7 DevOps & Deployment
-- Environment tiers: dev, staging, production?
-- CI/CD: GitHub Actions, GitLab CI, CircleCI, Buildkite?
-- Infrastructure as Code: Terraform, Pulumi, SST, CDK?
-- Container strategy: Docker, Podman, none (serverless)?
-- Preview deployments: per-PR, per-branch?
-- Blue-green or canary deployments?
+### DevOps & deployment
+- Environment tiers (dev / staging / production)?
+- CI / CD platform?
+- IaC (Terraform / Pulumi / SST / CDK / Crossplane / none)?
+- Containerization (Docker / Podman / native)?
+- Preview deploys (per-PR / per-branch)?
+- Blue-green / canary?
 
-### 3.8 Monitoring & Observability
-Ask if scale > MVP or if reliability is important:
-- Error tracking: Sentry, Bugsnag, Datadog?
-- Logging: structured logging, log aggregation?
-- APM: Datadog, New Relic, Grafana Cloud?
-- Uptime monitoring: Better Uptime, Checkly, Pingdom?
-- Analytics: PostHog, Mixpanel, Amplitude, Plausible?
+### Monitoring & observability (if scale > MVP)
+- Error tracking (Sentry / Bugsnag / Datadog)?
+- APM (Datadog / New Relic / Grafana Cloud)?
+- Logging (Loki / Datadog / Axiom / CloudWatch)?
+- Uptime monitoring?
+- Analytics (PostHog / Plausible / Mixpanel / Amplitude)?
+- Alerting destinations (Slack / PagerDuty / email)?
 
-### 3.9 Third-Party Integrations
-Ask if external services were mentioned:
-- Which external APIs/services need integration?
+### Third-party integrations
+- Which services are critical (which are nice-to-have)?
 - Webhook handling needs?
-- Queue/event system: Redis queues, SQS, Inngest, Trigger.dev?
-- Background job processing?
-- Cron/scheduled tasks?
+- Queue / event system?
+- Background jobs / scheduled tasks?
+- SDK quality / portability concerns?
+
+After all areas: **inline consistency check** (architect cross-checks decisions; surfaces contradictions for user resolution before doc gen).
+
+End-of-phase: `research-scout` on pattern validation. Findings → `docs/research/phase3-architecture.md`.
 
 ---
 
-## Question Routing Rules
+## Routing Rules
 
-Use these rules to skip irrelevant questions:
+Skip questions when prior answers make them irrelevant.
 
-| Phase 1 Answer | Skip |
+| Phase 0 answer | Skip in later phases |
 |---|---|
-| Project type = Library/SDK | Skip auth, database, hosting, UI, payments, notifications |
-| Project type = CLI tool | Skip frontend, UI, payments (usually), styling |
-| No user accounts needed | Skip all auth questions |
-| No data persistence | Skip database and ORM questions |
-| No frontend | Skip styling, UI components, frontend architecture |
-| No monetization | Skip payments & billing |
-| Budget = free tier only | Bias toward open-source and self-hosted options |
-| Scale = hobby/personal | Skip monitoring, enterprise security, multi-tenancy |
-| Team = solo | Simplify CI/CD, skip team collaboration tooling |
-| No regulatory requirements | Simplify security section |
-| Offline needed = yes | Include sync strategy, local-first architecture |
-| Real-time needed = yes | Include WebSocket/SSE architecture |
-| AI features = yes | Include AI/ML section, vector DB |
+| Project type = Library / SDK | Auth, database, hosting, UI, payments, notifications |
+| Project type = CLI tool | Frontend, UI, payments (usually), styling |
+| No user accounts | All auth questions |
+| No persistence | Database, ORM, schema design |
+| No frontend | Styling, components, frontend architecture |
+| No monetization | Payments & billing |
+| Budget = free-tier only | Bias options toward open-source / self-hosted |
+| Scale = hobby/personal | Monitoring deep dive, enterprise security, multi-tenancy |
+| Solo team | Simplify CI/CD; skip team collaboration tooling |
+| No regulatory requirements | Compliance section in security |
+| Offline = yes | Add sync strategy, local-first patterns |
+| Real-time = yes | WebSocket/SSE architecture, presence model |
+| AI features = yes | AI/ML section, vector DB, embeddings |
+| Stage = greenfield | Commit on `main`; no branch strategy questions |
+| Stage = extending/rewriting/migrating | Create `bootstrap/architect-<date>` branch |
