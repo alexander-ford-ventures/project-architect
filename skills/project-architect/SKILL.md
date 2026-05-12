@@ -58,7 +58,7 @@ Effort verification: not directly detectable from env. Trust the user's `/effort
 
 Claude Code's plugin schema only supports hard `dependencies`; there is no declarative soft / recommended-plugin field. We surface recommended plugins via a runtime probe here so missing ones are obvious before Phase 0.
 
-Recommended plugins (qualified names): `superpowers`, `claude-md-management`, `claude-code-setup`, `hookify`, `document-skills`.
+Recommended plugins (qualified names): `superpowers`, `claude-md-management`, `claude-code-setup`, `hookify`, `document-skills`, `fewer-permission-prompts`.
 
 1. For each recommended plugin, probe installation:
    ```bash
@@ -72,6 +72,7 @@ Recommended plugins (qualified names): `superpowers`, `claude-md-management`, `c
    - `claude-code-setup` — `claude plugin install claude-code-setup` — used by the `claude-tooling-author` agent for `.claude/` scaffolding.
    - `hookify` — `claude plugin install hookify` — used by `claude-tooling-author` when generating project hooks.
    - `document-skills` — `claude plugin install document-skills` — used by `document-author` for diagrams / artifacts.
+   - `fewer-permission-prompts` — `claude plugin install fewer-permission-prompts` — used by `claude-tooling-author` to tighten the generated `.claude/settings.json` permissions allowlist.
 3. If any are missing, ask once via `AskUserQuestion` (load via `ToolSearch` if needed):
    > "Continue with current plugins? (yes / install missing now / abort)"
 4. On `install missing now`: run each `claude plugin install <plugin>` sequentially; on each install failure, record and surface but do not abort the whole batch.
@@ -458,7 +459,7 @@ If yes:
 | Commit fails (pre-commit hook rejects) | Surface error, ask user. **Never** `--no-verify`. |
 | Push fails (network / auth) | Commit locally, queue push for next phase boundary. |
 | Required dep missing (`commit-commands`) | Refuse to start with explicit install command. |
-| Recommended (soft) dep missing (`superpowers`, `claude-md-management`, `claude-code-setup`, `hookify`, `document-skills`) | Handled proactively at Phase -1 "Soft-dependency check": probe each, offer install / continue / abort, record skipped ones in `state.recommended_plugins[].missing` so the generated `.claude/recommended-plugins.md` reflects the runtime choice. |
+| Recommended (soft) dep missing (`superpowers`, `claude-md-management`, `claude-code-setup`, `hookify`, `document-skills`, `fewer-permission-prompts`) | Handled proactively at Phase -1 "Soft-dependency check": probe each, offer install / continue / abort, record skipped ones in `state.recommended_plugins[].missing` so the generated `.claude/recommended-plugins.md` reflects the runtime choice. |
 | User said "no" to repo init then tries to commit | Detect at first commit attempt; offer to init now. |
 | Two terminals running architect concurrently | Lock file detects (other pid). Prompt user to clear if stale. |
 | Mid-session model switch to weaker model | Detect at next phase boundary by re-reading env; pause, re-prompt. |
