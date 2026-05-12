@@ -268,4 +268,198 @@ End of phase: dispatch `research-scout` with Phase 3 prompt (pattern validation)
 
 ---
 
-<!-- SKILL_E3_MARKER -->
+## Phase 4: Document Generation
+
+Load `references/document-catalog.md` for selection rules and the topological sort key.
+
+1. **Select templates** by evaluating each template's `generate_when` expression against `state.decisions`. Always-generated + type-anchored + matching conditional templates → selected list.
+2. **Topologically sort** by `depends_on`. Write upstream docs first.
+3. **Compute state slices**: for each selected template, extract only the `required_decisions` + `optional_decisions` keys from `state.decisions`.
+4. **Dispatch `document-author` agents in parallel batches of 8** (per `superpowers:dispatching-parallel-agents` pattern):
+   ```
+   For each batch in chunks(sorted_templates, 8):
+     For each template in batch:
+       Agent({
+         subagent_type: "project-architect:document-author",
+         model: "opus",
+         description: "Write {{template_name}}",
+         prompt: """
+           [MODEL DIRECTIVE]
+           Run with maximum effort. Apply extended thinking. Be thorough.
+
+           [INPUTS]
+           template_name: {{template_name}}
+           template_path: skills/project-architect/references/templates/{{template_name}}.md
+           state_slice: {{relevant decision keys as JSON}}
+           research_paths: [{{paths to relevant research files}}]
+           output_path: docs/{{template_name}}.md
+           cross_references: [{{list of doc filenames to link to}}]
+
+           [TASK]
+           Read the template. Read the state slice. Read the research findings.
+           Draft the document, populating sections with project-specific decisions.
+           Validate cross-references and placeholder resolution. Write to output_path.
+         """
+       })
+     wait_for_all(batch)
+   ```
+5. After each batch, commit each generated doc separately:
+   `docs: generate <DOC_NAME>` (one commit per doc, via `commit-commands:commit`).
+
+6. **In parallel with the last doc batch**, dispatch:
+   - `claude-md-author` agent → writes `/CLAUDE.md` and any per-folder CLAUDE.md.
+   - `claude-tooling-author` agent → writes `.claude/settings.json`, hooks/, agents/, commands/, recommended-plugins.md.
+
+7. After both return:
+   - Commit CLAUDE.md files: one commit per file or a batch commit `chore: add CLAUDE.md files`.
+   - Commit `.claude/` artifacts: `chore: add Claude Code project config`.
+
+8. Push if `state.git.push_strategy == "per_phase"` and `state.git.has_remote`:
+   ```bash
+   git push origin <branch>
+   ```
+
+9. State: `phase = "phase_5"`, save.
+
+---
+
+## Phase 5: Iteration
+
+Print a decision summary and offer the iteration menu:
+
+```
+✓ Bootstrap complete.
+
+DECISIONS:
+  ┌─────────────────────────────────────────────────────────────┐
+  │ Tech stack                                                   │
+  │   • Language: {{lang}} (ADR {{id}})                          │
+  │   • Frontend: {{fw}} (ADR {{id}})                            │
+  │   ...                                                        │
+  │ Architecture                                                 │
+  │   • Multi-tenancy: {{model}} (ADR {{id}})                    │
+  │   ...                                                        │
+  │ Generated {{N}} docs · {{M}} ADRs · {{K}} research findings  │
+  └─────────────────────────────────────────────────────────────┘
+
+What next?
+  (a) Approve all → Phase 6 (commit + plugin install)
+  (b) Revisit a decision → type its key
+  (c) Snapshot current as v1.0 → docs/versions/v1.0/ and continue
+  (d) Generate the implementation plan → Phase 7
+  (e) Show full decision tree
+  (f) Exit (resume later)
+```
+
+### Iteration loop
+
+Use `AskUserQuestion` for the menu.
+
+- **(a) Approve**: break to Phase 6.
+- **(b) Revisit**:
+  1. Ask: which decision key? (auto-suggest from `state.decisions` keys)
+  2. Ask: why (free-form — goes into ADR)
+  3. Re-ask the question that produced this decision (with current value as default).
+  4. Dispatch `decision-revisor` with `{decision_key, old_value, new_value, reason, next_adr_id}`.
+  5. After revisor returns, run inline validation (revisor should have done this already but double-check).
+  6. Commit via `commit-commands:commit`: `architect(revise): {{key}} → {{new}} (ADR {{id}})`.
+  7. Loop back to menu.
+- **(c) Snapshot**:
+  1. Compute next version: if `state.snapshots` is empty → "v1.0"; else bump.
+  2. Copy `docs/*.md` and `docs/decisions/`, `docs/research/` to `docs/versions/<vX.Y>/`.
+  3. Update `state.snapshots`, bump `state.current_doc_version`.
+  4. Commit: `chore: snapshot docs as <vX.Y>`.
+  5. Loop back to menu.
+- **(d) Plan**: set `skip_to_phase_7 = true`, break.
+- **(e) Tree**: print full decision tree (group by domain: project meta, language, frontend, backend, db, auth, hosting, security, testing, monitoring), with ADR references. Loop back to menu.
+- **(f) Exit**: save state, push if `per_phase`, return. The user can resume later by invoking the architect again.
+
+State: `phase = "phase_6"` once (a) is chosen, save.
+
+---
+
+## Phase 6: Post-Generation Setup
+
+1. **Plugin installs**: read `<user-project>/.claude/recommended-plugins.md`. For each recommendation, ask via `AskUserQuestion`:
+   - Install / Skip / Skip all remaining
+   If install: `claude plugin install <plugin>`. Record outcome in `state.recommended_plugins[i].installed`.
+2. **Push to remote** (if not already done at phase boundary):
+   ```bash
+   git push origin <branch>
+   ```
+3. **Open PR** if working on a `bootstrap/architect-*` branch (per `state.git.branch`):
+   ```bash
+   gh pr create --title "Project bootstrap" --body "..." --base main
+   ```
+   Body: short summary referencing the spec + plan + ADRs.
+4. **Bootstrap commands**: ask the user whether to run stack-specific commands:
+   ```
+   "Run project bootstrap commands now?
+      pnpm install / cargo new / pip install -r requirements.txt / etc.
+      Yes / Skip / Customize"
+   ```
+   If yes: execute. If customize: let user edit before running.
+5. **Final commit**: `chore: bootstrap complete` via `commit-commands:commit`.
+6. **Cleanup**: delete `docs/_architect_state.json`. Commit: `chore: clean up bootstrap state`.
+7. Output: "✓ Project architect complete."
+8. State: phase = "complete".
+
+---
+
+## Phase 7 (optional): Implementation Plan Handoff
+
+If chosen in Phase 5 menu, or asked at the end of Phase 6:
+```
+"Generate an MVP implementation plan? (uses superpowers:writing-plans)
+   Yes / Skip"
+```
+
+If yes:
+1. Invoke `Skill: superpowers:writing-plans` with context:
+   - `spec_path: docs/PROJECT_REQUIREMENTS.md`
+   - `state_path: docs/_architect_state.json` (or note that it's been deleted; pass a state summary instead)
+   - "MVP focus" or "Phase 1 features" tagging.
+2. Control transfers to writing-plans. project-architect does not run after this.
+
+---
+
+## Failure modes & recovery
+
+| Failure | Recovery |
+|---|---|
+| User exits mid-phase | State saved at every batch. Re-invocation reads state, prints resume summary, picks up at `state.phase`. |
+| Agent dispatch returns malformed output | Retry once with clarification appended to the prompt. If still failing, fall back to inline completion: orchestrator drafts the doc itself using the template + state slice. |
+| Commit fails (pre-commit hook rejects) | Surface error, ask user. **Never** `--no-verify`. |
+| Push fails (network / auth) | Commit locally, queue push for next phase boundary. |
+| Required dep missing (`commit-commands`) | Refuse to start with explicit install command. |
+| Soft dep missing (`hookify`, `fewer-permission-prompts`, etc.) | Continue with internal fallback; note in `recommended-plugins.md` that installing improves future bootstraps. |
+| User said "no" to repo init then tries to commit | Detect at first commit attempt; offer to init now. |
+| Two terminals running architect concurrently | Lock file detects (other pid). Prompt user to clear if stale. |
+| Mid-session model switch to weaker model | Detect at next phase boundary by re-reading env; pause, re-prompt. |
+| `gh` not authed | Skip remote creation; document in state; user can add remote later. |
+| `ToolSearch` for `AskUserQuestion` fails | Fall back to plain-text prompts. |
+
+## Resumability checklist
+
+When resuming from `state.json`:
+1. Validate `schema_version` matches plugin version. If older, migrate per `references/state-schema.md` migration policy.
+2. Check lock — if held by a different pid and `acquired_at > 30 min ago`, offer to clear.
+3. Re-run Preflight (model + effort).
+4. Print resume summary:
+   ```
+   Resuming bootstrap from {{state.phase}}.
+   Decisions captured: {{count}}.
+   Last action: {{state.last_action}}
+   Continue? (y / start over / show progress)
+   ```
+5. Jump to the function for `state.phase`.
+
+## What NEVER to do
+
+- Modify `~/.claude/settings.json` (global) — only the project-local `.claude/settings.json`.
+- Auto-install marketplace plugins without user confirmation.
+- Push without phase awareness when `push_strategy` is "per_phase" or "end_only".
+- Write code (beyond Phase 6 bootstrap commands the user opted into).
+- Generate icons / branding / mockups (defer to relevant `document-skills` skills via recommended-plugins).
+- Validate the chosen stack works (compile/smoke-test) — that's Phase 7+ territory.
+- Replace user judgment on decisions.
