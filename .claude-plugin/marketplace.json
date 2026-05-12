@@ -2,13 +2,14 @@
   "$schema": "https://code.claude.com/schemas/marketplace.json",
   "name": "local",
   "owner": {
-    "name": "Vladimir"
+    "name": "Vladimir Dukelic",
+    "email": "vladimir@dukelic.com"
   },
   "plugins": [
     {
       "name": "project-architect",
       "source": "./",
-      "description": "Project architecture planning and documentation generator. Interviews users in phases to capture vision, tech stack, and architecture decisions, then generates tailored planning documents and CLAUDE.md."
+      "description": "Project architecture orchestrator with research-augmented questioning, ADR-tracked decisions, parallel doc generation, per-folder CLAUDE.md, and .claude/ project tooling. Supports web apps, mobile, CLI, libraries, APIs, multi-platform, desktop, browser extensions, games, AI/ML, data pipelines, embedded, infrastructure, Claude Code plugins, MCP servers, Web3, scientific code, AR/VR, and more."
     }
   ]
 }
