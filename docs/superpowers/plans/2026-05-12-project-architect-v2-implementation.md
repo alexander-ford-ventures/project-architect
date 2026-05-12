@@ -4729,3 +4729,38 @@ Plan complete and saved to `docs/superpowers/plans/2026-05-12-project-architect-
 **Required sub-skill:** Use `superpowers:executing-plans` to execute.
 
 Which approach?
+
+---
+
+## As-built corrections (2026-05-12)
+
+Two design-stage assumptions did not survive implementation against the actual Claude Code plugin schema. The original text in this document is preserved for historical record; the as-built corrections below describe what actually shipped.
+
+### 1. `dependencies` field shape
+
+**Design text said:** `"dependencies": { "commit-commands": "*" }` (object map, npm-style).
+
+**As-built:** `"dependencies": ["commit-commands"]` (array of bare strings, per the canonical Claude Code plugin schema at https://code.claude.com/docs/en/plugins-reference). Object-map form fails `claude plugin validate`.
+
+**Fix commit:** `1be648b` — "fix(plugin): conform to Claude Code plugin schema".
+
+### 2. `softDependencies` field
+
+**Design text included:** a top-level `softDependencies` block in `plugin.json` listing 5 recommended plugins.
+
+**As-built:** the field is removed entirely. Claude Code's plugin schema rejects `softDependencies` as an unrecognized key. Recommended plugins are now surfaced through three runtime / documentation paths instead:
+- `README.md` "Recommended" section (install-time discoverability).
+- A new Preflight runtime check in SKILL.md (`### Soft-dependency check`) that scans for the 5 recommended plugins and offers to install missing ones at session start.
+- The generated project's `.claude/recommended-plugins.md` (curated per-project by the `claude-tooling-author` agent based on the project's chosen stack).
+
+**Fix commits:** `1be648b` (manifest cleanup) and the soft-dep Preflight check commit landing alongside this correction.
+
+### 3. `state-schema.md` reference
+
+**Design / plan referenced:** `references/state-schema.md` from SKILL.md but no Phase B task to create it.
+
+**As-built:** the file exists at `skills/project-architect/references/state-schema.md` (commit `d1446ac`). It contains the canonical state.json schema, lockfile protocol, and migration policy as a standalone runtime reference (not redirected to this design spec).
+
+### Convention going forward
+
+Future revisions of project-architect that diverge from documented design should add rows here with the same shape: design text → as-built → fix commit. This file is append-only; do not rewrite earlier sections.
