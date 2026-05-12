@@ -1,6 +1,6 @@
 {
   "$schema": "https://code.claude.com/schemas/marketplace.json",
-  "name": "local",
+  "name": "siliconyouth",
   "description": "Local marketplace for Vladimir's personal Claude Code plugins.",
   "owner": {
     "name": "Vladimir Dukelic",

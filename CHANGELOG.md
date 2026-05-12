@@ -4,11 +4,32 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.4] — 2026-05-12
+
+### Changed
+
+- **Marketplace renamed from `local` to `siliconyouth`** to match the GitHub org. The plugin now surfaces as `project-architect@siliconyouth`. **Breaking change for install commands**: anyone with the marketplace registered under the old `local` alias must re-register under `siliconyouth` (see migration below).
+
+### Migration
+
+```bash
+# Refresh + re-register the marketplace
+claude plugin marketplace remove local
+claude plugin marketplace add siliconyouth/project-architect
+
+# Reinstall the plugin from the renamed marketplace
+claude plugin uninstall project-architect@local
+claude plugin install project-architect@siliconyouth
+
+# Reload in any active Claude session
+/reload-plugins
+```
+
 ## [2.0.3] — 2026-05-12
 
 ### Fixed
 
-- **`commit-commands` dependency resolved to wrong marketplace** (`/doctor` flagged this as a missing-dep error). Bare-string dependencies (`"dependencies": ["commit-commands"]`) resolve to `commit-commands@<same-marketplace-as-this-plugin>` = `commit-commands@local`, which doesn't exist. The actual installation lives in `commit-commands@claude-plugins-official`. Changed to the object form `{ "name": "commit-commands", "marketplace": "claude-plugins-official" }` per the canonical Claude Code plugin schema.
+- **`commit-commands` dependency resolved to wrong marketplace** (`/doctor` flagged this as a missing-dep error). Bare-string dependencies (`"dependencies": ["commit-commands"]`) resolve to `commit-commands@<same-marketplace-as-this-plugin>` = `commit-commands@siliconyouth`, which doesn't exist. The actual installation lives in `commit-commands@claude-plugins-official`. Changed to the object form `{ "name": "commit-commands", "marketplace": "claude-plugins-official" }` per the canonical Claude Code plugin schema.
 
 ### Notes
 

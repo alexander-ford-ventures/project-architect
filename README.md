@@ -31,9 +31,9 @@ config, ADRs, and an optional implementation plan, all committed."
 
 ## Install
 
-This marketplace is registered under the alias `local` in
+This marketplace is registered under the alias `siliconyouth` in
 `~/.claude/plugins/known_marketplaces.json`. The plugin is enabled via
-`~/.claude/settings.json` under `enabledPlugins["project-architect@local"]`.
+`~/.claude/settings.json` under `enabledPlugins["project-architect@siliconyouth"]`.
 
 ## Dependencies
 
@@ -82,9 +82,9 @@ git push origin main
 git push origin v2.0.2
 
 # 6. Refresh local cache so the new version is loaded
-claude plugin marketplace update local
-claude plugin uninstall project-architect@local
-claude plugin install project-architect@local
+claude plugin marketplace update siliconyouth
+claude plugin uninstall project-architect@siliconyouth
+claude plugin install project-architect@siliconyouth
 ```
 
 Versioning rules (semver):

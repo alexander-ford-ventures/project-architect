@@ -283,9 +283,9 @@ config, ADRs, and an optional implementation plan, all committed."
 
 ## Install
 
-This marketplace is registered under the alias `local` in
+This marketplace is registered under the alias `siliconyouth` in
 `~/.claude/plugins/known_marketplaces.json`. The plugin is enabled via
-`~/.claude/settings.json` under `enabledPlugins["project-architect@local"]`.
+`~/.claude/settings.json` under `enabledPlugins["project-architect@siliconyouth"]`.
 
 ## Dependencies
 
@@ -4462,7 +4462,7 @@ In the active Claude Code session, run:
 ```
 /reload-plugins
 ```
-Confirm `project-architect@local` is enabled and at version 2.0.0.
+Confirm `project-architect@siliconyouth` is enabled and at version 2.0.0.
 
 - [ ] **Step 3: Invoke the architect in the test directory**
 
@@ -4678,7 +4678,7 @@ git push origin v2.0.0
 
 - [ ] **Step 6: Final smoke check — plugin still loads in Claude Code**
 
-In a fresh Claude Code session, run `/plugin` and confirm `project-architect@local` shows version 2.0.0 and loads without errors.
+In a fresh Claude Code session, run `/plugin` and confirm `project-architect@siliconyouth` shows version 2.0.0 and loads without errors.
 
 - [ ] **Step 7: Save a memory entry (optional)**
 
