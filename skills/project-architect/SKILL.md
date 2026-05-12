@@ -168,4 +168,104 @@ If not present: refuse to start with: "Required dependency `commit-commands` is 
 
 ---
 
-<!-- SKILL_E2_MARKER -->
+## Phase 1: Vision & Scope
+
+Load `references/questioning-flow.md` Section: "Per-Type Drill-Downs (Phase 1)" — read only the subsection for `decisions.project.type`.
+
+Loop until phase complete:
+1. Ask one batch of 2–4 questions via `AskUserQuestion` covering the next unanswered area of the type-specific drill-down.
+2. Save answers to `state.decisions`.
+3. Detect red flags in the answers (see `references/research-prompts.md` "Ad-hoc red-flag prompts"). For each flag, dispatch `research-scout` ad-hoc with the matching prompt. Append findings to `state.research_findings`.
+4. Commit via `commit-commands:commit`: `architect(phase-1): {{batch summary}}`.
+5. Decide if Phase 1 is complete (all relevant areas for this project type answered).
+
+At end of phase:
+1. Dispatch `research-scout` with the Phase 1 prompt (scope realism) — see `references/research-prompts.md`.
+2. Commit findings.
+3. Optionally surface major implications to the user; offer to revisit Phase 1 answers if research suggests scope problems.
+4. State: `phase = "phase_2"`, save.
+
+---
+
+## Phase 2: Tech Stack
+
+Load `references/tech-stack-options.md` for option tables. Load `references/questioning-flow.md` Section: "Tech Stack Drill-Downs" for category order and skip rules.
+
+Loop:
+1. Pick the next applicable category (skip per Routing Rules in questioning-flow.md).
+2. Present 2–4 options per category with one-line trade-offs. **Do NOT strongly recommend** — list options, user decides.
+3. Group related decisions in one batch (e.g., DB + ORM; host_frontend + host_backend + CDN).
+4. Save answers.
+5. For each *major* decision (language, framework, db engine, auth provider, host), file an ADR via the ADR workflow (see "Filing an ADR" below).
+6. Detect red flags; dispatch ad-hoc research-scout.
+7. Commit batch: `architect(phase-2): {{topic}}`.
+
+At end of phase:
+1. Dispatch `research-scout` with the Phase 2 prompt (stack combination gotchas).
+2. Commit findings.
+3. State: `phase = "phase_2.5"`, save.
+
+### Filing an ADR
+
+For each major decision (one that warrants a record):
+1. Use the next sequential ID from `state.next_adr_id`.
+2. Read `references/templates/ADR_TEMPLATE.md` for structure.
+3. Generate a kebab-case slug from the title (max 60 chars).
+4. Write to `docs/decisions/<NNNN>-<slug>.md`. Fill all frontmatter fields.
+5. Update `state.adrs_filed` and bump `state.next_adr_id`.
+6. Commit: `adr: 00NN <title>`.
+
+---
+
+## Phase 2.5: Cost Modeling
+
+1. Identify priced services from `state.decisions` (managed hosting, databases, AI providers, etc.).
+2. Dispatch `research-scout` with the Phase 2.5 prompt (pricing research). Pass the list of services + expected usage tier.
+3. After findings return, present a cost-summary table to the user with $/month at MVP / growth / enterprise tiers.
+4. Ask whether any cost reality should trigger a stack revision:
+   - If yes: enter a brief revisor sub-loop — dispatch `decision-revisor` for the changed decision(s).
+   - If no: proceed.
+5. Save findings reference in `state.research_findings`.
+6. The `COST_MODEL.md` doc itself is generated during Phase 4 — the pricing research is its input data.
+7. Commit: `architect(phase-2.5): cost model research`.
+8. State: `phase = "phase_3"`, save.
+
+---
+
+## Phase 3: Architecture Deep Dive
+
+Load `references/questioning-flow.md` Section: "Architecture Deep Dive (Phase 3)".
+
+Determine applicable areas:
+- `auth` — if `decisions.auth.enabled`
+- `database` — if `decisions.database.engine != null`
+- `api` — if `decisions.api.enabled`
+- `security` — if `decisions.constraints` includes regulated OR security flagged
+- `frontend` — if `decisions.frontend.framework != null`
+- `testing` — always for non-trivial projects
+- `devops` — if production-bound
+- `monitoring` — if scale > MVP
+- `integrations` — if `decisions.integrations.length > 0`
+
+For each applicable area:
+1. Ask 1–3 batches drilling into that area.
+2. File an ADR for each major area decision.
+3. Detect red flags; dispatch ad-hoc research-scout.
+4. Commit: `architect(phase-3/{{area}}): {{summary}}`.
+
+### Inline consistency check (end of Phase 3, before doc gen)
+
+Before exiting Phase 3, cross-check decisions for contradictions:
+- **Auth provider vs security stance**: e.g., Clerk + claimed "zero-knowledge" — flag.
+- **Database choice vs scale**: e.g., SQLite + multi-region growth — flag.
+- **Stack vs hosting**: e.g., Postgres pgvector + edge-only deployment — flag.
+- **Compliance vs architecture**: e.g., HIPAA + third-party analytics with PII — flag.
+- **Performance targets vs choices**: e.g., 50ms p99 + Lambda cold starts — flag.
+
+For each contradiction: surface to user with explanation and choices ("revise A, revise B, accept tradeoff"). User-chosen revisions dispatch `decision-revisor`.
+
+End of phase: dispatch `research-scout` with Phase 3 prompt (pattern validation). Commit findings. State: `phase = "phase_4"`, save.
+
+---
+
+<!-- SKILL_E3_MARKER -->
