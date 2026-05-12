@@ -81,6 +81,16 @@ Recommended plugins (qualified names): `superpowers`, `claude-md-management`, `c
 
 Skip the prompt entirely if every recommended plugin is already installed; just record `state.recommended_plugins[]` with `missing: false` for each and proceed silently.
 
+### Ambient hooks tolerance
+
+Silently pre-create `.remember/logs/` in cwd so the `remember` plugin's PostToolUse hook (if installed) can write its error log without erroring out. Run as `Bash`:
+
+```bash
+mkdir -p .remember/logs 2>/dev/null || true
+```
+
+The `|| true` ensures failure never blocks Preflight — the architect doesn't depend on this directory. This is a courtesy to a separate plugin and is harmless when `remember` isn't installed (the dir is empty + listed in `.gitignore` by Phase 0a). It lives in Preflight (not Phase 0a) because the hook fires on the first Bash/Read call regardless of whether the user opts into git init.
+
 ---
 
 ## Phase 0a: Repo Init (optional)
@@ -103,7 +113,7 @@ Skip the prompt entirely if every recommended plugin is already installed; just 
    ```bash
    git init
    ```
-   Write `.gitignore` with universal defaults (OS files: `.DS_Store`, `Thumbs.db`; editor files: `.idea/`, `.vscode/settings.json`, `*.swp`; env: `.env`, `.env.local`). Stack-specific entries are appended in Phase 6.
+   Write `.gitignore` with universal defaults (OS files: `.DS_Store`, `Thumbs.db`; editor files: `.idea/`, `.vscode/settings.json`, `*.swp`; env: `.env`, `.env.local`; ambient: `.remember/` — foreign-plugin courtesy, pre-created in Preflight). Stack-specific entries are appended in Phase 6.
 5. If remote requested and authed:
    ```bash
    gh repo create "$NAME" --"$VIS" --source . --remote origin --description "$DESC"
