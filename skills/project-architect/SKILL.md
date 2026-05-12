@@ -540,7 +540,6 @@ If yes:
 | Commit fails (pre-commit hook rejects) | Surface error, ask user. **Never** `--no-verify`. |
 | Push fails (network / auth) | Commit locally, queue push for next phase boundary. |
 | Required dep missing (`commit-commands`) | Refuse to start with explicit install command. |
-| Recommended (soft) dep missing (`superpowers`, `claude-md-management`, `claude-code-setup`, `hookify`, `document-skills`, `fewer-permission-prompts`) | Handled proactively at Phase -1 "Soft-dependency check": probe each, offer install / continue / abort, record skipped ones in `state.recommended_plugins[].missing` so the generated `.claude/recommended-plugins.md` reflects the runtime choice. |
 | User said "no" to repo init then tries to commit | Detect at first commit attempt; offer to init now. |
 | Two terminals running architect concurrently | Lock file detects (other pid). Prompt user to clear if stale. |
 | Mid-session model switch to weaker model | Detect at next phase boundary by re-reading env; pause, re-prompt. |

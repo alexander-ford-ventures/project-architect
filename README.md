@@ -25,8 +25,8 @@ config, ADRs, and an optional implementation plan, all committed."
 ## Plugin layout
 
 - `.claude-plugin/{plugin,marketplace}.json` — plugin manifest.
-- `skills/project-architect/SKILL.md` — orchestrator (~200 lines).
-- `skills/project-architect/references/` — 6 reference files including `templates/` (~56 docs).
+- `skills/project-architect/SKILL.md` — orchestrator (~450-650 lines).
+- `skills/project-architect/references/` — 7 reference files including `templates/` (~56 docs).
 - `agents/` — 5 subagents dispatched by the orchestrator.
 
 ## Install
@@ -46,6 +46,7 @@ This marketplace is registered under the alias `local` in
 - `claude-code-setup` (for skill/hook/agent recommendations).
 - `hookify` (for hook design principles).
 - `document-skills` (for writing-quality principles).
+- `fewer-permission-prompts` (used by `claude-tooling-author` to tighten the generated `.claude/settings.json` permissions allowlist).
 
 ## Usage
 

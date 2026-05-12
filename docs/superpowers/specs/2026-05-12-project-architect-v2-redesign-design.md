@@ -948,6 +948,14 @@ Two design-stage assumptions did not survive implementation against the actual C
 
 **As-built:** the file exists at `skills/project-architect/references/state-schema.md` (commit `d1446ac`). It contains the canonical state.json schema, lockfile protocol, and migration policy as a standalone runtime reference (not redirected to this design spec).
 
+### 4. Recommended-plugin baseline bumped from 5 to 6
+
+**Design text said:** 5 recommended plugins (`superpowers`, `claude-md-management`, `claude-code-setup`, `hookify`, `document-skills`) — surfaced in `README.md`, the Preflight soft-dep check, and the per-project `.claude/recommended-plugins.md`.
+
+**As-built:** `fewer-permission-prompts` was added as the 6th recommended-plugin baseline entry after the soft-dep Preflight check was implemented. It is used by the `claude-tooling-author` agent to tighten the generated project's `.claude/settings.json` permissions allowlist. The baseline list in SKILL.md Preflight, `README.md` "Recommended" section, and the failure-modes table all reflect 6 plugins.
+
+**Fix commit:** `b59cbfd` — "feat(skill): add fewer-permission-prompts to Preflight soft-dep baseline".
+
 ### Convention going forward
 
 Future revisions of project-architect that diverge from documented design should add rows here with the same shape: design text → as-built → fix commit. This file is append-only; do not rewrite earlier sections.
