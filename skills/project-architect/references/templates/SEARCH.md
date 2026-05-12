@@ -63,4 +63,4 @@ Zero-downtime reindex (dual-write + alias swap), schema-evolution playbook, back
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

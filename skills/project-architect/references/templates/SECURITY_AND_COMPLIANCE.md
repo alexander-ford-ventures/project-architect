@@ -72,4 +72,4 @@ Concrete checklist mapping each applicable regulation/standard to implemented co
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

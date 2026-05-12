@@ -56,4 +56,4 @@ Where contributors talk: Discord / Slack / Discussions / IRC / mailing list, wit
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

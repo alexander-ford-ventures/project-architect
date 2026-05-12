@@ -79,4 +79,4 @@ Path → purpose, one line each. Limit to ~10 most-important files.
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

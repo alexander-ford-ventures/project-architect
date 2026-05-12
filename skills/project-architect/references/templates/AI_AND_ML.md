@@ -79,4 +79,4 @@ Per-user/per-org token budgets, rate limits, model-tier downgrade rules under lo
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

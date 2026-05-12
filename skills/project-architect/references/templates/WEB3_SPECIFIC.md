@@ -68,4 +68,4 @@ Bug-bounty program (Immunefi, HackerOne), severity ladder, payout schedule, disc
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

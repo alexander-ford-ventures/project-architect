@@ -48,4 +48,4 @@ Where data originates, where it lands, how it transforms, where it's stored, and
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

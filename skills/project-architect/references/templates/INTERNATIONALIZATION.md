@@ -64,4 +64,4 @@ ICU plural categories per locale, gendered forms where required (Slavic, Semitic
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

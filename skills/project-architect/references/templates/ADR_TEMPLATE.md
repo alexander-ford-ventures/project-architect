@@ -67,4 +67,4 @@ If this turns out wrong, how do we revert? What's the cost?
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

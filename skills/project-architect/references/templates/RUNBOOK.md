@@ -48,4 +48,4 @@ Primary → secondary → tertiary on-call rotations, manager / VP escalation, v
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

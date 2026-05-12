@@ -48,4 +48,4 @@ Versioning scheme (per platform or unified semver), release cadence, update mech
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

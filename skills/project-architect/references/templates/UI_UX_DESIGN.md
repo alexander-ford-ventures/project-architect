@@ -64,4 +64,4 @@ Core Web Vitals targets (LCP, INP, CLS), JS bundle budget, and image strategy. L
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

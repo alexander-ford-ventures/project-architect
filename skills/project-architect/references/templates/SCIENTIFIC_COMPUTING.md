@@ -60,4 +60,4 @@ Provenance capture (W3C PROV, OpenLineage, Snakemake reports, nf-core MultiQC), 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

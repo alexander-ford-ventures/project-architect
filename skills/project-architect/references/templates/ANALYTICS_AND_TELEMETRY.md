@@ -56,4 +56,4 @@ The set of canonical dashboards (executive, growth, product, reliability, billin
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

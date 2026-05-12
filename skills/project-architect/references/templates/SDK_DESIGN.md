@@ -64,4 +64,4 @@ Per-language stance on types: TypeScript `.d.ts` shipping policy, Python type st
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

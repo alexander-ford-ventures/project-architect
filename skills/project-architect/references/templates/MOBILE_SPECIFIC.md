@@ -64,4 +64,4 @@ OTA update mechanism (Expo Updates, App Center CodePush, CodePush replacement, c
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

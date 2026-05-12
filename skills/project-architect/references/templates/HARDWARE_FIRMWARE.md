@@ -60,4 +60,4 @@ Hardware-firmware contract: pin assignments, register maps, version-detect strat
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

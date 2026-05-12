@@ -66,4 +66,4 @@ Storage GB/mo, request pricing, egress, processing. Link to `COST_MODEL.md` for 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

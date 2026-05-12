@@ -52,4 +52,4 @@ The explicit policy for removing finished experiments and rolled-out flags: who 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

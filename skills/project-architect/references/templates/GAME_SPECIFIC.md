@@ -60,4 +60,4 @@ Content cadence (seasons, events), remote config, A/B testing, telemetry into ba
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

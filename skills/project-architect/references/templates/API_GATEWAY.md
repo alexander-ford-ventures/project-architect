@@ -60,4 +60,4 @@ Outbound webhook events, payload schema, signing strategy, retry policy. Skip if
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

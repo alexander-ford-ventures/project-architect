@@ -68,4 +68,4 @@ Pulled from `project.constraints` plus any explicit out-of-scope items captured 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

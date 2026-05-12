@@ -56,4 +56,4 @@ When and how to yank a published release (registry yank for npm / cargo / PyPI, 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

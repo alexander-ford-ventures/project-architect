@@ -56,4 +56,4 @@ Testing approach (MCP Inspector for manual smoke, contract tests against schemas
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

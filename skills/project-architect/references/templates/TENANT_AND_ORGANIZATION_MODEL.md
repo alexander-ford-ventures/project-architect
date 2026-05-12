@@ -56,4 +56,4 @@ Provisioning at create time (resources allocated, default data, plan defaults), 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

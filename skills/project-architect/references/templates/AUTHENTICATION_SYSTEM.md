@@ -68,4 +68,4 @@ Specific SDKs, libraries, and middleware (with versions) used to implement the a
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

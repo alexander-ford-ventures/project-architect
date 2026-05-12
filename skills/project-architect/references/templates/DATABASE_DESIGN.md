@@ -64,4 +64,4 @@ Seed script location, test-fixture strategy, and any factory/builder libraries u
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

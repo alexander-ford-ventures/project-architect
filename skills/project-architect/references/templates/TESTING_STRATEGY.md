@@ -56,4 +56,4 @@ Tools (k6 / Artillery / Lighthouse CI / autocannon), key scenarios, target thres
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

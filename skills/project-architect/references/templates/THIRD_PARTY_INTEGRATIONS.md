@@ -48,4 +48,4 @@ Cron / scheduled jobs that touch third-party services (sync, reconcile, sweep), 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

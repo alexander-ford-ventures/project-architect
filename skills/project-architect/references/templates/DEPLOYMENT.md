@@ -56,4 +56,4 @@ How preview / per-PR environments are created and torn down, data-scrubbing rule
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

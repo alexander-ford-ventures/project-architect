@@ -60,4 +60,4 @@ Internal eval suites + external benchmarks (MMLU, HumanEval, GSM8K, custom), gat
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

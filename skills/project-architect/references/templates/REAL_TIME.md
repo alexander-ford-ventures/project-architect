@@ -58,4 +58,4 @@ Per-connection send/receive limits, server-side drop/coalesce policy, slow-consu
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

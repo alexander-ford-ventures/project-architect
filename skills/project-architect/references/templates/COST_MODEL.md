@@ -52,4 +52,4 @@ Per-service alert configuration: warn threshold, page threshold, owner, and the 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -56,4 +56,4 @@ Threats that cannot be fully mitigated and the explicit risk-acceptance decision
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

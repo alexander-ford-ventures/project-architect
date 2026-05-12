@@ -56,4 +56,4 @@ Distribution channel (Meta Horizon Store, App Lab, visionOS App Store, SteamVR, 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

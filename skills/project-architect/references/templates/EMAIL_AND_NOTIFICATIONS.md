@@ -72,4 +72,4 @@ SPF/DKIM/DMARC records, dedicated IPs vs shared, warm-up plan, bounce/complaint 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

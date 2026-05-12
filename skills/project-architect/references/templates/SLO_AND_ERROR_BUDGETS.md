@@ -44,4 +44,4 @@ Multi-window multi-burn-rate alert configuration (e.g., 2% budget in 1 hour page
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

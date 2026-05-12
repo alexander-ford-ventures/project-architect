@@ -10,6 +10,12 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.4] — 2026-05-12
+
+### Changed
+
+- **Template footer glyph**: `✨` (sparkle) → `★` (black star) across all 55 user-facing templates. Aligns the markdown-footer attribution with the existing social-preview image attribution (which already used the star glyph). README's Attribution section now explicitly notes the convention: generated-doc footer links to `project-architect` (the skill); the social-preview image credits `Claude Code` (the platform). The link target in the markdown footer is unchanged — still `https://github.com/siliconyouth/project-architect`.
+
 ## [2.1.3] — 2026-05-12
 
 ### Added

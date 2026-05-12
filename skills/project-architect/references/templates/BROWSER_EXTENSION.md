@@ -60,4 +60,4 @@ Distribution targets (Chrome Web Store, Edge Add-ons, Firefox AMO, Safari App St
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

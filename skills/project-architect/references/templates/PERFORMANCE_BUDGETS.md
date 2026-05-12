@@ -56,4 +56,4 @@ CI gates (Lighthouse CI thresholds, bundle-size regressions, k6 thresholds) and 
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

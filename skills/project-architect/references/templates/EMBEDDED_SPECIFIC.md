@@ -60,4 +60,4 @@ Bootloader choice (MCUboot, native ROM bootloader, custom), recovery mode entry,
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

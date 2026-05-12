@@ -66,4 +66,4 @@ Per-job latency/error dashboards, queue-depth alerts, oldest-pending-message age
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

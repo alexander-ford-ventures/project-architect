@@ -262,11 +262,13 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow. PRs welcome; for s
 
 When you use `project-architect`, the generated docs end with:
 
-> *✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+> *★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
 
 This is a social-norm attribution — please keep it visible in `PROJECT_OVERVIEW.md`, `CLAUDE.md`, and other top-level docs so others can discover the tool. The MIT license doesn't legally require this, but it's a polite norm and costs you nothing.
 
 If you fork the skill itself or build on top of it, the source-file attribution comments must remain per the MIT terms (the LICENSE file must be included in any redistribution).
+
+> **Note:** the social-preview image (`.github/social-preview.png`) carries a different attribution line — `★ Skillfully made with Claude Code` — to credit the underlying platform. That line is image-only; the markdown footer that ships in generated docs uses "project-architect" as shown above.
 
 ## License
 

@@ -52,4 +52,4 @@ Where build artifacts live (registry / object storage), versioning/tagging conve
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -72,4 +72,4 @@ MRR/ARR dashboards, revenue recognition, accounting export (Stripe → QuickBook
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

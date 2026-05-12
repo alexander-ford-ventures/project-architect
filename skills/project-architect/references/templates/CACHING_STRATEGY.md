@@ -63,4 +63,4 @@ Hit-rate dashboards per layer, miss-cost dashboards, alerting thresholds, sampli
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -52,4 +52,4 @@ Schedule for proving backups actually restore (table-top monthly, real restore q
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

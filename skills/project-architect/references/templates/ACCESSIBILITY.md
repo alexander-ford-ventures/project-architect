@@ -61,4 +61,4 @@ Automated (axe-core in unit/E2E, Lighthouse CI, Pa11y, Storybook a11y addon) plu
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -67,4 +67,4 @@ Retry semantics per task (exponential backoff, max attempts), idempotency strate
 
 ---
 
-*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
