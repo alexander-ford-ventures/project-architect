@@ -1,6 +1,6 @@
 ---
 name: project-architect
-description: Use when the user wants to set up a new project, scaffold project docs, plan a new project, initialize project architecture, bootstrap with planning documents, design a system architecture, choose a tech stack, revisit existing project architecture decisions, or generate CLAUDE.md and .claude/ config for an existing project. Works for any project type: web apps, mobile, multi-platform, APIs, CLI tools, libraries, desktop, browser extensions, games, AI/ML, data pipelines, embedded/IoT, infrastructure, Claude Code plugins, MCP servers, Web3, scientific code, AR/VR.
+description: Use when the user wants to set up a new project, scaffold project docs, plan a new project, initialize project architecture, bootstrap with planning documents, design a system architecture, choose a tech stack, revisit existing project architecture decisions, or generate CLAUDE.md and .claude/ config for an existing project. Works for any project type — web apps, mobile, multi-platform, APIs, CLI tools, libraries, desktop, browser extensions, games, AI/ML, data pipelines, embedded/IoT, infrastructure, Claude Code plugins, MCP servers, Web3, scientific code, AR/VR.
 ---
 
 # Project Architect
@@ -25,7 +25,7 @@ You orchestrate a 9-phase project bootstrap. You do not do the heavy lifting you
 
 ## State
 
-Persistent across the bootstrap: `docs/_architect_state.json`. Schema is in `references/state-schema.md` (or see the design spec). Save after every batch, every agent dispatch, every commit. Delete only at end of Phase 6 cleanup.
+Persistent across the bootstrap: `docs/_architect_state.json`. Schema is in `docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md` (Section 11). Save after every batch, every agent dispatch, every commit. Delete only at end of Phase 6 cleanup.
 
 Lock file: `docs/_architect_state.lock` with `{pid, host, acquired_at}`. Held throughout the session. If a stale lock (>30 min old) exists at startup, offer to clear it.
 
@@ -308,7 +308,7 @@ Load `references/document-catalog.md` for selection rules and the topological so
 
 6. **In parallel with the last doc batch**, dispatch:
    - `claude-md-author` agent → writes `/CLAUDE.md` and any per-folder CLAUDE.md.
-   - `claude-tooling-author` agent → writes `.claude/settings.json`, hooks/, agents/, commands/, recommended-plugins.md.
+   - `claude-tooling-author` agent → writes `.claude/settings.json`, hooks/, agents/, commands/, recommended-plugins.md (see `references/claude-code-integration.md` for stack→skill recipes).
 
 7. After both return:
    - Commit CLAUDE.md files: one commit per file or a batch commit `chore: add CLAUDE.md files`.
@@ -360,7 +360,7 @@ Use `AskUserQuestion` for the menu.
   1. Ask: which decision key? (auto-suggest from `state.decisions` keys)
   2. Ask: why (free-form — goes into ADR)
   3. Re-ask the question that produced this decision (with current value as default).
-  4. Dispatch `decision-revisor` with `{decision_key, old_value, new_value, reason, next_adr_id}`.
+  4. Dispatch `decision-revisor` (reads `references/revision-playbook.md`) with `{decision_key, old_value, new_value, reason, next_adr_id}`.
   5. After revisor returns, run inline validation (revisor should have done this already but double-check).
   6. Commit via `commit-commands:commit`: `architect(revise): {{key}} → {{new}} (ADR {{id}})`.
   7. Loop back to menu.
@@ -442,7 +442,7 @@ If yes:
 ## Resumability checklist
 
 When resuming from `state.json`:
-1. Validate `schema_version` matches plugin version. If older, migrate per `references/state-schema.md` migration policy.
+1. Validate `schema_version` matches plugin version. If older, migrate per `docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md` (Section 11) migration policy.
 2. Check lock — if held by a different pid and `acquired_at > 30 min ago`, offer to clear.
 3. Re-run Preflight (model + effort).
 4. Print resume summary:
