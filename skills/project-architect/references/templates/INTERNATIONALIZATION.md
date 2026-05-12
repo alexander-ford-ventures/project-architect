@@ -23,7 +23,19 @@ License: MIT
 
 # Internationalization: {{project_name}}
 
-## Supported Locales
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [⚙️ Supported Locales](#supported-locales)
+- [i18n Library](#i18n-library)
+- [Translation Workflow](#translation-workflow)
+- [String Externalization Conventions](#string-externalization-conventions)
+- [Date / Number / Currency Formatting](#date-number-currency-formatting)
+- [RTL Support](#rtl-support)
+- [Pluralization & Gender](#pluralization-gender)
+- [↻ Revision Log](#revision-log)
+
+## ⚙️ Supported Locales
 Full locale list (BCP-47 tags), launch tier vs follow-on tier, fallback chain (e.g., `pt-BR` → `pt` → `en`), and default locale resolution from headers/geo.
 
 ## i18n Library
@@ -44,9 +56,12 @@ Right-to-left coverage strategy (logical CSS properties, `dir` attribute, mirror
 ## Pluralization & Gender
 ICU plural categories per locale, gendered forms where required (Slavic, Semitic, etc.), context disambiguation conventions for translators.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

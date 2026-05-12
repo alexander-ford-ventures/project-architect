@@ -15,13 +15,25 @@ License: MIT
 
 # Analytics and Telemetry: {{project_name}}
 
-## Product Analytics Provider
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [📊 Product Analytics Provider](#product-analytics-provider)
+- [Event Taxonomy](#event-taxonomy)
+- [🗄️ Event Schema Conventions](#event-schema-conventions)
+- [Identification Strategy](#identification-strategy)
+- [Privacy & Consent](#privacy-consent)
+- [Funnels & Cohorts of Interest](#funnels-cohorts-of-interest)
+- [📊 Dashboards](#dashboards)
+- [↻ Revision Log](#revision-log)
+
+## 📊 Product Analytics Provider
 Provider chosen (PostHog / Amplitude / Mixpanel / Segment + warehouse / Snowplow) with one-paragraph rationale, ADR link, data-residency choice, retention defaults, and the SDKs in use (web / mobile / server). Note any second tool used in parallel (e.g., a warehouse-first pipeline alongside a product-analytics tool) and why.
 
 ## Event Taxonomy
 The canonical event list grouped by domain (auth, onboarding, core action, billing, retention). For each event note: name, when it fires, who fires it (client / server), and its lifecycle stage (active / deprecated). Reference the source of truth (tracking plan doc, Avo / Iteratively schema, or a versioned JSON file in the repo).
 
-## Event Schema Conventions
+## 🗄️ Event Schema Conventions
 Naming convention (e.g., `domain.object_action`, snake_case vs camelCase), the required property set for every event (timestamp, user_id, session_id, app_version, environment), allowed property types, and the deprecation flow for renaming or removing a property. Include an example event payload.
 
 ## Identification Strategy
@@ -33,12 +45,15 @@ Lawful basis (consent / legitimate interest), the consent-management implementat
 ## Funnels & Cohorts of Interest
 The canonical funnels (signup -> activation -> retention -> referral, plus product-specific funnels) and the cohorts the team monitors (paid plan, weekly-active, churned, expansion candidates). Each entry names the owning team and the review cadence.
 
-## Dashboards
+## 📊 Dashboards
 The set of canonical dashboards (executive, growth, product, reliability, billing) with their owning team, refresh cadence, and the URL/link. Note which dashboards are watched in incident response and which feed business reviews.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

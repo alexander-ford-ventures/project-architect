@@ -10,6 +10,18 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] — 2026-05-12
+
+### Added
+
+- **Modern README** with badges, mermaid architecture diagram, terminal "screenshot" code blocks showing the live UX, comprehensive project-types list, and recommended-plugins table.
+- **GitHub repo hardening**: `.github/ISSUE_TEMPLATE/bug_report.yml`, `feature_request.yml`, `config.yml`; `.github/pull_request_template.md`; `CONTRIBUTING.md`.
+- **Template beautification** for generated docs: status callout under H1, table-of-contents on long docs, judicious section-emoji prefixes (🎯 🏗️ 🔐 🗄️ 🌐 🎨 🚀 🧪 📊 💰 🔧 ⚙️ 📝 🚦 ↻), Revision Log rendered as a table, "✨ Skillfully made with…" footer (sparkle prefix).
+
+### Changed
+
+- **Marketplace description** rewritten for public release. Now reads: "Public marketplace by Silicon Youth, featuring project-architect — an orchestrator skill that bootstraps any project type with research-augmented questioning, ADR-tracked decisions, parallel doc generation, and project-local Claude Code configuration."
+
 ## [2.0.5] — 2026-05-12
 
 ### Added

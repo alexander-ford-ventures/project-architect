@@ -21,10 +21,23 @@ License: MIT
 
 # File Storage: {{project_name}}
 
-## Storage Provider
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🗄️ Storage Provider](#storage-provider)
+- [🎨 Bucket / Container Layout](#bucket-container-layout)
+- [Upload Flow](#upload-flow)
+- [Access Control](#access-control)
+- [Processing Pipeline](#processing-pipeline)
+- [CDN & Caching](#cdn-caching)
+- [Lifecycle Policies](#lifecycle-policies)
+- [💰 Costs](#costs)
+- [↻ Revision Log](#revision-log)
+
+## 🗄️ Storage Provider
 Chosen provider (S3, R2, GCS, Azure Blob, Supabase Storage, UploadThing) with rationale and region(s). Note egress pricing, S3-API compatibility, and lock-in considerations.
 
-## Bucket / Container Layout
+## 🎨 Bucket / Container Layout
 Naming convention, environment separation (dev/staging/prod), prefix scheme (`tenant/<id>/...`), public vs private buckets, retention buckets.
 
 ## Upload Flow
@@ -42,12 +55,15 @@ CDN in front of storage (Cloudflare, CloudFront, Fastly), cache headers, signed-
 ## Lifecycle Policies
 Archive tiers (S3 IA / Glacier, R2 Infrequent), automatic deletion rules, soft-delete vs hard-delete, legal hold considerations.
 
-## Costs
+## 💰 Costs
 Storage GB/mo, request pricing, egress, processing. Link to `COST_MODEL.md` for the full breakdown.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

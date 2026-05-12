@@ -34,13 +34,25 @@ License: MIT
 
 # {{project_name}}
 
-## Project Overview
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🎯 Project Overview](#project-overview)
+- [Tech Stack](#tech-stack)
+- [🏗️ Project Structure](#project-structure)
+- [Development Commands](#development-commands)
+- [Code Conventions](#code-conventions)
+- [🏗️ Architecture Notes](#architecture-notes)
+- [Key Files](#key-files)
+- [Where to look](#where-to-look)
+
+## 🎯 Project Overview
 One sentence: what this project is. Link to `docs/PROJECT_OVERVIEW.md` for the full pitch.
 
 ## Tech Stack
 Concise table — one row per major layer.
 
-## Project Structure
+## 🏗️ Project Structure
 Brief listing of key directories with one-line purpose each. Highlight which subdirs have their own CLAUDE.md.
 
 ## Development Commands
@@ -53,7 +65,7 @@ Install, dev, build, test, lint, typecheck. Stack-specific (pnpm / cargo / pip /
 - Test placement: {{co-located / __tests__ / tests/}}
 - Commit style: {{conventional / freeform}}
 
-## Architecture Notes
+## 🏗️ Architecture Notes
 Key architectural decisions that affect coding patterns. One line per decision, link to ADR.
 
 ## Key Files
@@ -67,4 +79,4 @@ Path → purpose, one line each. Limit to ~10 most-important files.
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

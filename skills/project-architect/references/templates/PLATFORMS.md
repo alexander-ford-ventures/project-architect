@@ -15,7 +15,17 @@ License: MIT
 
 # Platforms: {{project_name}}
 
-## Supported Platforms
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [⚙️ Supported Platforms](#supported-platforms)
+- [Code Sharing Strategy](#code-sharing-strategy)
+- [Platform-Specific Considerations](#platform-specific-considerations)
+- [Sync Strategy](#sync-strategy)
+- [🚀 Release Strategy](#release-strategy)
+- [↻ Revision Log](#revision-log)
+
+## ⚙️ Supported Platforms
 Table: platform | tech | priority | min version. One row per target (web, iOS, Android, macOS, Windows, Linux, etc.) with the framework chosen and minimum supported OS.
 
 ## Code Sharing Strategy
@@ -27,12 +37,15 @@ One subsection per platform. Each captures: distribution (App Store / Play / web
 ## Sync Strategy
 How state is synchronized across a user's devices (CRDT / event log / last-write-wins / manual), conflict-resolution rules, and offline-queue handling.
 
-## Release Strategy
+## 🚀 Release Strategy
 Versioning scheme (per platform or unified semver), release cadence, update mechanism (App Store / Play / Sparkle / auto-update server / OTA bundle), and rollback plan.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

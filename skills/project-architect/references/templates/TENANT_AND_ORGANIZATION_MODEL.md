@@ -15,6 +15,18 @@ License: MIT
 
 # Tenant and Organization Model: {{project_name}}
 
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [Tenant Hierarchy](#tenant-hierarchy)
+- [Isolation Model](#isolation-model)
+- [Identification](#identification)
+- [Invitation & Onboarding Flow](#invitation-onboarding-flow)
+- [Role Hierarchy & Permissions](#role-hierarchy-permissions)
+- [Cross-Tenant Access](#cross-tenant-access)
+- [Tenant Lifecycle](#tenant-lifecycle)
+- [↻ Revision Log](#revision-log)
+
 ## Tenant Hierarchy
 The concrete entities (workspace / organization / team / project / user) and the parent-child relationships between them. Name the entity terms the product uses and the cardinality at each level (one workspace -> N teams -> N users). Include a Mermaid diagram if the hierarchy is non-trivial.
 
@@ -36,9 +48,12 @@ How admin/support users access data across tenants (impersonation flow / sudo mo
 ## Tenant Lifecycle
 Provisioning at create time (resources allocated, default data, plan defaults), suspension semantics (read-only / billing-locked / hidden), archive vs delete behavior, the retention window before hard delete, and the data-export hook offered before delete. Link to BILLING_AND_PAYMENTS.md if plans gate features here.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -15,10 +15,20 @@ License: MIT
 
 # Runbook: {{project_name}}
 
-## Common Operations
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🔧 Common Operations](#common-operations)
+- [📊 Health Checks](#health-checks)
+- [Maintenance Windows](#maintenance-windows)
+- [Runbook Recipes](#runbook-recipes)
+- [Escalation Path](#escalation-path)
+- [↻ Revision Log](#revision-log)
+
+## 🔧 Common Operations
 Step-by-step recipes for the everyday actions on-call performs: deploy, rollback, scale up / down, restart a worker, drain a node, rotate secrets, rotate keys, flush cache, replay a queue, and put a feature flag into kill-switch state. Each recipe lists prerequisites, commands, verification, and rollback.
 
-## Health Checks
+## 📊 Health Checks
 Where to look first when something feels wrong: health-check endpoints, uptime dashboards, error-rate panels, and the canonical "is production healthy?" view. Includes expected steady-state values so a deviation is obvious.
 
 ## Maintenance Windows
@@ -30,9 +40,12 @@ One subsection per incident class. Cover at minimum: high latency, error-rate sp
 ## Escalation Path
 Primary → secondary → tertiary on-call rotations, manager / VP escalation, vendor support contacts (with account / contract IDs), and the legal / comms escalation for customer-facing incidents.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

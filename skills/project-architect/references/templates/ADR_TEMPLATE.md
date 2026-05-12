@@ -27,7 +27,19 @@ research_refs: [{{paths to research findings consulted}}]
 
 # ADR {{NNNN}}: {{title}}
 
-## Status
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🚦 Status](#status)
+- [Context](#context)
+- [Prior decision (if superseding)](#prior-decision-if-superseding)
+- [Decision](#decision)
+- [Alternatives reconsidered](#alternatives-reconsidered)
+- [Consequences](#consequences)
+- [🚀 Rollback plan](#rollback-plan)
+- [References](#references)
+
+## 🚦 Status
 {{status}} {{(supersedes ADR {{prior_id}} if applicable)}}
 
 ## Context
@@ -45,7 +57,7 @@ What is being chosen and why. Concrete and specific.
 ## Consequences
 - {{consequence}} — affected doc, mitigation
 
-## Rollback plan
+## 🚀 Rollback plan
 If this turns out wrong, how do we revert? What's the cost?
 
 ## References
@@ -55,4 +67,4 @@ If this turns out wrong, how do we revert? What's the cost?
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -1,7 +1,7 @@
 {
   "$schema": "https://code.claude.com/schemas/marketplace.json",
   "name": "siliconyouth",
-  "description": "Local marketplace for Vladimir's personal Claude Code plugins.",
+  "description": "Public marketplace by Silicon Youth, featuring project-architect — an orchestrator skill that bootstraps any project type with research-augmented questioning, ADR-tracked decisions, parallel doc generation, and project-local Claude Code configuration.",
   "owner": {
     "name": "Vladimir Dukelic",
     "email": "vladimir@dukelic.com",

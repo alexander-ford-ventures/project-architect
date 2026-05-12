@@ -21,10 +21,21 @@ License: MIT
 
 # Real-Time: {{project_name}}
 
-## Transport Protocol
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🌐 Transport Protocol](#transport-protocol)
+- [🗄️ Event Types & Schema](#event-types-schema)
+- [Connection Lifecycle](#connection-lifecycle)
+- [Presence Model](#presence-model)
+- [Scaling Strategy](#scaling-strategy)
+- [Backpressure & Rate Limits](#backpressure-rate-limits)
+- [↻ Revision Log](#revision-log)
+
+## 🌐 Transport Protocol
 Chosen transport (WebSocket, SSE, WebRTC, WebTransport, MQTT) with rationale. Note framing/encoding (JSON, MessagePack, protobuf, CBOR) and TLS/QUIC choices.
 
-## Event Types & Schema
+## 🗄️ Event Types & Schema
 Canonical event catalog (type, payload schema, direction client↔server, idempotency expectations). Pulled from the message contracts spec.
 
 ## Connection Lifecycle
@@ -39,9 +50,12 @@ Horizontal scaling pattern: sticky sessions vs stateless workers + broker, fan-o
 ## Backpressure & Rate Limits
 Per-connection send/receive limits, server-side drop/coalesce policy, slow-consumer handling, abuse detection.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

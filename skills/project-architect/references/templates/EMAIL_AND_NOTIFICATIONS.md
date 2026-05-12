@@ -23,7 +23,21 @@ License: MIT
 
 # Email & Notifications: {{project_name}}
 
-## Channels Overview
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🎯 Channels Overview](#channels-overview)
+- [Transactional Email](#transactional-email)
+- [Marketing Email](#marketing-email)
+- [Push Notifications](#push-notifications)
+- [SMS](#sms)
+- [Multi-Channel Orchestration](#multi-channel-orchestration)
+- [Templates & Localization](#templates-localization)
+- [User Preferences & Unsubscribe](#user-preferences-unsubscribe)
+- [Deliverability Strategy](#deliverability-strategy)
+- [↻ Revision Log](#revision-log)
+
+## 🎯 Channels Overview
 Summary table of every channel in use (email, push, SMS, in-app, webhooks) with provider, primary use case, and ownership.
 
 ## Transactional Email
@@ -50,9 +64,12 @@ Preferences model (per-channel × per-category), unsubscribe links/list-unsubscr
 ## Deliverability Strategy
 SPF/DKIM/DMARC records, dedicated IPs vs shared, warm-up plan, bounce/complaint handling, monitoring (Postmaster Tools, Google Postmaster, Bounce/Complaint webhooks).
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

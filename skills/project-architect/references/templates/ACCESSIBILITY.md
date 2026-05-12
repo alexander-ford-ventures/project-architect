@@ -20,6 +20,18 @@ License: MIT
 
 # Accessibility: {{project_name}}
 
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [WCAG Target Level](#wcag-target-level)
+- [Keyboard Navigation](#keyboard-navigation)
+- [Screen Reader Support](#screen-reader-support)
+- [Color & Contrast](#color-contrast)
+- [Focus Management](#focus-management)
+- [ARIA Patterns Used](#aria-patterns-used)
+- [🔧 Audit Tooling](#audit-tooling)
+- [↻ Revision Log](#revision-log)
+
 ## WCAG Target Level
 Target conformance (e.g., WCAG 2.2 AA), exemptions or known gaps with timelines, regulatory drivers (ADA, EAA 2025, Section 508, AODA).
 
@@ -38,12 +50,15 @@ Initial focus on route changes, focus restoration on modal close, async-content 
 ## ARIA Patterns Used
 Inventory of WAI-ARIA Authoring Practices patterns adopted (combobox, dialog, tabs, tree, menu, etc.) and the headless library backing each (Radix, React Aria, Reach, native).
 
-## Audit Tooling
+## 🔧 Audit Tooling
 Automated (axe-core in unit/E2E, Lighthouse CI, Pa11y, Storybook a11y addon) plus manual cadence (screen reader passes, keyboard-only walkthroughs, third-party audit schedule).
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

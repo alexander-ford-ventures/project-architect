@@ -15,7 +15,19 @@ License: MIT
 
 # Contributing: {{project_name}}
 
-## Code of Conduct
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🔐 Code of Conduct](#code-of-conduct)
+- [CLA / DCO](#cla-dco)
+- [Issue Templates](#issue-templates)
+- [PR Templates](#pr-templates)
+- [Review Process & Maintainers](#review-process-maintainers)
+- [🚀 Release Cadence](#release-cadence)
+- [Communication Channels](#communication-channels)
+- [↻ Revision Log](#revision-log)
+
+## 🔐 Code of Conduct
 Link to the project's Code of Conduct (typically `CODE_OF_CONDUCT.md` at the repo root, often Contributor Covenant v2.1). Name the enforcement contact (alias or email), the response SLA for reports, and the escalation path.
 
 ## CLA / DCO
@@ -30,15 +42,18 @@ The default PR template (`.github/pull_request_template.md`) with the required c
 ## Review Process & Maintainers
 Reviewer expectations: number of required approvals, required reviewer roles (CODEOWNERS), review SLA, and the etiquette for nits vs blockers. List the current maintainer set (link to CODEOWNERS or MAINTAINERS.md) and the path to becoming a maintainer.
 
-## Release Cadence
+## 🚀 Release Cadence
 How often releases ship to the public registry, the relationship between merges and releases, and the announcement path. Link to RELEASE_PROCESS.md for the operational detail.
 
 ## Communication Channels
 Where contributors talk: Discord / Slack / Discussions / IRC / mailing list, with topic per channel and the response-time expectation. Include the maintainer office-hours schedule if any, and the path to escalate a stalled PR.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

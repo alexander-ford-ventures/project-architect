@@ -15,6 +15,17 @@ License: MIT
 
 # Incident Response: {{project_name}}
 
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [Severity Levels](#severity-levels)
+- [Incident Commander Roles](#incident-commander-roles)
+- [Communication](#communication)
+- [Detection → Triage → Resolution Flow](#detection-triage-resolution-flow)
+- [Post-Mortem Policy](#post-mortem-policy)
+- [War Room Logistics](#war-room-logistics)
+- [↻ Revision Log](#revision-log)
+
 ## Severity Levels
 Table: severity | definition | example | response SLA | who pages | external comms required. Typically SEV-1 through SEV-4 with concrete impact thresholds (% users affected, revenue impact, data loss) so classification isn't subjective.
 
@@ -33,9 +44,12 @@ When a post-mortem is mandatory (always for SEV-1/2, conditional for SEV-3), aut
 ## War Room Logistics
 Physical or virtual war room (Zoom / Meet bridge with persistent link), incident document template (Google Doc / Notion page), recording policy, and the protocol for handing off across regions / shifts.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

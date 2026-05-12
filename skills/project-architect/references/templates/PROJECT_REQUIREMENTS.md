@@ -29,7 +29,18 @@ License: MIT
 
 # Project Requirements: {{project_name}}
 
-## Problem Statement
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🎯 Problem Statement](#problem-statement)
+- [Target Users](#target-users)
+- [Functional Requirements](#functional-requirements)
+- [Non-Functional Requirements](#non-functional-requirements)
+- [Technical Constraints](#technical-constraints)
+- [Success Metrics](#success-metrics)
+- [↻ Revision Log](#revision-log)
+
+## 🎯 Problem Statement
 What problem this solves, for whom, and why now.
 
 ## Target Users
@@ -52,9 +63,12 @@ Pre-existing decisions, required integrations, budget limits.
 ## Success Metrics
 How to measure if the project achieves its goals.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -24,7 +24,17 @@ License: MIT
 
 # {{subfolder.path}}
 
-## Purpose
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🎯 Purpose](#purpose)
+- [Local Tech Stack](#local-tech-stack)
+- [Conventions Specific to This Area](#conventions-specific-to-this-area)
+- [Local Development Commands](#local-development-commands)
+- [Key Files In This Area](#key-files-in-this-area)
+- [Cross-references](#cross-references)
+
+## 🎯 Purpose
 What this area is responsible for. How it relates to the rest of the project.
 
 ## Local Tech Stack
@@ -46,4 +56,4 @@ Path → purpose.
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -15,27 +15,41 @@ License: MIT
 
 # Monitoring and Observability: {{project_name}}
 
-## Monitoring Stack
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [📊 Monitoring Stack](#monitoring-stack)
+- [📊 Logging Strategy](#logging-strategy)
+- [📊 Alerting Rules](#alerting-rules)
+- [📊 Dashboards](#dashboards)
+- [📊 Health Checks](#health-checks)
+- [📊 Performance Budgets](#performance-budgets)
+- [↻ Revision Log](#revision-log)
+
+## 📊 Monitoring Stack
 Table: concern | tool | purpose. Rows for logs, metrics, traces, error tracking, uptime, RUM, product analytics, and synthetic monitoring as applicable.
 
-## Logging Strategy
+## 📊 Logging Strategy
 Log format (JSON structured), level conventions (debug/info/warn/error), PII-redaction rules, sampling policy, and retention windows per environment.
 
-## Alerting Rules
+## 📊 Alerting Rules
 Table: alert | condition | severity | owner | runbook link. One row per production alert (error rate, latency, saturation, business KPI deviation, third-party outage).
 
-## Dashboards
+## 📊 Dashboards
 List of dashboards owned, what each visualizes, who the audience is (eng / product / exec), and where they're hosted.
 
-## Health Checks
+## 📊 Health Checks
 Endpoint paths (`/health`, `/ready`, `/version`), what each verifies, and how upstream load balancers / orchestrators consume them.
 
-## Performance Budgets
+## 📊 Performance Budgets
 Brief summary of frontend / backend / DB performance targets. Link to PERFORMANCE_BUDGETS.md for the full table once generated.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

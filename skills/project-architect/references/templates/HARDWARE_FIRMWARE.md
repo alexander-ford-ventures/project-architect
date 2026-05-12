@@ -15,7 +15,20 @@ License: MIT
 
 # Hardware & Firmware: {{project_name}}
 
-## Hardware Overview (block diagram)
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🎯 Hardware Overview (block diagram)](#hardware-overview-block-diagram)
+- [PCB Design Strategy](#pcb-design-strategy)
+- [BoM Strategy](#bom-strategy)
+- [Manufacturing Partner](#manufacturing-partner)
+- [Certifications (FCC / CE / UL / RoHS)](#certifications-fcc-ce-ul-rohs)
+- [Enclosure & Mechanical](#enclosure-mechanical)
+- [Component Sourcing Risk](#component-sourcing-risk)
+- [Firmware ↔ Hardware Interface Contracts](#firmware-hardware-interface-contracts)
+- [↻ Revision Log](#revision-log)
+
+## 🎯 Hardware Overview (block diagram)
 High-level block diagram of the device — MCU, sensors, radios, power tree, I/O — with a short walkthrough explaining data and power flow.
 
 ## PCB Design Strategy
@@ -39,9 +52,12 @@ Supply-chain risk profile per critical part, lead times, allocation status, alte
 ## Firmware ↔ Hardware Interface Contracts
 Hardware-firmware contract: pin assignments, register maps, version-detect strategy (hardware revision pins), and how firmware adapts to multiple hardware revisions.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

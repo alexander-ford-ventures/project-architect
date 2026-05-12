@@ -21,7 +21,20 @@ License: MIT
 
 # Background Jobs: {{project_name}}
 
-## Queue / Broker Choice
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [🔧 Queue / Broker Choice](#queue-broker-choice)
+- [Job Types](#job-types)
+- [Idempotency Strategy](#idempotency-strategy)
+- [Retry Policy](#retry-policy)
+- [🔧 Dead-Letter Queues](#dead-letter-queues)
+- [Scheduling](#scheduling)
+- [Concurrency Limits](#concurrency-limits)
+- [📊 Monitoring](#monitoring)
+- [↻ Revision Log](#revision-log)
+
+## 🔧 Queue / Broker Choice
 Selected queue/broker (Inngest, Trigger.dev, Temporal, BullMQ + Redis, SQS, Cloudflare Queues, RabbitMQ, Sidekiq, Celery) with rationale, hosting model, and ordering/exactly-once semantics.
 
 ## Job Types
@@ -33,7 +46,7 @@ Idempotency-key conventions (per-event, per-business-action), dedupe window/stor
 ## Retry Policy
 Per-job retry budgets, backoff curve (exponential with jitter), max attempts, partial-progress checkpointing, retryable vs terminal error classification.
 
-## Dead-Letter Queues
+## 🔧 Dead-Letter Queues
 DLQ destination, alerting on entry, re-drive tooling, manual-resolution UX, retention policy on dead jobs.
 
 ## Scheduling
@@ -42,12 +55,15 @@ Cron-style recurring jobs vs event-driven, durable scheduling layer, time-zone h
 ## Concurrency Limits
 Global, per-tenant, and per-queue concurrency caps, fair-scheduling rules, autoscaling signal (queue depth, age, latency).
 
-## Monitoring
+## 📊 Monitoring
 Per-job latency/error dashboards, queue-depth alerts, oldest-pending-message age, success-rate SLOs, integration with the broader observability stack.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

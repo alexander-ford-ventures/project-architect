@@ -15,6 +15,19 @@ License: MIT
 
 # Embedded Specific: {{project_name}}
 
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [MCU / SoC Choice](#mcu-soc-choice)
+- [RTOS (or bare-metal)](#rtos-or-bare-metal)
+- [Programming Language](#programming-language)
+- [Power Budget](#power-budget)
+- [Connectivity (BLE / Wi-Fi / LoRa / cellular)](#connectivity-ble-wi-fi-lora-cellular)
+- [🚀 OTA Update Mechanism](#ota-update-mechanism)
+- [🔧 Tooling (PlatformIO / esp-idf / Zephyr)](#tooling-platformio-esp-idf-zephyr)
+- [Bootloader & Recovery](#bootloader-recovery)
+- [↻ Revision Log](#revision-log)
+
 ## MCU / SoC Choice
 Microcontroller / SoC family (ESP32, STM32, nRF52/nRF53, RP2040, RISC-V, i.MX RT), variant, peripherals needed, and second-source availability for supply-chain risk.
 
@@ -30,18 +43,21 @@ Active / sleep / deep-sleep current targets, average duty cycle, battery chemist
 ## Connectivity (BLE / Wi-Fi / LoRa / cellular)
 Radio stack(s) — BLE (Nordic SoftDevice, Zephyr Bluetooth, ESP-IDF), Wi-Fi, Thread/Matter, LoRaWAN, NB-IoT/LTE-M — provisioning UX, and pairing model.
 
-## OTA Update Mechanism
+## 🚀 OTA Update Mechanism
 OTA strategy (HTTPS over Wi-Fi, BLE DFU, MCUboot dual-bank, A/B partitions), signing, rollback on boot failure, and delta updates if size-constrained.
 
-## Tooling (PlatformIO / esp-idf / Zephyr)
+## 🔧 Tooling (PlatformIO / esp-idf / Zephyr)
 Build system (PlatformIO, ESP-IDF, Zephyr west, STM32CubeIDE, Make/CMake), debugger (J-Link, ST-Link, OpenOCD), and CI strategy for firmware artifacts.
 
 ## Bootloader & Recovery
 Bootloader choice (MCUboot, native ROM bootloader, custom), recovery mode entry, brick-prevention strategy, and secure boot chain.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

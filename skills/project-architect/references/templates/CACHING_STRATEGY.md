@@ -22,6 +22,18 @@ License: MIT
 
 # Caching Strategy: {{project_name}}
 
+> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+
+## Table of contents
+- [Cache Layers](#cache-layers)
+- [CDN Caching](#cdn-caching)
+- [Application Cache](#application-cache)
+- [🗄️ Database Query Cache](#database-query-cache)
+- [Invalidation Strategy](#invalidation-strategy)
+- [Cache-Warming](#cache-warming)
+- [📊 Monitoring](#monitoring)
+- [↻ Revision Log](#revision-log)
+
 ## Cache Layers
 Overview of every cache layer in the stack (edge → app → DB → client) with the role each plays, the TTL class, and the owner of invalidation.
 
@@ -31,7 +43,7 @@ CDN provider (Cloudflare, Fastly, CloudFront, Vercel Edge), what's cached at the
 ## Application Cache
 In-process (LRU/SWR), shared Redis/Valkey/Memcached, or platform cache (Vercel Cache, Cloudflare Cache API). Document hot keys, eviction policy, and serialization format.
 
-## Database Query Cache
+## 🗄️ Database Query Cache
 DB-level caching choices (Postgres prepared statements, MySQL query cache off, materialized views, pg_repack), connection-level pooled caches, ORM query cache configuration.
 
 ## Invalidation Strategy
@@ -40,12 +52,15 @@ TTL-only, event-driven (write → publish invalidation), tag-based (Cloudflare c
 ## Cache-Warming
 Pre-warm strategies (cron, build-time, on-deploy, request-driven), warm-cache deployment policy, cold-start mitigation.
 
-## Monitoring
+## 📊 Monitoring
 Hit-rate dashboards per layer, miss-cost dashboards, alerting thresholds, sampling for stampede/thundering-herd detection.
 
-## Revision Log
-(none yet)
+## ↻ Revision Log
+
+| Date | Decision key | Change | ADR |
+|---|---|---|---|
+| _(none yet)_ |  |  |  |
 
 ---
 
-*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*✨ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
