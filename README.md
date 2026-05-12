@@ -1,13 +1,64 @@
-# project-architect
+# project-architect (v2.0)
 
-A Claude Code plugin (single-plugin marketplace).
+A Claude Code plugin that bootstraps a new project end-to-end.
 
-**Plugin:** `project-architect` — Project architecture planning and documentation generator. Interviews users in phases to capture vision, tech stack, and architecture decisions, then generates tailored planning documents and `CLAUDE.md`.
+## What it does
+
+`project-architect` is an **orchestrator skill** that walks the user through
+9 phases — from "I want to build X" to "here are docs, CLAUDE.md, .claude/
+config, ADRs, and an optional implementation plan, all committed."
+
+| Phase | What happens |
+|---|---|
+| Preflight | Verify Opus 4.7 (1M context) at max effort |
+| 0a Repo init (optional) | `git init` + `gh repo create` |
+| 0 Universal kickoff | Classify the project (Q1–Q8) + first research dispatch |
+| 1 Vision & Scope | Type-specific drill-down + end-of-phase research |
+| 2 Tech Stack | Type-aware option presentation + ADR per major decision |
+| 2.5 Cost Modeling | Pricing research → `COST_MODEL.md` |
+| 3 Architecture Deep Dive | Per-area drill-downs + inline consistency check |
+| 4 Document Generation | Parallel `document-author` × N + CLAUDE.md + `.claude/` config |
+| 5 Iteration | Decision-revisor loop, snapshot option |
+| 6 Post-Generation Setup | Plugin install offers, push, bootstrap commands |
+| 7 Plan Handoff (optional) | Invoke `superpowers:writing-plans` |
+
+## Plugin layout
+
+- `.claude-plugin/{plugin,marketplace}.json` — plugin manifest.
+- `skills/project-architect/SKILL.md` — orchestrator (~200 lines).
+- `skills/project-architect/references/` — 6 reference files including `templates/` (~56 docs).
+- `agents/` — 5 subagents dispatched by the orchestrator.
 
 ## Install
 
-This marketplace is registered under the alias `local` in `~/.claude/plugins/known_marketplaces.json`. The plugin is enabled via `~/.claude/settings.json` under `enabledPlugins["project-architect@local"]`.
+This marketplace is registered under the alias `local` in
+`~/.claude/plugins/known_marketplaces.json`. The plugin is enabled via
+`~/.claude/settings.json` under `enabledPlugins["project-architect@local"]`.
+
+## Dependencies
+
+**Required:**
+- `commit-commands` (used for auto-commit cadence).
+
+**Recommended:**
+- `superpowers` (for the optional `writing-plans` handoff).
+- `claude-md-management` (for CLAUDE.md audit).
+- `claude-code-setup` (for skill/hook/agent recommendations).
+- `hookify` (for hook design principles).
+- `document-skills` (for writing-quality principles).
+
+## Usage
+
+```
+/project-architect
+```
+
+Or describe what you want to build — e.g. "set up a new project", "scaffold
+project docs", "bootstrap a CLI tool", "design the architecture for X" — and
+the architect should trigger automatically.
 
 ## Source
 
-This repo IS the marketplace root. The catalog lives at `.claude-plugin/marketplace.json`; the single plugin's metadata at `.claude-plugin/plugin.json`; the skill files at `skills/project-architect/`.
+Repo root IS the marketplace root. See `CHANGELOG.md` for version history.
+The full v2.0 design spec is at
+`docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md`.
