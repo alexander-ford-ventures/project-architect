@@ -303,3 +303,128 @@ Concise option lists with trade-offs for each technology category. Present relev
 | **bun** | Speed, all-in-one runtime | Compatibility gaps, newer |
 | **npm** | Universal, no setup | Slower, flat node_modules |
 | **yarn** | Berry (PnP), workspaces | PnP compatibility issues |
+
+---
+
+## Web3 / Smart Contracts
+
+| Layer | Options | Trade-offs |
+|---|---|---|
+| **Chain (EVM)** | Ethereum mainnet, Optimism, Arbitrum, Base, Polygon zkEVM, Linea, Scroll | mainnet = highest security + cost; L2s = cheap + fast, ecosystem-fragmented |
+| **Chain (non-EVM)** | Solana, Aptos, Sui, Starknet, Near | high throughput, different tooling, smaller dev ecosystems |
+| **Contract language** | Solidity (EVM), Vyper (EVM), Rust+Anchor (Solana), Move (Aptos/Sui), Cairo (Starknet) | Solidity = most learning material; Rust = strong typing; Move = resource-oriented |
+| **Dev framework** | Foundry, Hardhat, Truffle (deprecated), Anchor, Starknet Foundry | Foundry = Rust-fast tests; Hardhat = JS-native; Anchor = Solana standard |
+| **Indexing** | The Graph, Goldsky, Subsquid, Ponder, custom | hosted vs self-host; cost vs control |
+| **Wallet integration** | RainbowKit, ConnectKit, wagmi, ethers, viem, web3.js (legacy) | wagmi+viem = modern TS-first |
+| **Audits** | Trail of Bits, OpenZeppelin, Sherlock contest, Code4rena | firm vs contest; cost vs depth |
+
+## Game Engines
+
+| Option | Best for | Trade-offs |
+|---|---|---|
+| **Unity** | Cross-platform, mobile, AR/VR, indie + AAA | C#, royalty model after threshold |
+| **Unreal Engine** | High-fidelity 3D, AAA, console | C++ + Blueprints, heavier |
+| **Godot** | 2D + 3D indie, OSS | GDScript / C#, smaller ecosystem |
+| **Bevy** | Rust-based, OSS, ECS | Rust expertise required, younger |
+| **PlayCanvas / Phaser / Pixi.js** | Web-native games | Browser only, no native AOT |
+
+## Mobile-Specific Tooling
+
+| Layer | Options | Trade-offs |
+|---|---|---|
+| **Cross-platform framework** | React Native (bare or Expo), Flutter, .NET MAUI, NativeScript, KMP+Compose Multiplatform | RN+Expo = JS speed; Flutter = pixel-perfect; KMP = native UI per platform |
+| **Native (iOS)** | SwiftUI, UIKit (legacy) | SwiftUI = modern, UIKit needed for some controls |
+| **Native (Android)** | Jetpack Compose, View system (legacy) | Compose = modern, Views needed for some libs |
+| **State (RN/Flutter)** | Zustand+Jotai (RN), Riverpod+BLoC (Flutter) | per-ecosystem standard |
+| **Distribution / OTA** | EAS Update (Expo), CodePush (deprecated), Shorebird (Flutter), App Center | EAS for Expo; Shorebird for Flutter dart hot updates |
+| **In-app purchases** | RevenueCat (cross-platform), StoreKit 2 (iOS native), Google Play Billing (Android native) | RevenueCat = subscription unification |
+
+## Embedded / Firmware
+
+| Layer | Options | Trade-offs |
+|---|---|---|
+| **MCU class** | Cortex-M0+/M3/M4F/M7 (STM32, NXP), RP2040/RP2350 (Raspberry Pi), ESP32 (Espressif), nRF52/nRF53 (Nordic BLE) | RP2040 = cheap+RP; ESP32 = built-in WiFi+BLE; nRF = BLE-first |
+| **RTOS** | FreeRTOS, Zephyr, ThreadX (Azure RTOS), bare-metal | Zephyr = modular + DTS; FreeRTOS = simplest |
+| **Language** | C, C++ (modern), Rust (embedded-hal), MicroPython | Rust = memory safety, learning curve |
+| **OTA** | esp-idf OTA, MCUboot, Nordic DFU, custom | MCUboot = vendor-neutral |
+| **Connectivity** | BLE, Wi-Fi, Thread/Matter, LoRa(WAN), NB-IoT, Cellular (LTE-M / 4G / 5G), Ethernet | Matter = unified IoT; LoRa = long-range low-power |
+| **Tooling** | PlatformIO, esp-idf, STM32CubeIDE, Zephyr west, probe-rs | PlatformIO unifies across MCUs |
+
+## Browser Extensions
+
+| Layer | Options | Trade-offs |
+|---|---|---|
+| **Manifest** | Manifest V3 (required for Chrome new submissions), Manifest V2 (Firefox supports longer) | MV3 = service worker model |
+| **Framework** | WXT, Plasmo, CRXJS, vanilla | WXT/Plasmo = DX boost, type-safe |
+| **Cross-browser** | webextension-polyfill, browser API shims | extension code largely portable |
+| **Distribution** | Chrome Web Store, Mozilla Add-ons, Edge Add-ons, Safari (Mac App Store) | Safari requires Xcode wrapper |
+
+## Desktop App Frameworks
+
+| Option | Best for | Trade-offs |
+|---|---|---|
+| **Tauri** | Rust backend + web frontend, small bundle | Rust learning |
+| **Electron** | Max compatibility, large ecosystem | Heavy memory, large bundle |
+| **Wails** | Go backend + web frontend | Smaller ecosystem |
+| **SwiftUI (macOS-only)** | Native macOS UX | Apple only |
+| **WinUI 3 (Windows-only)** | Native Windows UX | Microsoft only |
+| **GTK / Qt** | Native Linux + cross-platform | Older stacks, harder UX polish |
+
+## AR / VR / Spatial
+
+| Layer | Options | Trade-offs |
+|---|---|---|
+| **Headset/device** | Apple Vision Pro (visionOS), Meta Quest 2/3/Pro, smartphone AR (ARKit/ARCore), WebXR | visionOS = native spatial; Quest = standalone; WebXR = browser-only |
+| **Engine** | Unity (broad support), Unreal, RealityKit (Apple), Three.js+react-three-fiber (WebXR) | Unity = most cross-platform; RealityKit = visionOS native |
+| **Tracking** | controllers, hand-tracking, eye-tracking, gaze, voice | varies by device capability |
+| **Multi-user** | Photon, Mirror, Normcore, ROS (research) | Photon = managed; Mirror = open-source Unity |
+
+## MCP Server Hosts
+
+| Option | Best for | Trade-offs |
+|---|---|---|
+| **stdio** | Local development, Claude Desktop integration | Single-user, no remote |
+| **HTTP + SSE** | Remote, multi-user, web auth | Need hosting + auth |
+| **Cloudflare Workers (McpAgent)** | Edge, durable state via DO, OAuth | Cloudflare-coupled |
+| **Vercel Functions** | Serverless, Next.js-adjacent | Cold starts |
+
+## Claude Code Plugin Components
+
+| Layer | When to use | Notes |
+|---|---|---|
+| **Skills** | Reusable techniques, workflows, references | Default unit — see `skill-creator:skill-creator` |
+| **Commands** | User-invoked slash commands | See `plugin-dev:command-development` |
+| **Agents** | Long-running, isolated context tasks | See `plugin-dev:agent-development` |
+| **Hooks** | Event-driven (PreToolUse, PostToolUse, Stop, etc.) | See `plugin-dev:hook-development` |
+| **MCP servers** | External tool integrations | See `plugin-dev:mcp-integration` |
+
+## Scientific / Research Stacks
+
+| Layer | Options | Trade-offs |
+|---|---|---|
+| **Compute backend** | NumPy / SciPy, PyTorch, JAX, cuDF, Polars, DuckDB, Dask, Ray | JAX = autodiff + JIT; Polars/DuckDB = OLAP local |
+| **Notebooks** | Jupyter, marimo, Pluto.jl (Julia), Quarto | marimo = reactive; Quarto = publication |
+| **Environment** | conda / mamba, uv, pixi, Nix, devcontainer | pixi = conda+lockfile speed; Nix = full reproducibility |
+| **Workflow** | Snakemake, Nextflow, Pachyderm (data versioning) | Nextflow = bioinformatics standard |
+| **Publication** | Quarto, Pandoc, LaTeX, Manuscripts | Quarto unifies notebooks + papers |
+
+## Data Pipeline Orchestrators
+
+| Option | Best for | Trade-offs |
+|---|---|---|
+| **Airflow (Astronomer-managed)** | Mature, large community | Heavy, complex |
+| **Dagster** | Modern, asset-aware | Newer, less battle-tested |
+| **Prefect** | Python-native, dynamic | Smaller community than Airflow |
+| **Argo Workflows** | Kubernetes-native | K8s required |
+| **Temporal** | Durable execution, code-defined | Different mental model |
+| **GitHub Actions / cron** | Simple schedules | Limited for complex DAGs |
+
+## IaC / Cloud Infrastructure
+
+| Option | Best for | Trade-offs |
+|---|---|---|
+| **Terraform / OpenTofu** | Multi-cloud, mature ecosystem | HCL learning |
+| **Pulumi** | Real programming languages | Smaller community |
+| **AWS CDK** | AWS-only, TypeScript/Python | AWS lock-in |
+| **SST** | Serverless + Next.js + AWS | Opinionated |
+| **Crossplane** | K8s-native infrastructure | K8s required |
