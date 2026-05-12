@@ -58,6 +58,40 @@ Or describe what you want to build — e.g. "set up a new project", "scaffold
 project docs", "bootstrap a CLI tool", "design the architecture for X" — and
 the architect should trigger automatically.
 
+## Versioning policy
+
+Every meaningful change to the skill bumps `plugin.json` and creates a matching git tag. The Preflight `Version freshness check` reads both `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` and the latest tag at `siliconyouth/project-architect`; when they diverge, users see a one-line "an update is available" notice with the refresh command.
+
+Procedure for maintainers:
+
+```bash
+# 1. Bump plugin.json version (patch / minor / major per semver)
+python3 -c "import json,sys; p='.claude-plugin/plugin.json'; d=json.load(open(p)); d['version']=sys.argv[1]; open(p,'w').write(json.dumps(d,indent=2)+'\n')" 2.0.2
+
+# 2. Add a [<version>] block to CHANGELOG.md describing the change
+
+# 3. Commit
+git add .claude-plugin/plugin.json CHANGELOG.md
+git commit -m "chore(version): bump to 2.0.2"
+
+# 4. Tag (annotated, with release notes from CHANGELOG)
+git tag -a v2.0.2 -m "<short summary>"
+
+# 5. Push commits + tag
+git push origin main
+git push origin v2.0.2
+
+# 6. Refresh local cache so the new version is loaded
+claude plugin marketplace update local
+claude plugin uninstall project-architect@local
+claude plugin install project-architect@local
+```
+
+Versioning rules (semver):
+- **Patch (`2.0.X`)** — bug fixes, doc tightening, internal refactors with no user-visible behavior change.
+- **Minor (`2.X.0`)** — backward-compatible new features (new phase, new agent, new template).
+- **Major (`X.0.0`)** — breaking changes (renaming phases, removing decision keys, schema migrations).
+
 ## Source
 
 Repo root IS the marketplace root. See `CHANGELOG.md` for version history.

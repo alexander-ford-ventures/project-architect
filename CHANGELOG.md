@@ -4,6 +4,33 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] — 2026-05-12
+
+### Fixed
+
+- **Plugin manifest schema conformance** (`1be648b`). `dependencies` was an object map (npm-style); now the canonical array form per the Claude Code plugin schema. Removed `softDependencies` (unrecognized key); recommendations now surface via README, runtime Preflight check, and generated `recommended-plugins.md`. Added a top-level marketplace `description`.
+- **`phase_-1` enum mismatch** (`c731879`). The Soft-dependency check saved `state.phase = "phase_-1"`, inconsistent with the canonical phase enum (`"preflight"`). Resume after a Preflight abort would have no matching case. Renamed to `"preflight"` everywhere.
+- **Missing `Skill` tool grants** (`c731879`). `claude-md-author` and `claude-tooling-author` agent bodies invoke other skills but `Skill` wasn't in their tools array. Added.
+
+### Added
+
+- **`references/state-schema.md`** (`d1446ac`). Canonical runtime reference for `state.json`: schema, lockfile protocol, migration policy. Replaces the workaround that pointed SKILL.md at the design spec.
+- **Soft-dependency Preflight check** (`6eb14a9`, `23cd200`). Lists 6 recommended plugins at startup, scans for missing ones, offers install. Replaces the dropped `softDependencies` manifest field.
+- **`.remember/logs/` auto-creation** (`baf31ac`, `675b6d7`). Preflight's first step now `mkdir -p .remember/logs` to silence the `remember` plugin's PostToolUse hook when it's installed. Also adds `.remember/` to the universal-default `.gitignore` Phase 0a writes.
+- **Version freshness check** (`cd54887`). Preflight compares `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` against `gh release view --repo siliconyouth/project-architect`; warns if loaded < latest. Best-effort; silently skips if `gh` missing, no network, or no releases.
+- **Manual test plan** (`715bca0`). 5 scenarios covering CLI bootstrap, Claude Code plugin bootstrap, iteration/revision, resumability, and snapshot versioning.
+- **As-built corrections appendix** (`3992cb6`) on the v2.0 design spec and implementation plan, documenting deltas between design-time assumptions and shipped behavior.
+
+### Changed
+
+- **Preflight subsection order**: `Ambient hooks tolerance` → `Model/effort verification` → `Soft-dependency check` → `Version freshness check`. The mkdir runs first so the `remember` plugin's hook never sees a missing log dir.
+- **Doc consistency** (`23cd200`): README, spec, and plan all reference 6 recommended plugins. Test plan corrected re: `/plugin` not showing versions.
+
+### Removed
+
+- `softDependencies` field from `plugin.json` (unrecognized by schema).
+- "Soft dep missing" row from the failure-modes table (replaced by proactive Preflight handling).
+
 ## [2.0.0] — 2026-05-12
 
 ### Added — Major redesign as an orchestrator
