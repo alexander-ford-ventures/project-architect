@@ -333,9 +333,61 @@ Load `references/document-catalog.md` for selection rules and the topological so
 5. After each batch, commit each generated doc separately:
    `docs: generate <DOC_NAME>` (one commit per doc, via `commit-commands:commit`).
 
-6. **In parallel with the last doc batch**, dispatch:
-   - `claude-md-author` agent → writes `/CLAUDE.md` and any per-folder CLAUDE.md.
-   - `claude-tooling-author` agent → writes `.claude/settings.json`, hooks/, agents/, commands/, recommended-plugins.md (see `references/claude-code-integration.md` for stack→skill recipes).
+6. **In parallel with the last doc batch**, dispatch two agents:
+
+   - `claude-md-author` → writes `/CLAUDE.md` and any per-folder CLAUDE.md.
+
+     ```
+     Agent({
+       subagent_type: "project-architect:claude-md-author",
+       model: "opus",
+       description: "Write CLAUDE.md files",
+       prompt: """
+         [MODEL DIRECTIVE]
+         Run with maximum effort. Apply extended thinking. Be thorough.
+
+         [INPUTS]
+         state_path: docs/_architect_state.json
+         template_root_path: skills/project-architect/references/templates/CLAUDE_MD_ROOT.md
+         template_subfolder_path: skills/project-architect/references/templates/CLAUDE_MD_SUBFOLDER.md
+         doc_paths: {{list of generated doc filenames from state.documents_generated}}
+         project_structure: {{tree from state.decisions[project.structure] or scanned filesystem}}
+
+         [TASK]
+         Write the root CLAUDE.md and any subdirectory CLAUDE.md files per the
+         agent's documented gating triggers. Run claude-md-management:claude-md-improver
+         on each file and iterate until pass. Return a summary listing each file written.
+       """
+     })
+     ```
+
+   - `claude-tooling-author` → writes `.claude/settings.json`, hooks/, agents/, commands/, recommended-plugins.md (see `references/claude-code-integration.md` for stack→skill recipes).
+
+     ```
+     Agent({
+       subagent_type: "project-architect:claude-tooling-author",
+       model: "opus",
+       description: "Write .claude/ project config",
+       prompt: """
+         [MODEL DIRECTIVE]
+         Run with maximum effort. Apply extended thinking. Be thorough.
+
+         [INPUTS]
+         state_path: docs/_architect_state.json
+         integration_path: skills/project-architect/references/claude-code-integration.md
+         project_root: {{user project root path}}
+         stack_summary: {{parsed summary of language/frontend/backend/db/auth/hosting/testing from state.decisions}}
+
+         [TASK]
+         Follow the agent's documented workflow: read the integration recipe library,
+         write .claude/settings.json (stack-aware allowlist, hooks), .claude/hooks/*,
+         .claude/agents/*, .claude/commands/*, and .claude/recommended-plugins.md.
+         Optionally invoke fewer-permission-prompts, hookify:writing-rules, update-config,
+         and claude-code-setup:claude-automation-recommender if available. Return a summary
+         listing artifact counts.
+       """
+     })
+     ```
 
 7. After both return:
    - Commit CLAUDE.md files: one commit per file or a batch commit `chore: add CLAUDE.md files`.
@@ -387,7 +439,36 @@ Use `AskUserQuestion` for the menu.
   1. Ask: which decision key? (auto-suggest from `state.decisions` keys)
   2. Ask: why (free-form — goes into ADR)
   3. Re-ask the question that produced this decision (with current value as default).
-  4. Dispatch `decision-revisor` (reads `references/revision-playbook.md`) with `{decision_key, old_value, new_value, reason, next_adr_id}`.
+  4. Dispatch `decision-revisor`:
+
+     ```
+     Agent({
+       subagent_type: "project-architect:decision-revisor",
+       model: "opus",
+       description: "Revise {{decision_key}}",
+       prompt: """
+         [MODEL DIRECTIVE]
+         Run with maximum effort. Apply extended thinking. Be thorough.
+
+         [INPUTS]
+         decision_key: {{decision_key}}
+         old_value: {{old_value}}
+         new_value: {{new_value}}
+         reason: {{user-supplied reason}}
+         state_path: docs/_architect_state.json
+         playbook_path: skills/project-architect/references/revision-playbook.md
+         next_adr_id: {{state.next_adr_id}}
+
+         [TASK]
+         Look up decision_key in the playbook's affected-docs map. Surgically rewrite
+         only the affected sections in each listed doc; append a revision-log entry
+         per doc. File a new ADR at docs/decisions/<next_adr_id>-<slug>.md superseding
+         any prior ADR for the same key. Update state.decisions and state.adrs_filed.
+         Validate cross-references and return a structured report.
+       """
+     })
+     ```
+
   5. After revisor returns, run inline validation (revisor should have done this already but double-check).
   6. Commit via `commit-commands:commit`: `architect(revise): {{key}} → {{new}} (ADR {{id}})`.
   7. Loop back to menu.
