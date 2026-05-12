@@ -6,14 +6,5 @@
     "name": "Vladimir Dukelic",
     "email": "vladimir@dukelic.com"
   },
-  "dependencies": {
-    "commit-commands": "*"
-  },
-  "softDependencies": {
-    "superpowers": "*",
-    "claude-md-management": "*",
-    "claude-code-setup": "*",
-    "hookify": "*",
-    "document-skills": "*"
-  }
+  "dependencies": ["commit-commands"]
 }
