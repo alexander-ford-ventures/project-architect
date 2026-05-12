@@ -54,6 +54,32 @@ Verify the harness is running Opus 4.7 with 1M context at max effort.
 
 Effort verification: not directly detectable from env. Trust the user's `/effort max` confirmation. As a fallback, include the directive `"Run with maximum effort. Apply extended thinking. Be thorough."` in every subagent prompt header and every `Skill` invocation context.
 
+### Soft-dependency check
+
+Claude Code's plugin schema only supports hard `dependencies`; there is no declarative soft / recommended-plugin field. We surface recommended plugins via a runtime probe here so missing ones are obvious before Phase 0.
+
+Recommended plugins (qualified names): `superpowers`, `claude-md-management`, `claude-code-setup`, `hookify`, `document-skills`.
+
+1. For each recommended plugin, probe installation:
+   ```bash
+   claude plugin list 2>/dev/null | grep -i "<plugin>" \
+     || ls ~/.claude/plugins/cache 2>/dev/null | grep -i "<plugin>"
+   ```
+   Treat a non-empty match as installed.
+2. For each missing plugin, emit one line to the user, e.g.:
+   - `superpowers` — `claude plugin install superpowers` — used by Phase 4 doc-gen (`superpowers:dispatching-parallel-agents`) and Phase 7 (`superpowers:writing-plans`).
+   - `claude-md-management` — `claude plugin install claude-md-management` — used by the `claude-md-author` agent.
+   - `claude-code-setup` — `claude plugin install claude-code-setup` — used by the `claude-tooling-author` agent for `.claude/` scaffolding.
+   - `hookify` — `claude plugin install hookify` — used by `claude-tooling-author` when generating project hooks.
+   - `document-skills` — `claude plugin install document-skills` — used by `document-author` for diagrams / artifacts.
+3. If any are missing, ask once via `AskUserQuestion` (load via `ToolSearch` if needed):
+   > "Continue with current plugins? (yes / install missing now / abort)"
+4. On `install missing now`: run each `claude plugin install <plugin>` sequentially; on each install failure, record and surface but do not abort the whole batch.
+5. On `yes`: for every plugin still missing, append its name to `state.recommended_plugins[].missing`. The `claude-tooling-author` agent reads this in Phase 4 when generating `.claude/recommended-plugins.md` so the user's runtime choices are reflected in the final doc.
+6. On `abort`: save state with `phase = "phase_-1"` and exit cleanly.
+
+Skip the prompt entirely if every recommended plugin is already installed; just record `state.recommended_plugins[]` with `missing: false` for each and proceed silently.
+
 ---
 
 ## Phase 0a: Repo Init (optional)
@@ -432,7 +458,7 @@ If yes:
 | Commit fails (pre-commit hook rejects) | Surface error, ask user. **Never** `--no-verify`. |
 | Push fails (network / auth) | Commit locally, queue push for next phase boundary. |
 | Required dep missing (`commit-commands`) | Refuse to start with explicit install command. |
-| Soft dep missing (`hookify`, `fewer-permission-prompts`, etc.) | Continue with internal fallback; note in `recommended-plugins.md` that installing improves future bootstraps. |
+| Recommended (soft) dep missing (`superpowers`, `claude-md-management`, `claude-code-setup`, `hookify`, `document-skills`) | Handled proactively at Phase -1 "Soft-dependency check": probe each, offer install / continue / abort, record skipped ones in `state.recommended_plugins[].missing` so the generated `.claude/recommended-plugins.md` reflects the runtime choice. |
 | User said "no" to repo init then tries to commit | Detect at first commit attempt; offer to init now. |
 | Two terminals running architect concurrently | Lock file detects (other pid). Prompt user to clear if stale. |
 | Mid-session model switch to weaker model | Detect at next phase boundary by re-reading env; pause, re-prompt. |

@@ -94,8 +94,16 @@ To re-bootstrap: delete `state.json` and re-invoke. Existing generated docs beco
       "file": "docs/research/phase0-domain.md", "dispatched_at": "..." }
   ],
 
-  // Plugin recommendations (resolved during Phase 6)
-  "recommended_plugins": [{ "name": "hookify", "reason": "...", "installed": false }],
+  // Plugin recommendations. Two write points:
+  //   • Phase -1 "Soft-dependency check": probes the 5 baseline recommended plugins
+  //     and writes one entry per plugin with `missing: true|false` and `installed`
+  //     (true if installed during Preflight, false if user chose to continue without).
+  //   • Phase 6: per-project recommendations from claude-tooling-author may be
+  //     appended; their install outcome is recorded back into `installed`.
+  "recommended_plugins": [
+    { "name": "superpowers", "reason": "Phase 4 / Phase 7", "missing": false, "installed": true },
+    { "name": "hookify", "reason": "claude-tooling-author hooks", "missing": true, "installed": false }
+  ],
 
   // Concurrency guard. Mirror of _architect_state.lock; the file is canonical.
   "lock": { "pid": 42, "host": "macbook-air", "acquired_at": "..." }
