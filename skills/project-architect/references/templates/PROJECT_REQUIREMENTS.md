@@ -21,6 +21,12 @@ revision_triggers:
   - non_functional.*
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Project Requirements: {{project_name}}
 
 ## Problem Statement
@@ -48,3 +54,7 @@ How to measure if the project achieves its goals.
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

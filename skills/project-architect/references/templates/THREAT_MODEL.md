@@ -7,6 +7,12 @@ depends_on: [SECURITY_AND_COMPLIANCE]
 revision_triggers: [project.type, security.*, regulatory.*]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Threat Model: {{project_name}}
 
 ## Assets
@@ -32,3 +38,7 @@ Threats that cannot be fully mitigated and the explicit risk-acceptance decision
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

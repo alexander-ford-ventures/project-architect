@@ -7,6 +7,12 @@ depends_on: [DEPLOYMENT, DATABASE_DESIGN]
 revision_triggers: [hosting.frontend, hosting.backend, database.host, file_storage.provider, ai.llm_provider]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Cost Model: {{project_name}}
 
 ## Cost Summary
@@ -29,3 +35,7 @@ Per-service alert configuration: warn threshold, page threshold, owner, and the 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

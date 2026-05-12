@@ -7,6 +7,12 @@ depends_on: [MONITORING_AND_OBSERVABILITY, RUNBOOK]
 revision_triggers: [monitoring.*]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Incident Response: {{project_name}}
 
 ## Severity Levels
@@ -29,3 +35,7 @@ Physical or virtual war room (Zoom / Meet bridge with persistent link), incident
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

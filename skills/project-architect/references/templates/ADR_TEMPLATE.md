@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: []
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 ---
 adr_id: {{NNNN}}                       # zero-padded sequential
 title: {{title}}
@@ -46,3 +52,7 @@ If this turns out wrong, how do we revert? What's the cost?
 - Prior ADR: {{prior_id}}
 - Research: {{research_refs}}
 - Related: {{external links}}
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

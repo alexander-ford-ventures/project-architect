@@ -7,6 +7,12 @@ depends_on: [TESTING_STRATEGY, DEPLOYMENT]
 revision_triggers: [cicd.platform, cicd.branch_strategy, testing.unit_framework, testing.e2e_framework]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # CI/CD: {{project_name}}
 
 ## CI/CD Platform
@@ -29,3 +35,7 @@ Where build artifacts live (registry / object storage), versioning/tagging conve
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

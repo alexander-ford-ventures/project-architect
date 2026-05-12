@@ -13,6 +13,12 @@ revision_triggers:
   - file_storage.cdn
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # File Storage: {{project_name}}
 
 ## Storage Provider
@@ -41,3 +47,7 @@ Storage GB/mo, request pricing, egress, processing. Link to `COST_MODEL.md` for 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

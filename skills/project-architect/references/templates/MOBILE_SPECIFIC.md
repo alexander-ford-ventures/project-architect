@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [mobile.platforms, mobile.framework, mobile.distribution]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Mobile Specific: {{project_name}}
 
 ## Platforms & Min OS
@@ -38,3 +44,7 @@ OTA update mechanism (Expo Updates, App Center CodePush, CodePush replacement, c
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -1,11 +1,13 @@
 {
   "name": "project-architect",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Project architecture orchestrator. Interviews across 9 phases (preflight → repo init → kickoff → vision → tech stack → cost → architecture → docs → iteration → setup → optional plan), dispatches research-scout / document-author / decision-revisor / claude-md-author / claude-tooling-author subagents, files ADRs, generates docs + per-folder CLAUDE.md + .claude/ project config.",
   "author": {
     "name": "Vladimir Dukelic",
     "email": "vladimir@dukelic.com"
   },
+  "license": "MIT",
+  "repository": "https://github.com/siliconyouth/project-architect",
   "dependencies": [
     { "name": "commit-commands", "marketplace": "claude-plugins-official" }
   ]

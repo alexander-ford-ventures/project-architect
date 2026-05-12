@@ -19,6 +19,12 @@ revision_triggers:
   - project.scale
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # {{project_name}}
 
 ## Vision
@@ -44,3 +50,7 @@ Pulled from `project.constraints` plus any explicit out-of-scope items captured 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

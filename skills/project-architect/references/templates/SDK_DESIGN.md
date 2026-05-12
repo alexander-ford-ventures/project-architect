@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [sdk.target_languages, sdk.versioning_policy]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # SDK Design: {{project_name}}
 
 ## Target Consumers
@@ -38,3 +44,7 @@ Per-language stance on types: TypeScript `.d.ts` shipping policy, Python type st
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

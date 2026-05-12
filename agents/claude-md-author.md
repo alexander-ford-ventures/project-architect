@@ -5,6 +5,12 @@ tools: [Read, Write, Edit, Glob, Grep, Bash, Skill]
 model: opus
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # CLAUDE.md Author
 
 You write `/CLAUDE.md` (always) and per-folder CLAUDE.md files (when warranted) for a generated project. After writing each file, you invoke `claude-md-management:claude-md-improver` to audit it and iterate until it passes.

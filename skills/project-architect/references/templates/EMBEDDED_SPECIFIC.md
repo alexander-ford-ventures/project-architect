@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [embedded.mcu_class, embedded.language, embedded.rtos, embedded.connectivity]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Embedded Specific: {{project_name}}
 
 ## MCU / SoC Choice
@@ -35,3 +41,7 @@ Bootloader choice (MCUboot, native ROM bootloader, custom), recovery mode entry,
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -1,3 +1,9 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Questioning Flow Reference
 
 The interview is a tree: **universal kickoff** (always asked) → **per-type drill-down** (one branch) → **architecture deep dive** (per-area). Skip questions that prior answers render irrelevant.

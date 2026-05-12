@@ -14,6 +14,12 @@ revision_triggers:
   - data_pipeline.warehouse
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Data Pipeline: {{project_name}}
 
 ## Sources & Sinks
@@ -42,3 +48,7 @@ Retry semantics per task (exponential backoff, max attempts), idempotency strate
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

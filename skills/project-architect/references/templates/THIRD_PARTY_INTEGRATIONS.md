@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [integrations, webhooks.inbound, background_jobs.queue]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Third-Party Integrations: {{project_name}}
 
 ## Integration Overview
@@ -26,3 +32,7 @@ Cron / scheduled jobs that touch third-party services (sync, reconcile, sweep), 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

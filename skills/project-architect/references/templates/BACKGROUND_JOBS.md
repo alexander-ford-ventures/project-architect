@@ -13,6 +13,12 @@ revision_triggers:
   - background_jobs.scheduling
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Background Jobs: {{project_name}}
 
 ## Queue / Broker Choice
@@ -41,3 +47,7 @@ Per-job latency/error dashboards, queue-depth alerts, oldest-pending-message age
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

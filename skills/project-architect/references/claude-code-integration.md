@@ -1,3 +1,9 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Claude Code Integration Recipes
 
 The `claude-tooling-author` agent reads this file to decide which `.claude/` artifacts to write for the generated project. Stack-aware hooks, permissions, agents, commands, and plugin recommendations live here.

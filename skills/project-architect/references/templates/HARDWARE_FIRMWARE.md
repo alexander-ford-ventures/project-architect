@@ -7,6 +7,12 @@ depends_on: [EMBEDDED_SPECIFIC]
 revision_triggers: [hardware.pcb_design, hardware.manufacturing, hardware.certifications]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Hardware & Firmware: {{project_name}}
 
 ## Hardware Overview (block diagram)
@@ -35,3 +41,7 @@ Hardware-firmware contract: pin assignments, register maps, version-detect strat
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

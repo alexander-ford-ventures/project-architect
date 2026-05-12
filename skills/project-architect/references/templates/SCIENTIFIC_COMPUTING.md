@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [scientific.compute_backend, scientific.reproducibility, scientific.environment_pinning]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Scientific Computing: {{project_name}}
 
 ## Domain & Goal
@@ -35,3 +41,7 @@ Provenance capture (W3C PROV, OpenLineage, Snakemake reports, nf-core MultiQC), 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -7,6 +7,12 @@ depends_on: [CI_CD, DEPLOYMENT]
 revision_triggers: [cicd.platform, release.cadence, release.versioning]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Release Process: {{project_name}}
 
 ## Versioning Scheme
@@ -32,3 +38,7 @@ When and how to yank a published release (registry yank for npm / cargo / PyPI, 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

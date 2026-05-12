@@ -12,6 +12,12 @@ revision_triggers:
   - a11y.target
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Accessibility: {{project_name}}
 
 ## WCAG Target Level
@@ -37,3 +43,7 @@ Automated (axe-core in unit/E2E, Lighthouse CI, Pa11y, Storybook a11y addon) plu
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

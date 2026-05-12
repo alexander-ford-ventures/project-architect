@@ -1,3 +1,9 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # State Schema Reference
 
 Canonical runtime reference for `state.json`. The orchestrator reads this file to know what to write, validate, and migrate. Self-contained: no need to consult the design spec.

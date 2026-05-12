@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [frontend.framework, frontend.styling, frontend.component_library, frontend.state, frontend.rendering]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # UI/UX Design: {{project_name}}
 
 ## Design System
@@ -38,3 +44,7 @@ Core Web Vitals targets (LCP, INP, CLS), JS bundle budget, and image strategy. L
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [cicd.branch_strategy, open_source]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Contributing: {{project_name}}
 
 ## Code of Conduct
@@ -32,3 +38,7 @@ Where contributors talk: Discord / Slack / Discussions / IRC / mailing list, wit
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [database.engine, database.host, database.orm, database.migration_strategy, database.multi_tenancy_isolation]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Database Design: {{project_name}}
 
 ## Database Choice
@@ -38,3 +44,7 @@ Seed script location, test-fixture strategy, and any factory/builder libraries u
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

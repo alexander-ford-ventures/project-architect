@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [testing.unit_framework, testing.integration_framework, testing.e2e_framework, testing.coverage_target]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Testing Strategy: {{project_name}}
 
 ## Testing Philosophy
@@ -32,3 +38,7 @@ Tools (k6 / Artillery / Lighthouse CI / autocannon), key scenarios, target thres
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

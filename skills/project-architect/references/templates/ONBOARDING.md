@@ -7,6 +7,12 @@ depends_on: [CLAUDE_MD_ROOT]
 revision_triggers: [language.primary, frontend.framework, backend.framework]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Onboarding: {{project_name}}
 
 ## Setup Steps
@@ -29,3 +35,7 @@ The communication map: synchronous channels (Slack/Discord rooms with topics), a
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

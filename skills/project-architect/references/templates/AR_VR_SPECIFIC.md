@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [ar_vr.device, ar_vr.engine, ar_vr.tracking]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # AR / VR Specific: {{project_name}}
 
 ## Target Device / Platform
@@ -32,3 +38,7 @@ Distribution channel (Meta Horizon Store, App Lab, visionOS App Store, SteamVR, 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

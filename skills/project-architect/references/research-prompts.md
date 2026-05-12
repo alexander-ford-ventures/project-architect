@@ -1,3 +1,9 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Research Prompts
 
 Prompt templates the orchestrator hands to the `research-scout` agent. The agent substitutes `{{...}}` placeholders with values from `state.decisions` and the current phase summary.

@@ -7,6 +7,12 @@ depends_on: [DEPLOYMENT, MONITORING_AND_OBSERVABILITY]
 revision_triggers: [hosting.*, monitoring.*]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Runbook: {{project_name}}
 
 ## Common Operations
@@ -26,3 +32,7 @@ Primary → secondary → tertiary on-call rotations, manager / VP escalation, v
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

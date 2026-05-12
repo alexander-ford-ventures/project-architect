@@ -7,6 +7,12 @@ depends_on: [AUTHENTICATION_SYSTEM, DATABASE_DESIGN]
 revision_triggers: [backend.framework, backend.api_style, backend.versioning, backend.realtime_protocol]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # API Gateway: {{project_name}}
 
 ## API Style
@@ -35,3 +41,7 @@ Outbound webhook events, payload schema, signing strategy, retry policy. Skip if
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -15,6 +15,12 @@ revision_triggers:
   - payments.pricing_tiers
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Billing & Payments: {{project_name}}
 
 ## Provider & Rationale
@@ -46,3 +52,7 @@ MRR/ARR dashboards, revenue recognition, accounting export (Stripe → QuickBook
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

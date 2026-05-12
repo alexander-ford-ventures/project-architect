@@ -16,6 +16,12 @@ revision_triggers:
   - subfolder.test_framework
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # {{subfolder.path}}
 
 ## Purpose
@@ -37,3 +43,7 @@ Path → purpose.
 ## Cross-references
 - Root: `../CLAUDE.md` for project-wide conventions
 - Related docs: {{relevant docs/ links}}
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

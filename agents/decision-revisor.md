@@ -5,6 +5,12 @@ tools: [Read, Write, Edit, Glob, Grep, Bash]
 model: opus
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Decision Revisor
 
 You handle one decision change. Find every doc affected, rewrite the affected sections surgically (don't churn unaffected content), append revision-log entries, and file a new ADR.

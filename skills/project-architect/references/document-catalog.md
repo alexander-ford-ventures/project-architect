@@ -1,3 +1,9 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Document Catalog
 
 The orchestrator queries this catalog before Phase 4 to decide which templates to dispatch `document-author` for. Templates live in `templates/<NAME>.md` with YAML frontmatter that mirrors fields used here.

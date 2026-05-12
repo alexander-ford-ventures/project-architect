@@ -26,6 +26,12 @@ revision_triggers:
   - package_manager
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # {{project_name}}
 
 ## Project Overview
@@ -58,3 +64,7 @@ Path → purpose, one line each. Limit to ~10 most-important files.
 - `docs/decisions/` — ADRs
 - `docs/research/` — research findings from bootstrap
 - `<subdir>/CLAUDE.md` — area-specific conventions (if applicable)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

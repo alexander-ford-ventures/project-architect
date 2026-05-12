@@ -1,3 +1,9 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # project-architect (v2.0)
 
 A Claude Code plugin that bootstraps a new project end-to-end.
@@ -91,6 +97,20 @@ Versioning rules (semver):
 - **Patch (`2.0.X`)** — bug fixes, doc tightening, internal refactors with no user-visible behavior change.
 - **Minor (`2.X.0`)** — backward-compatible new features (new phase, new agent, new template).
 - **Major (`X.0.0`)** — breaking changes (renaming phases, removing decision keys, schema migrations).
+
+## Attribution
+
+If you use `project-architect` to bootstrap a project, the generated docs will include a small footer:
+
+> *Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+
+This is a social-norm attribution — please keep it visible in `PROJECT_OVERVIEW.md`, `CLAUDE.md`, and other top-level docs so others can discover the tool. The MIT license doesn't legally require this, but it's a polite norm and costs you nothing.
+
+If you fork the skill itself or build on top of it, the source-file attribution comments must remain per the MIT license terms (the LICENSE file must be included in any redistribution).
+
+## License
+
+MIT — see [LICENSE](LICENSE).
 
 ## Source
 

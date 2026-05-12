@@ -7,6 +7,12 @@ depends_on: [UI_UX_DESIGN, API_GATEWAY]
 revision_triggers: [frontend.framework, frontend.rendering, backend.framework, performance.*]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Performance Budgets: {{project_name}}
 
 ## Core Web Vitals Targets
@@ -32,3 +38,7 @@ CI gates (Lighthouse CI thresholds, bundle-size regressions, k6 thresholds) and 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

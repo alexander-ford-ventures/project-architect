@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [auth.provider, auth.methods, auth.session_strategy, auth.multi_tenancy, auth.mfa]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Authentication System: {{project_name}}
 
 ## Auth Provider
@@ -41,3 +47,7 @@ Specific SDKs, libraries, and middleware (with versions) used to implement the a
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

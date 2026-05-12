@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [hosting.frontend, hosting.backend, hosting.cdn, deployment.iac]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Deployment: {{project_name}}
 
 ## Environments
@@ -32,3 +38,7 @@ How preview / per-PR environments are created and torn down, data-scrubbing rule
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

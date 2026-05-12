@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [mcp.host_environment, mcp.surface, mcp.auth_model]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # MCP Server Specific: {{project_name}}
 
 ## Host Environment (stdio / HTTP+SSE / Cloudflare Workers / Vercel)
@@ -32,3 +38,7 @@ Testing approach (MCP Inspector for manual smoke, contract tests against schemas
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

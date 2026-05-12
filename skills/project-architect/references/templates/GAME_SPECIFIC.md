@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [game.engine, game.multiplayer, game.platforms]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Game Specific: {{project_name}}
 
 ## Engine & Rationale
@@ -35,3 +41,7 @@ Content cadence (seasons, events), remote config, A/B testing, telemetry into ba
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

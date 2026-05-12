@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [web3.chain, web3.contract_language, web3.dev_framework, web3.upgradeability]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Web3 Specific: {{project_name}}
 
 ## Chain & Network
@@ -41,3 +47,7 @@ Bug-bounty program (Immunefi, HackerOne), severity ladder, payout schedule, disc
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

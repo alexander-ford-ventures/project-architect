@@ -18,6 +18,12 @@ revision_triggers:
   - ai.embeddings_model
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # AI & ML: {{project_name}}
 
 ## LLM Provider & Models
@@ -52,3 +58,7 @@ Per-user/per-org token budgets, rate limits, model-tier downgrade rules under lo
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

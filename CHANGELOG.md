@@ -1,8 +1,27 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Changelog
 
 All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.0.5] — 2026-05-12
+
+### Added
+
+- **MIT LICENSE**.
+- **Author attribution comment block** added to every text file in the repo (after YAML frontmatter where applicable, at top otherwise). Carries name, email, repo URL, license.
+- **"Skillfully made with…" footer** appended to every doc template so generated user-project docs (PROJECT_OVERVIEW, CLAUDE.md, all architecture docs, etc.) automatically include downstream attribution.
+- **Attribution policy + License section** in README.md explaining the social-norm attribution and the MIT terms.
+
+### Changed
+
+- `plugin.json` and `marketplace.json` now declare `license: MIT` and `repository: https://github.com/siliconyouth/project-architect` as standard manifest fields.
 
 ## [2.0.4] — 2026-05-12
 

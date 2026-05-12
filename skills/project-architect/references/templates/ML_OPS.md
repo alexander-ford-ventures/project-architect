@@ -7,6 +7,12 @@ depends_on: [AI_AND_ML]
 revision_triggers: [ml.training_framework, ml.serving, ml.experiment_tracking]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # ML Ops: {{project_name}}
 
 ## Training Framework
@@ -35,3 +41,7 @@ Internal eval suites + external benchmarks (MMLU, HumanEval, GSM8K, custom), gat
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -7,6 +7,12 @@ depends_on: [DATABASE_DESIGN]
 revision_triggers: [database.engine, database.host, backup.frequency, backup.retention]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Backup and DR: {{project_name}}
 
 ## Backup Strategy
@@ -29,3 +35,7 @@ Schedule for proving backups actually restore (table-top monthly, real restore q
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

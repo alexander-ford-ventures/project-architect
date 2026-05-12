@@ -1,3 +1,9 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Tech Stack Options Reference
 
 Concise option lists with trade-offs for each technology category. Present relevant options to the user, let them decide.

@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [extension.browsers, extension.manifest_version, extension.permissions]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Browser Extension: {{project_name}}
 
 ## Target Browsers
@@ -35,3 +41,7 @@ Distribution targets (Chrome Web Store, Edge Add-ons, Firefox AMO, Safari App St
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -14,6 +14,12 @@ revision_triggers:
   - search.indexing_strategy
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Search: {{project_name}}
 
 ## Search Engine Choice
@@ -39,3 +45,7 @@ Zero-downtime reindex (dual-write + alias swap), schema-evolution playbook, back
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

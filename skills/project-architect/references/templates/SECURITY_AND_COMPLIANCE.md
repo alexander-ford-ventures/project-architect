@@ -7,6 +7,12 @@ depends_on: [AUTHENTICATION_SYSTEM, DATABASE_DESIGN]
 revision_triggers: [security.*, regulatory.*, auth.provider, database.engine]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Security and Compliance: {{project_name}}
 
 ## Threat Model
@@ -44,3 +50,7 @@ Concrete checklist mapping each applicable regulation/standard to implemented co
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -1,3 +1,7 @@
+# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Repository: https://github.com/siliconyouth/project-architect
+# License: MIT
+
 # OS files
 .DS_Store
 Thumbs.db

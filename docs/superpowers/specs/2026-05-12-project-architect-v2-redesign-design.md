@@ -1,3 +1,9 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # project-architect v2.0 redesign — design spec
 
 **Status:** Approved (brainstorming phase complete)

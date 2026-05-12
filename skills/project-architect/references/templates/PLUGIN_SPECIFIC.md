@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [plugin.components, plugin.distribution]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Plugin Specific: {{project_name}}
 
 ## Components Used (skills / commands / agents / hooks / MCP servers)
@@ -32,3 +38,7 @@ Versioning scheme (semver) for the plugin manifest, breaking-change communicatio
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

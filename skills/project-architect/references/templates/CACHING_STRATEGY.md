@@ -14,6 +14,12 @@ revision_triggers:
   - caching.db_cache
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Caching Strategy: {{project_name}}
 
 ## Cache Layers
@@ -39,3 +45,7 @@ Hit-rate dashboards per layer, miss-cost dashboards, alerting thresholds, sampli
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

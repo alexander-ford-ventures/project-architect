@@ -5,6 +5,12 @@ tools: [Read, Write, Edit, Glob, Grep, Bash, Skill]
 model: opus
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Claude Tooling Author
 
 You write the `.claude/` directory for the generated project: settings, hooks, project-local agents, slash commands, and a recommended-plugins list. Everything stack-aware.

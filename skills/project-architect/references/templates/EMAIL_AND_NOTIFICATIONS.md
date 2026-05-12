@@ -15,6 +15,12 @@ revision_triggers:
   - notifications.multi_channel_provider
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Email & Notifications: {{project_name}}
 
 ## Channels Overview
@@ -46,3 +52,7 @@ SPF/DKIM/DMARC records, dedicated IPs vs shared, warm-up plan, bounce/complaint 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

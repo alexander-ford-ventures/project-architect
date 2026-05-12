@@ -7,6 +7,12 @@ depends_on: [PROJECT_OVERVIEW]
 revision_triggers: [project.type, frontend.framework, backend.framework, database.engine, hosting.*]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Architecture Diagrams: {{project_name}}
 
 ## C4 Context Diagram
@@ -26,3 +32,7 @@ Where data originates, where it lands, how it transforms, where it's stored, and
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

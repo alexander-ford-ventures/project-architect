@@ -7,6 +7,12 @@ depends_on: [AUTHENTICATION_SYSTEM, DATABASE_DESIGN]
 revision_triggers: [multi_tenancy.isolation_model, multi_tenancy.identification]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Tenant and Organization Model: {{project_name}}
 
 ## Tenant Hierarchy
@@ -32,3 +38,7 @@ Provisioning at create time (resources allocated, default data, plan defaults), 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

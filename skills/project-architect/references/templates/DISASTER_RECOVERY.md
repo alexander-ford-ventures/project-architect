@@ -7,6 +7,12 @@ depends_on: [BACKUP_AND_DR, DEPLOYMENT]
 revision_triggers: [hosting.backend, database.host, dr.rto, dr.rpo]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Disaster Recovery: {{project_name}}
 
 ## RTO / RPO Targets
@@ -26,3 +32,7 @@ Internal incident-response activation (see INCIDENT_RESPONSE.md) plus DR-specifi
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

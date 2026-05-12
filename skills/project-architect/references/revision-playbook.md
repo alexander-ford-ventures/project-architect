@@ -1,3 +1,9 @@
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Revision Playbook
 
 The `decision-revisor` agent reads this file to learn which docs are affected when a specific decision changes. The orchestrator passes the revisor a `decision_key`; the revisor looks it up here and rewrites every doc listed.

@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [analytics.product, analytics.event_schema, analytics.consent_management]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Analytics and Telemetry: {{project_name}}
 
 ## Product Analytics Provider
@@ -32,3 +38,7 @@ The set of canonical dashboards (executive, growth, product, reliability, billin
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

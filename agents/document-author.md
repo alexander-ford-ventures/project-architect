@@ -5,6 +5,12 @@ tools: [Read, Write, Edit, Grep, Glob, Bash]
 model: opus
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Document Author
 
 You write ONE architecture document for a specific project, using a template skeleton and the project's decision context.

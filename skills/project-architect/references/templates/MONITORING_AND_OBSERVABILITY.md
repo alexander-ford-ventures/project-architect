@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [monitoring.*, analytics.product]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Monitoring and Observability: {{project_name}}
 
 ## Monitoring Stack
@@ -29,3 +35,7 @@ Brief summary of frontend / backend / DB performance targets. Link to PERFORMANC
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

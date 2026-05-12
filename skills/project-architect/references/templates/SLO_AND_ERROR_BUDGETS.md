@@ -7,6 +7,12 @@ depends_on: [MONITORING_AND_OBSERVABILITY]
 revision_triggers: [monitoring.*, slo.targets]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # SLOs and Error Budgets: {{project_name}}
 
 ## SLI Definitions
@@ -23,3 +29,7 @@ Multi-window multi-burn-rate alert configuration (e.g., 2% budget in 1 hour page
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

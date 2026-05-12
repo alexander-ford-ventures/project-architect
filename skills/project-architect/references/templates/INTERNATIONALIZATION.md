@@ -15,6 +15,12 @@ revision_triggers:
   - i18n.rtl_support
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Internationalization: {{project_name}}
 
 ## Supported Locales
@@ -40,3 +46,7 @@ ICU plural categories per locale, gendered forms where required (Slavic, Semitic
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

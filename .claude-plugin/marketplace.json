@@ -4,7 +4,8 @@
   "description": "Local marketplace for Vladimir's personal Claude Code plugins.",
   "owner": {
     "name": "Vladimir Dukelic",
-    "email": "vladimir@dukelic.com"
+    "email": "vladimir@dukelic.com",
+    "url": "https://github.com/siliconyouth/project-architect"
   },
   "plugins": [
     {

@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [desktop.platforms, desktop.framework, desktop.distribution]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Desktop Specific: {{project_name}}
 
 ## Target Platforms
@@ -32,3 +38,7 @@ Code-signing identity per OS (Apple Developer ID, EV Authenticode cert), notariz
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

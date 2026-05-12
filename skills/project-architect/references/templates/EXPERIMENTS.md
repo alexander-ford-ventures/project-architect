@@ -7,6 +7,12 @@ depends_on: []
 revision_triggers: [feature_flags.provider, ab_testing.provider]
 ---
 
+<!--
+Author: Vladimir Dukelic <vladimir@dukelic.com>
+Repository: https://github.com/siliconyouth/project-architect
+License: MIT
+-->
+
 # Experiments: {{project_name}}
 
 ## Feature-Flag Provider
@@ -29,3 +35,7 @@ The explicit policy for removing finished experiments and rolled-out flags: who 
 
 ## Revision Log
 (none yet)
+
+---
+
+*Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
