@@ -4,6 +4,10 @@ Repository: https://github.com/siliconyouth/project-architect
 License: MIT
 -->
 
+<p align="center">
+  <img src=".github/social-preview.png" alt="project-architect — Bootstrap any project end-to-end inside Claude Code" width="100%" />
+</p>
+
 <div align="center">
 
 # project-architect
