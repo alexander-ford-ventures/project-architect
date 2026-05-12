@@ -1,176 +1,171 @@
 ---
 name: project-architect
-description: >
-  Comprehensive project architecture planning and documentation generator.
-  Interviews the user in phases to capture vision, tech stack, and architecture
-  decisions, then generates tailored planning documents and CLAUDE.md.
-  Use when the user wants to: (1) set up a new project, (2) scaffold project
-  docs, (3) initialize project architecture, (4) plan a new project,
-  (5) create project documentation, (6) design a system architecture,
-  (7) choose a tech stack, or (8) bootstrap a project with planning documents.
-  Works for all project types: web apps, mobile, CLI tools, libraries, APIs,
-  multi-platform systems, desktop apps, AI/ML applications, and more.
+description: Use when the user wants to set up a new project, scaffold project docs, plan a new project, initialize project architecture, bootstrap with planning documents, design a system architecture, choose a tech stack, revisit existing project architecture decisions, or generate CLAUDE.md and .claude/ config for an existing project. Works for any project type: web apps, mobile, multi-platform, APIs, CLI tools, libraries, desktop, browser extensions, games, AI/ML, data pipelines, embedded/IoT, infrastructure, Claude Code plugins, MCP servers, Web3, scientific code, AR/VR.
 ---
 
 # Project Architect
 
-Interview the user in phases, make decisions, generate architecture documents and CLAUDE.md.
+You orchestrate a 9-phase project bootstrap. You do not do the heavy lifting yourself — you dispatch subagents, invoke skills, and synthesize. Load references on-demand from `references/`.
 
-## Workflow
+## Phase order
 
 ```
-Phase 1: Vision & Scope → Phase 2: Tech Stack → Phase 3: Architecture Deep Dive → Document Generation → CLAUDE.md
+-1. Preflight              — model + effort + 1M-context verification
+ 0a. Repo Init (optional)  — git init + remote
+ 0.  Universal Kickoff     — Q1–Q8 + first research dispatch
+ 1.  Vision & Scope        — type-specific drill-down + research
+ 2.  Tech Stack            — type-aware options + ADR per major decision
+ 2.5 Cost Modeling         — pricing research → COST_MODEL.md draft
+ 3.  Architecture          — per-area drill-downs + inline consistency check
+ 4.  Document Generation   — parallel agent dispatch
+ 5.  Iteration             — decision-revisor loop, snapshot option
+ 6.  Post-Generation Setup — commit/push, plugin install offers
+ 7.  Plan Handoff (opt)    — invoke superpowers:writing-plans
 ```
 
-Each phase uses `AskUserQuestion` to gather decisions. Earlier answers determine which later questions to ask and which documents to generate.
+## State
 
-### Resumability
+Persistent across the bootstrap: `docs/_architect_state.json`. Schema is in `references/state-schema.md` (or see the design spec). Save after every batch, every agent dispatch, every commit. Delete only at end of Phase 6 cleanup.
 
-The user may not complete all phases in one session. At the end of each phase:
-1. Summarize decisions made so far
-2. List which phases remain
-3. Save progress to `docs/_architect_state.json` (decisions log — delete after all docs generated)
+Lock file: `docs/_architect_state.lock` with `{pid, host, acquired_at}`. Held throughout the session. If a stale lock (>30 min old) exists at startup, offer to clear it.
 
-If the user returns and says "continue project setup" or similar, read `docs/_architect_state.json` to resume.
+## Resumability
 
-## Phase 1: Vision & Scope
+If `docs/_architect_state.json` exists at startup, read it, validate `schema_version`, print a resume summary, and jump to `state.phase`. If schema version is older than current plugin version, migrate (or refuse with a clear message).
 
-Gather foundational information. Read [references/questioning-flow.md](references/questioning-flow.md) section "Phase 1" for the full question set.
+---
 
-**Ask in this order:**
-1. **Project identity** — name, one-sentence description, problem statement
-2. **Project type** — web app, mobile, CLI, library, multi-platform, etc.
-3. **Target users & scale** — who, how many, where
-4. **Platforms** — which platforms, browser/device requirements
-5. **Constraints & priorities** — budget, timeline, team, regulations, existing decisions
-6. **Core features** — top 3-5 features for MVP, explicit non-goals
+## Phase -1: Preflight
 
-**Rules:**
-- Ask 2-4 questions at a time using `AskUserQuestion` (never overwhelm)
-- Adapt follow-up questions based on answers (see routing rules in questioning-flow.md)
-- If project type is "library/SDK", skip platforms, auth, database, UI questions later
-- If project type is "CLI tool", skip frontend, styling, payments questions later
-- Capture all decisions in a running log
+Verify the harness is running Opus 4.7 with 1M context at max effort.
 
-**Phase 1 complete when:** Project type, target users, scale, constraints, and core features are known.
+1. Read the model identifier from the system env metadata. Look for the line `The exact model ID is claude-<...>` in your context.
+2. **If model is `claude-opus-4-7[1m]`**: silently proceed.
+3. **If model is `claude-opus-4-7` (no `[1m]`)**: invoke `Skill: update-config` to set `model: claude-opus-4-7` and `env.ANTHROPIC_CONTEXT_VARIANT: "1m"` in global settings; then prompt the user:
+   > This skill requires Opus 4.7 with 1M context at maximum effort.
+   > Settings file updated for future sessions. For *this* session, please run:
+   >   /model       → select "Opus 4.7 (1M context)"
+   >   /effort max
+   > Reply "continue" when done.
 
-## Phase 2: Tech Stack Decisions
+   Wait for "continue."
+4. **If model is anything else** (sonnet, haiku, or older): same prompt as step 3 but without the autofix (since the user's current session won't have inherited the desired model yet).
+5. **If the user declines to switch**: refuse to start. Output a clear message: "project-architect requires Opus 4.7 (1M context) for the quality of reasoning needed across phases. Please restart with the correct model."
 
-Present technology options for each relevant category. Read [references/tech-stack-options.md](references/tech-stack-options.md) for options and trade-offs.
+Effort verification: not directly detectable from env. Trust the user's `/effort max` confirmation. As a fallback, include the directive `"Run with maximum effort. Apply extended thinking. Be thorough."` in every subagent prompt header and every `Skill` invocation context.
 
-**Ask in this order** (skip categories that don't apply based on Phase 1):
-1. **Language & runtime**
-2. **Frontend framework** (skip if no frontend)
-3. **Backend framework** (skip if client-only)
-4. **Database** (skip if no persistence)
-5. **ORM / query layer** (ask after database chosen)
-6. **Authentication** (skip if no user accounts)
-7. **Hosting & deployment** (frontend and backend separately)
-8. **Package manager & tooling**
-9. **Styling & UI** (skip if no frontend)
-10. **Payments** (skip if no monetization)
-11. **Email & notifications** (skip if not needed)
-12. **File storage** (skip if no file handling)
-13. **AI/ML integration** (skip if no AI features)
+---
 
-**Rules:**
-- Present 2-4 options per category with one-line trade-offs
-- Do NOT strongly recommend — list options, user decides
-- If user has pre-existing decisions (from Phase 1 constraints), confirm and skip
-- Group related decisions together (e.g., database + ORM in same question set)
+## Phase 0a: Repo Init (optional)
 
-**Phase 2 complete when:** All relevant technology choices are made.
+1. Detect repo state:
+   ```bash
+   git rev-parse --is-inside-work-tree 2>/dev/null
+   ```
+   If exits 0: already a repo. Print remote info from `git remote -v` and confirm with user. Skip to Phase 0.
+2. If not a repo: ask via `AskUserQuestion`:
+   - Q: "Initialize git here?" options: "Yes — local only" | "Yes — with GitHub remote" | "No, skip"
+3. If "Yes — with GitHub remote" was chosen:
+   - Check `gh auth status` exit code.
+   - If not authed: warn user, fall back to local-only with instructions for adding remote later.
+   - If authed: ask via `AskUserQuestion`:
+     - Repo name (default: `basename "$PWD"`)
+     - Visibility: private / public / internal
+     - One-line description (placeholder — refined after Phase 0 Q1)
+4. Execute:
+   ```bash
+   git init
+   ```
+   Write `.gitignore` with universal defaults (OS files: `.DS_Store`, `Thumbs.db`; editor files: `.idea/`, `.vscode/settings.json`, `*.swp`; env: `.env`, `.env.local`). Stack-specific entries are appended in Phase 6.
+5. If remote requested and authed:
+   ```bash
+   gh repo create "$NAME" --"$VIS" --source . --remote origin --description "$DESC"
+   ```
+6. Determine branch strategy from prior knowledge (Q4 won't be answered yet — default to `main` for now; revisit if Q4 = "extending"/"rewriting"/"migrating", create `bootstrap/architect-<date>` branch at that point).
+7. Set `state.git.repo_init = true`, `state.git.has_remote`, `state.git.remote_url`, `state.git.branch`.
+8. Commit via `Skill: commit-commands:commit` with hint message: `chore: initialize project repo`.
+9. State: `phase = "phase_0a"`, mark phase complete, save.
 
-## Phase 3: Architecture Deep Dive
+---
 
-Deeper questions for areas that need detailed planning. Read [references/questioning-flow.md](references/questioning-flow.md) section "Phase 3" for the full question set.
+## Phase 0: Universal Kickoff
 
-**Only ask about areas that are relevant** (determined by Phase 1 & 2):
-- Auth deep dive → if auth was selected
-- Database design → if database was selected
-- API design → if building an API
-- Security architecture → if security flagged or regulated industry
-- Frontend architecture → if frontend exists
-- Testing strategy → for all non-trivial projects
-- DevOps & deployment → if deploying beyond localhost
-- Monitoring → if scale > MVP
-- Third-party integrations → if external services mentioned
+Load `references/questioning-flow.md` (Section: Universal Kickoff).
 
-**Rules:**
-- This phase may be shorter for simple projects (CLI, library)
-- For complex projects (multi-platform, enterprise), this is the longest phase
-- Ask 2-3 questions at a time, not all at once
+Ask 3 batches via `AskUserQuestion` (load the tool via `ToolSearch` if not already available — see "Tool availability" below):
 
-**Phase 3 complete when:** Sufficient detail exists to generate all relevant documents.
+**Batch 1** (Identity & Type):
+- Elevator pitch (open-ended).
+- Top-level project type (multiple choice from the 18-option taxonomy).
+- Sub-type (multiple choice, options depend on type).
 
-## Document Generation
+**Batch 2** (Stage & Problem):
+- Project stage (greenfield / extending / rewriting / migrating / PoC).
+- Primary problem & target users (open-ended).
 
-After all phases are complete, generate documents. Read [references/document-templates.md](references/document-templates.md) for document structures.
+**Batch 3** (Constraints & Scale):
+- Constraints (multi-select).
+- Team & scale (combined multiple choice).
+- Hard pre-existing decisions (open-ended).
 
-### Document Selection
+After Batch 3:
+1. Save all answers to `state.decisions`.
+2. If stage ≠ greenfield: switch to `bootstrap/architect-<YYYY-MM-DD>` branch (`git checkout -b bootstrap/architect-2026-05-12`).
+3. Commit via `commit-commands:commit`: `architect(phase-0): record kickoff decisions`.
+4. Dispatch `research-scout` for domain research:
+   ```
+   Agent({
+     subagent_type: "project-architect:research-scout",
+     model: "opus",
+     description: "Phase 0 domain research",
+     prompt: """
+       [MODEL DIRECTIVE]
+       Run with maximum effort. Apply extended thinking. Be thorough.
 
-Dynamically select which documents to generate based on project needs:
+       [TOPIC]
+       domain
 
-| Document | Generate When |
-|----------|--------------|
-| `PROJECT_OVERVIEW.md` | Always |
-| `PROJECT_REQUIREMENTS.md` | Always |
-| `AUTHENTICATION_SYSTEM.md` | User accounts / auth needed |
-| `DATABASE_DESIGN.md` | Data persistence needed |
-| `API_GATEWAY.md` | API / backend service |
-| `UI_UX_DESIGN.md` | Frontend exists |
-| `PLATFORMS.md` | Multi-platform project |
-| `SECURITY_AND_COMPLIANCE.md` | Security important or regulated |
-| `DEPLOYMENT.md` | Deploying beyond localhost |
-| `CI_CD.md` | Automated pipeline needed |
-| `TESTING_STRATEGY.md` | Non-trivial project |
-| `THIRD_PARTY_INTEGRATIONS.md` | External services used |
-| `MONITORING_AND_OBSERVABILITY.md` | Scale > MVP or reliability matters |
-| Additional docs | See "Additional Documents" in document-templates.md |
+       [CONTEXT]
+       Project: {{project.name}}
+       Type: {{project.type}} / {{project.subtype}}
+       Stage: {{project.stage}}
+       Target users: {{project.target_users}}
+       Scale: {{project.scale}}
+       Constraints: {{project.constraints}}
 
-### Generation Rules
+       [TASK]
+       Research the project domain. Find: (1) 3–5 similar existing projects with one-line summaries and links. (2) Common pitfalls for a {{project.subtype}} {{project.type}}. (3) Regulatory implications for {{project.target_users}}. (4) Market context. (5) What's actually hard about this kind of project. Cite URLs. Market data must be < 12 months old.
 
-1. Create `docs/` directory in the project root
-2. Generate `PROJECT_OVERVIEW.md` first (the master hub)
-3. Generate remaining documents in dependency order
-4. Each document must reference specific decisions from the interview — no generic boilerplate
-5. Include diagrams (mermaid or ASCII) where they add clarity
-6. Cross-reference between documents (e.g., API_GATEWAY.md links to AUTHENTICATION_SYSTEM.md)
-7. After all docs, delete `docs/_architect_state.json` (progress file no longer needed)
+       [OUTPUT]
+       Write findings to: docs/research/phase0-domain.md
+       Return ≤20-line summary to me.
+     """
+   })
+   ```
+5. Append the resulting research file to `state.research_findings`.
+6. Commit via `commit-commands:commit`: `architect(phase-0-research): domain research`.
+7. State: `phase = "phase_0"`, mark complete, save.
 
-### CLAUDE.md Generation
+---
 
-Generate `CLAUDE.md` in the project root as the final step. This file configures future Claude Code sessions.
+## Tool availability
 
-Include:
-- Project name and one-line description
-- Complete tech stack (language, framework, database, auth, hosting, key packages)
-- Project structure (key directories and their purposes)
-- Development commands (install, dev, build, test, lint)
-- Code conventions derived from tech stack choices
-- Key architectural decisions that affect coding patterns
-- Links to relevant docs/ files for deeper context
+The `AskUserQuestion` tool is deferred — it may not be loaded into your context at startup. Before Phase 0 Batch 1, run:
 
-Keep CLAUDE.md concise — it's loaded into every conversation. Reference `docs/` files for details.
-
-## Output Location
-
-All documents go to `docs/` in the project root:
 ```
-project-root/
-├── CLAUDE.md
-└── docs/
-    ├── PROJECT_OVERVIEW.md
-    ├── PROJECT_REQUIREMENTS.md
-    ├── AUTHENTICATION_SYSTEM.md
-    ├── DATABASE_DESIGN.md
-    └── ...
+ToolSearch(query: "select:AskUserQuestion", max_results: 1)
 ```
 
-## Important Behaviors
+If it loads, use it for all batches. If it doesn't load (rare edge case), fall back to plain-text prompts: print the questions inline, ask the user to reply with comma-separated answers, parse manually.
 
-- **Never generate documents without completing the interview** — partial information leads to generic docs
-- **Be adaptive** — a CLI tool needs 3-4 documents, a multi-platform SaaS might need 10+
-- **No boilerplate** — every section must contain project-specific decisions. If a section has nothing specific to say, omit it
-- **Capture rationale** — for each tech choice, briefly note why it was chosen over alternatives
-- **Respect existing decisions** — if the user says "I'm using PostgreSQL", don't ask about databases, just confirm and move on
+Similarly, `Skill` tool invocations require the referenced skill to be enabled. Before Phase 0a (the first `commit-commands:commit` call), verify the dependency is satisfied:
+
+```bash
+ls ~/.claude/plugins/cache | grep -i commit-commands
+```
+
+If not present: refuse to start with: "Required dependency `commit-commands` is not installed. Run `claude plugin install commit-commands` and retry."
+
+---
+
+<!-- SKILL_E2_MARKER -->
