@@ -37,6 +37,20 @@ If `docs/_architect_state.json` exists at startup, read it, validate `schema_ver
 
 ## Phase -1: Preflight
 
+### Ambient hooks tolerance
+
+Runs FIRST in Preflight so the `remember` plugin's PostToolUse hook (if installed) sees its log directory exist starting from its very first invocation, avoiding any transient hook-error noise in the user's transcript during the rest of Preflight.
+
+Silently pre-create `.remember/logs/` in cwd so the `remember` plugin's PostToolUse hook (if installed) can write its error log without erroring out. Run as `Bash`:
+
+```bash
+mkdir -p .remember/logs 2>/dev/null || true
+```
+
+The `|| true` ensures failure never blocks Preflight — the architect doesn't depend on this directory. This is a courtesy to a separate plugin and is harmless when `remember` isn't installed (the dir is empty + listed in `.gitignore` by Phase 0a). It lives in Preflight (not Phase 0a) because the hook fires on the first Bash/Read call regardless of whether the user opts into git init. PostToolUse hooks fire AFTER the tool completes, so the very first `mkdir` call's hook sees the directory already created by that same call, and every subsequent tool call is clean.
+
+### Model/effort verification
+
 Verify the harness is running Opus 4.7 with 1M context at max effort.
 
 1. Read the model identifier from the system env metadata. Look for the line `The exact model ID is claude-<...>` in your context.
@@ -118,16 +132,6 @@ Detect if the loaded skill is older than the latest release at the source repo, 
    - Network is unreachable.
 
 The check is best-effort and non-blocking. The architect's correctness does not depend on running the absolute latest version — this is purely a user-experience nudge so cache-staleness bugs (like loading v1 SKILL.md when v2 has shipped) surface immediately rather than mid-interview.
-
-### Ambient hooks tolerance
-
-Silently pre-create `.remember/logs/` in cwd so the `remember` plugin's PostToolUse hook (if installed) can write its error log without erroring out. Run as `Bash`:
-
-```bash
-mkdir -p .remember/logs 2>/dev/null || true
-```
-
-The `|| true` ensures failure never blocks Preflight — the architect doesn't depend on this directory. This is a courtesy to a separate plugin and is harmless when `remember` isn't installed (the dir is empty + listed in `.gitignore` by Phase 0a). It lives in Preflight (not Phase 0a) because the hook fires on the first Bash/Read call regardless of whether the user opts into git init.
 
 ---
 
