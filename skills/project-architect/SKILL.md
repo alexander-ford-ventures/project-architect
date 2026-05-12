@@ -133,6 +133,30 @@ Detect if the loaded skill is older than the latest release at the source repo, 
 
 The check is best-effort and non-blocking. The architect's correctness does not depend on running the absolute latest version — this is purely a user-experience nudge so cache-staleness bugs (like loading v1 SKILL.md when v2 has shipped) surface immediately rather than mid-interview.
 
+### Cache hygiene
+
+Remove stale plugin-cache version directories so future invocations can't accidentally load an older copy. The architect knows its own install path via `${CLAUDE_PLUGIN_ROOT}`; sibling directories under the same plugin folder that aren't the current version are leftover from prior uninstall/install cycles.
+
+```bash
+# CLAUDE_PLUGIN_ROOT points at the *installed* version dir, e.g.
+#   ~/.claude/plugins/cache/local/project-architect/2.0.1
+# Its parent is the plugin folder containing every version that was ever installed.
+if [ -n "${CLAUDE_PLUGIN_ROOT}" ]; then
+  CURRENT_VERSION_DIR=$(basename "${CLAUDE_PLUGIN_ROOT}")
+  PLUGIN_PARENT_DIR=$(dirname "${CLAUDE_PLUGIN_ROOT}")
+  if [ -d "${PLUGIN_PARENT_DIR}" ]; then
+    find "${PLUGIN_PARENT_DIR}" -mindepth 1 -maxdepth 1 -type d ! -name "${CURRENT_VERSION_DIR}" -exec rm -rf {} + 2>/dev/null || true
+  fi
+fi
+```
+
+Best-effort:
+- Only acts when `${CLAUDE_PLUGIN_ROOT}` is set (older Claude Code versions: skip).
+- Only removes sibling directories at the same depth — never touches files outside the plugin folder.
+- `|| true` so failure never blocks Preflight.
+
+After this step, if the freshness check found a newer version available but the user chose to continue, the cache for this specific plugin contains only the currently-loaded version — no ambiguity about which version a future session would load.
+
 ---
 
 ## Phase 0a: Repo Init (optional)

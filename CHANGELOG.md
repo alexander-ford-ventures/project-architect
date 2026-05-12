@@ -4,6 +4,16 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.2] — 2026-05-12
+
+### Added
+
+- **Preflight `Cache hygiene` step**. After the version-freshness check, the architect now proactively removes stale plugin-cache version directories (sibling dirs to `${CLAUDE_PLUGIN_ROOT}`) so future sessions can't accidentally load an older cached version. Replaces the manual `rm -rf` step that used to be in the README versioning-policy procedure.
+
+### Fixed
+
+- **`.remember/logs/` and `.gitignore` for the plugin's own repo**. The architect SKILL pre-creates `.remember/logs/` in Preflight for *generated projects*, but the plugin's own repo (`/Users/vladimir/projects/project-architect/`) was missing both the directory and a `.gitignore`. Anyone working on the architect's own files would see hook-error spam from the `remember` plugin. Added a repo-level `.gitignore` (with `.remember/` listed) and pre-created the empty `.remember/logs/` dir locally.
+
 ## [2.0.1] — 2026-05-12
 
 ### Fixed

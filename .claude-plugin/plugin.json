@@ -1,6 +1,6 @@
 {
   "name": "project-architect",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Project architecture orchestrator. Interviews across 9 phases (preflight → repo init → kickoff → vision → tech stack → cost → architecture → docs → iteration → setup → optional plan), dispatches research-scout / document-author / decision-revisor / claude-md-author / claude-tooling-author subagents, files ADRs, generates docs + per-folder CLAUDE.md + .claude/ project config.",
   "author": {
     "name": "Vladimir Dukelic",
