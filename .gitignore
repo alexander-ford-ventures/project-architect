@@ -1,3 +1,15 @@
-node_modules/
+# OS files
 .DS_Store
-*.log
+Thumbs.db
+*.swp
+
+# Editor
+.idea/
+.vscode/settings.json
+
+# Ambient — foreign-plugin courtesy
+.remember/
+
+# Local environment
+.env
+.env.local
