@@ -16,15 +16,14 @@ To regenerate on each release, run this script after bumping plugin.json,
 then commit both the script change (if any) and the new social-preview.png.
 
 Notes on glyph substitutions:
-    - The original design called for a "✨" (U+2728 SPARKLES) prefix on the
-      footer CTA. None of the system fonts that PIL can load on macOS render
-      that glyph as a real shape (Helvetica Neue / Apple Symbols / Arial
-      Unicode all produce tofu boxes; only the color-emoji font has it, and
-      PIL refuses to load Apple Color Emoji because of its non-standard
-      pixel-size table). To keep the image flat-color and dependency-light
-      we substitute the ASCII asterisk "*" for the sparkles. All other
-      unicode glyphs in the spec (▲, ✓, →, ·) render correctly out of Menlo,
-      so they are used as-is.
+    - v2.1.2: The footer right-side now uses "★" (U+2605 BLACK STAR), which
+      renders as a real shape out of Menlo / Arial Unicode / Apple Symbols
+      (verified via PIL bbox + lit-pixel inspection). The earlier "*"
+      asterisk fallback for "✨" sparkles is no longer needed.
+    - The original "try it →" inline CTA was removed from the footer; the
+      CTA is now a dedicated pill-shaped button anchored to the top-right.
+    - All other unicode glyphs in the spec (▲, ✓, →, ·) render correctly
+      out of Menlo, so they are used as-is.
 """
 
 from __future__ import annotations
@@ -128,8 +127,12 @@ def load_fonts() -> dict[str, tuple[ImageFont.FreeTypeFont, str]]:
 
         # Footer.
         "footer_mono":   _load_first(MONO_REGULAR_CANDIDATES, 22),  # repo URL
-        "footer_sans":   _load_first(SANS_REGULAR_CANDIDATES, 22),  # CTA text
-        "footer_arrow":  _load_first(SYMBOL_CANDIDATES,       22),  # → glyph in CTA
+        "footer_sans":   _load_first(SANS_REGULAR_CANDIDATES, 22),  # right-side attribution
+        "footer_star":   _load_first(SYMBOL_CANDIDATES,       22),  # ★ glyph in attribution
+
+        # Top-right pill-shaped CTA: "Install →".
+        "cta":           _load_first(SANS_BOLD_CANDIDATES,    26),  # "Install" label, bold
+        "cta_arrow":     _load_first(SYMBOL_CANDIDATES,       26),  # → glyph in CTA
     }
 
 
@@ -234,6 +237,57 @@ def render() -> Image.Image:
         anchor="ls",
     )
 
+    # -------------------------------------------------------------------
+    # Top-right CTA: pill-shaped "Install →" button.
+    # Vertically centered around y=140 (in the publisher-line negative
+    # space, well clear of the title baseline at y=230). Right edge
+    # aligned with the terminal panel's right edge at x=1200.
+    # -------------------------------------------------------------------
+    cta_font, _ = fonts["cta"]
+    cta_arrow_font, _ = fonts["cta_arrow"]
+    cta_label = "Install"
+    cta_arrow = "→"
+    # Measure the two segments and the 8px gap between them.
+    cta_label_w, _ = _measure(draw, cta_label, cta_font)
+    cta_arrow_w, _ = _measure(draw, cta_arrow, cta_arrow_font)
+    cta_gap = 8
+    cta_text_w = cta_label_w + cta_gap + cta_arrow_w
+    cta_pad_x = 32
+    cta_btn_h = 56
+    cta_btn_w = cta_pad_x + cta_text_w + cta_pad_x
+    cta_btn_right = 1200
+    cta_btn_left = cta_btn_right - cta_btn_w
+    cta_btn_cy = 140
+    cta_btn_top = cta_btn_cy - cta_btn_h // 2
+    cta_btn_bot = cta_btn_top + cta_btn_h
+    cta_radius = cta_btn_h // 2  # = 28 → perfect pill
+    rounded_rect(
+        draw,
+        (cta_btn_left, cta_btn_top, cta_btn_right, cta_btn_bot),
+        radius=cta_radius,
+        fill=COLORS["accent"],
+        outline=COLORS["accent"],
+        outline_width=1,
+    )
+    # Center the text vertically using the middle-baseline (ms) anchor.
+    # Use the button's vertical center and let the anchor handle baseline.
+    cta_text_left = cta_btn_left + cta_pad_x
+    # "mm" anchor centers both horizontally and vertically.
+    draw.text(
+        (cta_text_left + cta_label_w // 2, cta_btn_cy),
+        cta_label,
+        fill=COLORS["bg"],
+        font=cta_font,
+        anchor="mm",
+    )
+    draw.text(
+        (cta_text_left + cta_label_w + cta_gap + cta_arrow_w // 2, cta_btn_cy),
+        cta_arrow,
+        fill=COLORS["bg"],
+        font=cta_arrow_font,
+        anchor="mm",
+    )
+
     # Title: "project-architect"
     title_font, _ = fonts["title"]
     title_y = 230  # baseline; large font sits above this
@@ -327,7 +381,7 @@ def render() -> Image.Image:
     # -------------------------------------------------------------------
     footer_mono_font, _ = fonts["footer_mono"]
     footer_sans_font, _ = fonts["footer_sans"]
-    footer_arrow_font, _ = fonts["footer_arrow"]
+    footer_star_font, _ = fonts["footer_star"]
     footer_y = 590  # baseline
 
     # Left: repo URL in mono, muted.
@@ -339,21 +393,22 @@ def render() -> Image.Image:
         anchor="ls",
     )
 
-    # Right: CTA. The "✨" glyph isn't available in any PIL-loadable system
-    # font as a real shape, so we substitute "*" per design-spec instruction.
-    # Right-align the CTA against x=1200 (panel right edge) so it matches the
-    # panel's right margin. Use a "rs" anchor to right-align by baseline.
-    cta_segments = [
-        ("* Skillfully made — try it ", COLORS["accent"], footer_sans_font),
-        ("→", COLORS["accent"], footer_arrow_font),  # → from a symbol-capable font
+    # Right: attribution. "★ Skillfully made with Claude Code".
+    # The ★ glyph (U+2605 BLACK STAR) is rendered by a symbol-capable font
+    # (Menlo → Arial Unicode → Apple Symbols) so it lands as a real star
+    # rather than an asterisk fallback. Right-align against x=1200 to match
+    # the terminal panel's right edge.
+    footer_segments = [
+        ("★", COLORS["accent"], footer_star_font),
+        (" Skillfully made with Claude Code", COLORS["accent"], footer_sans_font),
     ]
     # Measure total width to right-align.
     total_w = 0
-    for text, _, font in cta_segments:
+    for text, _, font in footer_segments:
         w, _h = _measure(draw, text, font)
         total_w += w
-    cta_x_start = 1200 - total_w
-    draw_text_run(draw, cta_x_start, footer_y, cta_segments, anchor="ls")
+    footer_x_start = 1200 - total_w
+    draw_text_run(draw, footer_x_start, footer_y, footer_segments, anchor="ls")
 
     return img
 

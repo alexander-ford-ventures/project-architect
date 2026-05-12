@@ -10,6 +10,12 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] — 2026-05-12
+
+### Changed
+
+- **Social-preview image redesigned**: footer right-side now reads "★ Skillfully made with Claude Code" (proper star glyph instead of the previous `*` fallback). The "try it →" inline CTA was removed; replaced with a dedicated pill-shaped **Install →** button in the top-right corner — higher click-conversion shape with dark-on-blue contrast.
+
 ## [2.1.1] — 2026-05-12
 
 ### Added
