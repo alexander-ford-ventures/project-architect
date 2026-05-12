@@ -95,7 +95,7 @@ To re-bootstrap: delete `state.json` and re-invoke. Existing generated docs beco
   ],
 
   // Plugin recommendations. Two write points:
-  //   • Phase -1 "Soft-dependency check": probes the 5 baseline recommended plugins
+  //   • Phase -1 "Soft-dependency check": probes the 6 baseline recommended plugins
   //     and writes one entry per plugin with `missing: true|false` and `installed`
   //     (true if installed during Preflight, false if user chose to continue without).
   //   • Phase 6: per-project recommendations from claude-tooling-author may be
@@ -133,6 +133,25 @@ Each `phase_progress[<phase>]` entry tracks completion and work-in-flight state 
 | `phase_7` | `complete`, `handoff_invoked` (bool) | If handoff invoked, do not re-invoke. |
 
 `completed_at` is ISO8601 UTC. `*_remaining` arrays shrink as work completes; all other arrays are append-only.
+
+---
+
+## `recommended_plugins[]` fields
+
+One entry per recommended plugin probed at Phase -1 (six baseline entries) plus any per-project additions appended in Phase 6. Append-only across both write points; updates flip the `installed` flag on existing entries when an install completes.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | string | yes | Qualified plugin/skill name (e.g., `superpowers`, `hookify`, `claude-md-management`). Use the marketplace install name; namespaced skills like `hookify:writing-rules` go in `reason` not `name`. |
+| `reason` | string | yes | One-line "used by which agent/phase for what" justification. Example: `"claude-tooling-author hooks"` or `"Phase 4 / Phase 7"`. |
+| `installed` | bool | yes | True if the plugin was installed (either already present at Preflight or installed during Preflight / Phase 6). False if probed-missing-and-skipped or not yet acted on. |
+| `missing` | bool | yes | True if the Phase -1 probe found the plugin absent before the user decision. Stays true even after `installed` flips, so the orchestrator can distinguish "had to install" from "was already there." |
+| `install_command` | string | no | The exact command the orchestrator offered, e.g., `claude plugin install hookify`. Useful for the generated `recommended-plugins.md` so the user can re-run it later. |
+| `detected_at` | string (ISO8601 UTC) | no | When the Phase -1 probe ran. Helps debug stale state on resume. |
+
+Write points:
+- **Phase -1** (Preflight "Soft-dependency check") writes one entry per baseline plugin with `missing` and `installed` set from probe + user decision.
+- **Phase 6** (Post-Generation Setup, plugin-install offers) may flip `installed: false → true` on existing entries; `claude-tooling-author` may append additional per-project entries during Phase 4 doc-gen.
 
 ---
 
