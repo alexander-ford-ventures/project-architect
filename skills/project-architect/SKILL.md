@@ -76,7 +76,7 @@ Recommended plugins (qualified names): `superpowers`, `claude-md-management`, `c
    > "Continue with current plugins? (yes / install missing now / abort)"
 4. On `install missing now`: run each `claude plugin install <plugin>` sequentially; on each install failure, record and surface but do not abort the whole batch.
 5. On `yes`: for every plugin still missing, append its name to `state.recommended_plugins[].missing`. The `claude-tooling-author` agent reads this in Phase 4 when generating `.claude/recommended-plugins.md` so the user's runtime choices are reflected in the final doc.
-6. On `abort`: save state with `phase = "phase_-1"` and exit cleanly.
+6. On `abort`: save state with `phase = "preflight"` and exit cleanly.
 
 Skip the prompt entirely if every recommended plugin is already installed; just record `state.recommended_plugins[]` with `missing: false` for each and proceed silently.
 
