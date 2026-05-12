@@ -81,6 +81,44 @@ Recommended plugins (qualified names): `superpowers`, `claude-md-management`, `c
 
 Skip the prompt entirely if every recommended plugin is already installed; just record `state.recommended_plugins[]` with `missing: false` for each and proceed silently.
 
+### Version freshness check
+
+Detect if the loaded skill is older than the latest release at the source repo, so users running a stale cache are warned and offered a refresh path. Best-effort: network errors, missing `gh`, or no published releases all degrade silently.
+
+1. **Read the loaded version** from this plugin's own manifest. Claude Code exposes the install path via `${CLAUDE_PLUGIN_ROOT}`:
+
+   ```bash
+   LOADED=$(jq -r .version "${CLAUDE_PLUGIN_ROOT:-/dev/null}/.claude-plugin/plugin.json" 2>/dev/null || echo unknown)
+   ```
+
+2. **Read the latest released version** from the source repo (only if `gh` is available and authenticated):
+
+   ```bash
+   LATEST=$(gh release view --repo siliconyouth/project-architect --json tagName --jq .tagName 2>/dev/null | sed 's/^v//' || echo unknown)
+   ```
+
+3. **Compare** with semver-style ordering:
+   - If `LOADED == LATEST` OR either is `unknown`: proceed silently.
+   - If `LOADED < LATEST`: surface a one-time notice:
+
+     > Loaded version v{{LOADED}} — a newer release v{{LATEST}} is available.
+     > To update, run in any terminal:
+     >   `claude plugin marketplace update local`
+     >   `claude plugin uninstall project-architect@local && claude plugin install project-architect@local`
+     >   `/reload-plugins`     (in this Claude session)
+     >
+     > Continue with v{{LOADED}} for this run? (yes / pause to update)
+
+     If "pause to update": exit cleanly with state saved. If "yes": proceed and record `state.version_warning_acknowledged = true` so the warning doesn't repeat on the next phase.
+
+4. **Skip the check** silently if:
+   - `${CLAUDE_PLUGIN_ROOT}` is unset (rare; older Claude Code versions).
+   - `gh` is not installed or not authenticated.
+   - The repo has no releases yet.
+   - Network is unreachable.
+
+The check is best-effort and non-blocking. The architect's correctness does not depend on running the absolute latest version — this is purely a user-experience nudge so cache-staleness bugs (like loading v1 SKILL.md when v2 has shipped) surface immediately rather than mid-interview.
+
 ### Ambient hooks tolerance
 
 Silently pre-create `.remember/logs/` in cwd so the `remember` plugin's PostToolUse hook (if installed) can write its error log without erroring out. Run as `Bash`:
