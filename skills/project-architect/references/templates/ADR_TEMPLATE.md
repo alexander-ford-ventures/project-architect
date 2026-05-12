@@ -1,0 +1,48 @@
+---
+template_name: ADR_TEMPLATE
+generate_when: "n/a (used by agents, never selected as a standalone doc)"
+required_decisions: []
+optional_decisions: []
+depends_on: []
+revision_triggers: []
+---
+
+---
+adr_id: {{NNNN}}                       # zero-padded sequential
+title: {{title}}
+date: {{YYYY-MM-DD}}
+status: proposed | accepted | superseded | deprecated
+supersedes: {{prior_adr_id or null}}
+superseded_by: null                     # filled in if a future ADR supersedes this
+affected_docs: [{{list of doc filenames}}]
+decision_keys: [{{list of decision keys this records}}]
+research_refs: [{{paths to research findings consulted}}]
+---
+
+# ADR {{NNNN}}: {{title}}
+
+## Status
+{{status}} {{(supersedes ADR {{prior_id}} if applicable)}}
+
+## Context
+What changed. What new information surfaced. Why we're (re)deciding.
+
+## Prior decision (if superseding)
+What was chosen before and why. Link to prior ADR.
+
+## Decision
+What is being chosen and why. Concrete and specific.
+
+## Alternatives reconsidered
+- {{alt}} — why not
+
+## Consequences
+- {{consequence}} — affected doc, mitigation
+
+## Rollback plan
+If this turns out wrong, how do we revert? What's the cost?
+
+## References
+- Prior ADR: {{prior_id}}
+- Research: {{research_refs}}
+- Related: {{external links}}
