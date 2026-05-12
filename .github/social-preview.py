@@ -7,7 +7,7 @@ Repository: https://github.com/siliconyouth/project-architect
 License: MIT
 
 Usage:
-    pip install pillow
+    pip install pillow cairosvg
     python3 .github/social-preview.py
 
 Output: .github/social-preview.png  (1280x640 PNG)
@@ -15,14 +15,30 @@ Output: .github/social-preview.png  (1280x640 PNG)
 To regenerate on each release, run this script after bumping plugin.json,
 then commit both the script change (if any) and the new social-preview.png.
 
+Dependencies:
+    - Pillow: canvas drawing, text rendering, PNG output.
+    - cairosvg: rasterizes the Silicon Youth logo SVG into a PIL Image so
+      it can be composited as the top-left publisher mark. Required only
+      for regenerating the preview — the deployed plugin itself has zero
+      runtime dependencies.
+
+Assets:
+    - .github/assets/silicon-youth-logo.svg — the source mark, three
+      parallelogram-clipped rectangles filled `#1a1918`. The script
+      re-tints the fill to the accent blue (`#58a6ff`) at render time so
+      the mark sits cleanly on the dark canvas without needing a second
+      pre-tinted copy of the SVG.
+
 Notes on glyph substitutions:
-    - v2.1.2: The footer right-side now uses "★" (U+2605 BLACK STAR), which
-      renders as a real shape out of Menlo / Arial Unicode / Apple Symbols
-      (verified via PIL bbox + lit-pixel inspection). The earlier "*"
-      asterisk fallback for "✨" sparkles is no longer needed.
-    - The original "try it →" inline CTA was removed from the footer; the
-      CTA is now a dedicated pill-shaped button anchored to the top-right.
-    - All other unicode glyphs in the spec (▲, ✓, →, ·) render correctly
+    - v2.1.3: The top-left "▲" Unicode placeholder is replaced by the
+      actual Silicon Youth logo (rasterized SVG, re-tinted to accent).
+      The "Silicon Youth" wordmark text sits to the right of the logo.
+    - v2.1.2: The footer right-side uses "★" (U+2605 BLACK STAR), which
+      renders as a real shape out of Menlo / Arial Unicode / Apple
+      Symbols (verified via PIL bbox + lit-pixel inspection).
+    - The "try it →" inline CTA was replaced with a dedicated pill-shaped
+      Install → button anchored to the top-right.
+    - Remaining unicode glyphs in the spec (✓, →, ·) render correctly
       out of Menlo, so they are used as-is.
 """
 
@@ -30,6 +46,7 @@ from __future__ import annotations
 
 import os
 import sys
+from io import BytesIO
 from pathlib import Path
 
 try:
@@ -38,6 +55,16 @@ except ImportError as exc:  # pragma: no cover - import-time guard only
     sys.stderr.write(
         "error: Pillow is not installed. Install with:\n"
         "    python3 -m pip install --user pillow\n"
+    )
+    raise SystemExit(1) from exc
+
+try:
+    import cairosvg
+except ImportError as exc:  # pragma: no cover - import-time guard only
+    sys.stderr.write(
+        "error: cairosvg is not installed. This script needs cairosvg to\n"
+        "rasterize the Silicon Youth logo SVG. Install with:\n"
+        "    python3 -m pip install --user cairosvg\n"
     )
     raise SystemExit(1) from exc
 
@@ -85,7 +112,7 @@ MONO_REGULAR_CANDIDATES = [
     ("/System/Library/Fonts/Supplemental/Andale Mono.ttf", 0, "Andale Mono"),
     ("/System/Library/Fonts/Courier.ttc", 0, "Courier"),
 ]
-# Used only for the small set of unicode symbols (▲, ✓, →, ·) when they
+# Used only for the small set of unicode symbols (✓, →, ·, ★) when they
 # appear inside a sans-serif text run that wouldn't render them.
 SYMBOL_CANDIDATES = [
     ("/System/Library/Fonts/Menlo.ttc",   0, "Menlo Regular (symbols)"),
@@ -117,7 +144,6 @@ def load_fonts() -> dict[str, tuple[ImageFont.FreeTypeFont, str]]:
     return {
         # Title block.
         "publisher":     _load_first(SANS_REGULAR_CANDIDATES, 22),  # "Silicon Youth"
-        "publisher_mark":_load_first(SYMBOL_CANDIDATES,       36),  # ▲ mark
         "title":         _load_first(SANS_BOLD_CANDIDATES,    92),  # "project-architect"
         "tagline":       _load_first(SANS_REGULAR_CANDIDATES, 30),
 
@@ -200,6 +226,70 @@ def draw_dot_grid(img: Image.Image, color: tuple[int, int, int], spacing: int = 
 
 
 # ---------------------------------------------------------------------------
+# Logo (SVG) loading and tinting
+# ---------------------------------------------------------------------------
+
+# Path to the source SVG. Computed relative to this script so the generator
+# stays portable (no absolute paths from the author's machine).
+LOGO_SVG_PATH = Path(__file__).resolve().parent / "assets" / "silicon-youth-logo.svg"
+
+# The source logo's fill color in its raw form. Replaced with the accent
+# blue at render time so the mark stands out on the dark canvas.
+LOGO_SOURCE_FILL = "#1a1918"
+
+
+def load_logo(target_height_px: int, tint_hex: str) -> Image.Image:
+    """
+    Rasterize the Silicon Youth logo SVG to a PIL Image of approximately
+    `target_height_px` pixels tall, re-tinted to `tint_hex` (e.g. '#58a6ff').
+
+    The source SVG fills its 1024x1024 viewBox sparsely — content occupies
+    roughly x=160..860, y=210..820. After rasterization we crop transparent
+    margins via `getbbox()` so the logo packs tightly next to the wordmark.
+
+    cairosvg's `parent_color` is unreliable for nested CSS classes, so we
+    take the simpler-and-correct route: read the SVG as text, substitute
+    the known fill color, then hand the mutated bytes to cairosvg.
+
+    Chosen logo height: 56 px (see callsite). At this height, after content-
+    bbox cropping, the visible logo is about 38 px tall — taller than the
+    "Silicon Youth" 22 px text baseline by enough that it reads as a
+    publisher mark, not as an inline glyph. Heights 48/52/60 were also
+    tested; 56 felt the most balanced against the wordmark.
+    """
+    raw = LOGO_SVG_PATH.read_text(encoding="utf-8")
+    # Tolerate both quoted and unquoted forms of the fill color (the source
+    # file uses the `#`-prefixed form inside a CSS block; this also catches
+    # any inline `fill="#1a1918"` should the SVG ever be re-exported).
+    retinted = raw.replace(LOGO_SOURCE_FILL, tint_hex)
+
+    # Render the entire 1024x1024 viewBox at the target height. Width is
+    # computed proportionally (so also `target_height_px` for the square
+    # viewBox). We rasterize at 2x and downscale for sharper edges, since
+    # cairosvg's native rasterizer has no built-in supersampling.
+    render_scale = 2
+    png_bytes = cairosvg.svg2png(
+        bytestring=retinted.encode("utf-8"),
+        output_width=target_height_px * render_scale,
+        output_height=target_height_px * render_scale,
+    )
+    img = Image.open(BytesIO(png_bytes)).convert("RGBA")
+    if render_scale != 1:
+        img = img.resize(
+            (target_height_px, target_height_px),
+            resample=Image.Resampling.LANCZOS,
+        )
+
+    # Crop transparent margins so the visible logo packs tightly against
+    # whatever sits next to it. `getbbox()` returns the tight bbox of all
+    # non-fully-transparent pixels.
+    bbox = img.getbbox()
+    if bbox is not None:
+        img = img.crop(bbox)
+    return img
+
+
+# ---------------------------------------------------------------------------
 # Composition
 # ---------------------------------------------------------------------------
 
@@ -218,22 +308,41 @@ def render() -> Image.Image:
     # -------------------------------------------------------------------
     x_left = 80
 
-    # Publisher line: "▲ Silicon Youth"
+    # Publisher line: [Silicon Youth logo]  Silicon Youth
+    #
+    # The logo is the actual SVG mark rasterized + re-tinted to accent
+    # blue. Height = 56 px is tested empirically against the 22 px
+    # wordmark — large enough to read as a publisher mark, small enough
+    # to sit comfortably in the negative space above the 92 px title.
     publisher_text = "Silicon Youth"
-    mark_font, _ = fonts["publisher_mark"]
     pub_font, _ = fonts["publisher"]
-    # Use baseline-anchored draw so the mark sits visually next to the text.
-    # Y = ~90 is the baseline of the publisher line.
-    pub_y = 100
-    draw_text_run(
-        draw,
-        x_left,
-        pub_y,
-        [
-            ("▲", COLORS["accent"], mark_font),    # ▲
-            ("  ", COLORS["fg_muted"], pub_font),
-            (publisher_text, COLORS["fg_muted"], pub_font),
-        ],
+    # Baseline of the wordmark. Chosen so the logo and the wordmark share
+    # a common visual center near y ~ 88, well clear of the title baseline
+    # at y = 230 and clear of the CTA button vertically centered at y=140.
+    pub_y = 100  # wordmark baseline
+
+    logo_height_px = 56
+    logo_img = load_logo(logo_height_px, tint_hex="#58a6ff")  # accent blue
+    logo_w, logo_h = logo_img.size
+    # Vertical center of the visible logo aligns with the visual center of
+    # the wordmark line. The wordmark sits a few pixels above its baseline
+    # (typographic x-height ≈ 0.5 of pt size), so we pick a center at
+    # roughly pub_y - 12 and derive the top-left y from there.
+    logo_cy = pub_y - 12
+    logo_x = x_left
+    logo_y = logo_cy - logo_h // 2
+    # Composite the logo onto the canvas using its own alpha as the mask.
+    img.alpha_composite(logo_img, dest=(logo_x, logo_y))
+
+    # Wordmark to the right of the logo with a 16 px gap.
+    logo_right = logo_x + logo_w
+    gap_logo_to_text = 16
+    text_x = logo_right + gap_logo_to_text
+    draw.text(
+        (text_x, pub_y),
+        publisher_text,
+        fill=COLORS["fg_muted"],
+        font=pub_font,
         anchor="ls",
     )
 

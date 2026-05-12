@@ -10,6 +10,12 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.3] — 2026-05-12
+
+### Added
+
+- **Silicon Youth logo** in the social-preview image's top-left publisher line, replacing the `▲` Unicode placeholder. SVG is now tracked at `.github/assets/silicon-youth-logo.svg`; the generator (`.github/social-preview.py`) re-tints the dark-fill SVG to accent blue at render time so it sits cleanly on the dark canvas. Adds `cairosvg` as an optional dependency of the generator script (only needed for regenerating the preview, not for using the skill).
+
 ## [2.1.2] — 2026-05-12
 
 ### Changed
