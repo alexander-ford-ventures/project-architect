@@ -163,6 +163,41 @@ Best-effort:
 
 After this step, if the freshness check found a newer version available but the user chose to continue, the cache for this specific plugin contains only the currently-loaded version — no ambiguity about which version a future session would load.
 
+### State file initialization
+
+If `docs/_architect_state.json` does not exist, initialize it. Use exactly this template — the literal `"schema_version": "2.0"` is REQUIRED (do NOT substitute the plugin version):
+
+```bash
+if [ ! -f docs/_architect_state.json ]; then
+  mkdir -p docs
+  cat > docs/_architect_state.json <<'STATE_EOF'
+{
+  "schema_version": "2.0",
+  "plugin_version": "PLUGIN_VERSION_PLACEHOLDER",
+  "started_at": "STARTED_AT_PLACEHOLDER",
+  "last_updated_at": "STARTED_AT_PLACEHOLDER",
+  "phase": "preflight",
+  "decisions": {},
+  "phase_progress": {},
+  "documents_pending": [],
+  "documents_generated": [],
+  "adrs_filed": [],
+  "next_adr_id": "0001",
+  "research_findings": [],
+  "recommended_plugins": []
+}
+STATE_EOF
+  # Substitute the placeholders
+  PLUGIN_VERSION=$(jq -r .version "${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json" 2>/dev/null || echo "unknown")
+  STARTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  sed -i.bak "s/PLUGIN_VERSION_PLACEHOLDER/${PLUGIN_VERSION}/" docs/_architect_state.json
+  sed -i.bak "s/STARTED_AT_PLACEHOLDER/${STARTED_AT}/g" docs/_architect_state.json
+  rm -f docs/_architect_state.json.bak
+fi
+```
+
+CRITICAL: `schema_version` is the literal string `"2.0"` — never substitute the plugin version into this field. The plugin version goes into `plugin_version`.
+
 ---
 
 ## Phase 0a: Repo Init (optional)

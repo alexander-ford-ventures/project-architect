@@ -40,7 +40,7 @@ To re-bootstrap: delete `state.json` and re-invoke. Existing generated docs beco
 ```jsonc
 {
   // Versioning
-  "schema_version": "2.0",                  // String. Bumps when this schema changes. Drives migration.
+  "schema_version": "2.0",                  // String. State-schema version, separate from plugin_version. Bumps only when this schema changes (currently "2.0" is the only released version). DO NOT set this to the plugin's version — that's a different concept.
   "plugin_version": "2.0.0",                // String. semver of the plugin that wrote this state.
   "started_at": "2026-05-12T14:00:00Z",     // ISO8601 UTC. Set at file creation.
   "last_updated_at": "2026-05-12T16:30:00Z",// ISO8601 UTC. Rewritten on every save.
@@ -115,6 +115,17 @@ To re-bootstrap: delete `state.json` and re-invoke. Existing generated docs beco
   "lock": { "pid": 42, "host": "macbook-air", "acquired_at": "..." }
 }
 ```
+
+### `schema_version` vs `plugin_version` — DO NOT CONFUSE
+
+These are **independent versions**:
+
+- `schema_version` describes the layout of `state.json` itself (what fields exist, what types they are, what enums are valid). Currently `"2.0"`. Only bumps when migration is required.
+- `plugin_version` describes which version of `project-architect` wrote this state. Currently follows semver of `.claude-plugin/plugin.json`. Bumps with every release.
+
+A v2.1.4 plugin can write a state with `schema_version: "2.0"`. A future v3.0 plugin could ALSO write `schema_version: "2.0"` if no schema migration was needed.
+
+The Preflight phase MUST initialize `schema_version` to the constant `"2.0"`, NOT to whatever value `plugin.json` reports. This was a bug in v2.1.4 and earlier — see `docs/tests/2026-05-13-md2pdf-live-test-report.md` bug #1.
 
 **Phase enum:** `"preflight" | "phase_0a" | "phase_0" | "phase_1" | "phase_2" | "phase_2.5" | "phase_3" | "phase_4" | "phase_5" | "phase_6" | "phase_7" | "complete"`
 
