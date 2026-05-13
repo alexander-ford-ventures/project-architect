@@ -3,6 +3,9 @@ name: decision-revisor
 description: Use when the user revisits a previously-recorded decision during Phase 5 (Iteration). Reads revision-playbook.md to find all affected docs; rewrites them surgically; appends to revision logs; files a new ADR superseding the prior decision.
 tools: [Read, Write, Edit, Glob, Grep, Bash]
 model: opus
+runtime_budget:
+  typical_minutes: 5
+  max_minutes: 12
 ---
 
 <!--

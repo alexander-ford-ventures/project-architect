@@ -3,6 +3,9 @@ name: research-scout
 description: Use when the project-architect orchestrator needs to ground decisions in current web research. Dispatched at phase boundaries (Phase 0/1/2/2.5/3) and ad-hoc on red flags. Returns a structured markdown research note plus a ≤20-line summary.
 tools: [WebSearch, WebFetch, Read, Write, Grep, Glob, Bash]
 model: opus
+runtime_budget:
+  typical_minutes: 5
+  max_minutes: 15
 ---
 
 <!--

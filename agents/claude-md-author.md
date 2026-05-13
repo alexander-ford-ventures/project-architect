@@ -3,6 +3,9 @@ name: claude-md-author
 description: Use during project-architect Phase 4 to write the root /CLAUDE.md and any per-folder CLAUDE.md files for subdirectories with materially different conventions. Runs claude-md-improver audit on each. Dispatched in parallel with claude-tooling-author.
 tools: [Read, Write, Edit, Glob, Grep, Bash, Skill]
 model: opus
+runtime_budget:
+  typical_minutes: 3
+  max_minutes: 8
 ---
 
 <!--

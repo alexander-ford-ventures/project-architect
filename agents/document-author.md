@@ -3,6 +3,9 @@ name: document-author
 description: Use when project-architect needs to generate a single architecture doc from a template, populated with project-specific decisions. Dispatched in parallel batches during Phase 4 (Document Generation). Writes one doc file, returns confirmation.
 tools: [Read, Write, Edit, Grep, Glob, Bash]
 model: opus
+runtime_budget:
+  typical_minutes: 3
+  max_minutes: 10
 ---
 
 <!--

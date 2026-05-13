@@ -3,6 +3,9 @@ name: claude-tooling-author
 description: Use during project-architect Phase 4 to write the generated project's .claude/ directory — settings.json, hooks/, agents/, commands/, recommended-plugins.md. Stack-aware. Dispatched in parallel with claude-md-author.
 tools: [Read, Write, Edit, Glob, Grep, Bash, Skill]
 model: opus
+runtime_budget:
+  typical_minutes: 10
+  max_minutes: 20
 ---
 
 <!--
