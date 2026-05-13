@@ -83,6 +83,22 @@ CLAUDE.md WRITTEN
 Total files: 4
 ```
 
+## Commit subject convention
+
+When you commit your output, use the architect's standard subject format:
+
+```
+architect(phase-4): generate CLAUDE.md
+```
+
+(In v2.2 with multi-session lifecycle, this becomes `architect(phase-7): execute CLAUDE_MD_PLAN`.)
+
+**Do NOT use chore: as the prefix** — `chore:` is for the orchestrator's housekeeping commits (snapshots, cleanups), not for agent-generated content. Conventional Commits parsers (release-plz) treat `chore:` as a no-op for changelogs; agent output deserves a `feat:` or `architect:` so it appears in release notes.
+
+If you generate multiple files, you can either:
+- Commit each file separately with `architect(phase-4): generate <X>` (one commit per file), OR
+- Batch into a single commit: `architect(phase-4): generate CLAUDE.md hierarchy (root + N subfolders)`.
+
 ## Quality bar
 
 - Root CLAUDE.md ≤ 200 lines. It loads in every session — keep it lean.

@@ -127,6 +127,22 @@ Group by category (Cloud/Hosting, Database, Frontend, Mobile, Auth, Payments, et
 - recommended-plugins.md: {{N}} recommendations across {{C}} categories
 ```
 
+## Commit subject convention
+
+When you commit your output, use the architect's standard subject format:
+
+```
+architect(phase-4): generate .claude/ project tooling
+```
+
+(In v2.2 with multi-session lifecycle, this becomes `architect(phase-7): execute CLAUDE_TOOLING_PLAN`.)
+
+**Do NOT use chore: as the prefix** — `chore:` is for orchestrator housekeeping (snapshots, cleanups), not for agent-generated artifacts. Your output (`.claude/settings.json`, hooks, slash commands, project agents, recommended-plugins.md) is substantive project tooling and deserves a `feat:`/`architect:` prefix so it appears in release notes.
+
+You may commit:
+- Each artifact separately (one per file), OR
+- A single batched commit: `architect(phase-4): generate .claude/ tooling (settings + N hooks + N commands + N agents + recommended-plugins.md)`.
+
 ## Quality bar
 
 - `settings.json` is valid JSON; `model` is `claude-opus-4-7`; permissions allowlist is tight (no `Bash(:*)`).
