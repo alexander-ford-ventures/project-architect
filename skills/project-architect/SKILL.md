@@ -141,10 +141,18 @@ Detect if the loaded skill is older than the latest release at the source repo, 
    LOADED=$(jq -r .version "${CLAUDE_PLUGIN_ROOT:-/dev/null}/.claude-plugin/plugin.json" 2>/dev/null || echo unknown)
    ```
 
-2. **Read the latest released version** from the source repo (only if `gh` is available and authenticated):
+2. **Read the latest released version** from the source repo. Try `gh` first (fastest, lowest rate-limit impact), then fall back to the public GitHub Releases API via `curl` (no auth needed for public repos):
 
    ```bash
-   LATEST=$(gh release view --repo siliconyouth/project-architect --json tagName --jq .tagName 2>/dev/null | sed 's/^v//' || echo unknown)
+   # Try gh first (fastest, lowest rate-limit impact)
+   LATEST=$(gh release view --repo siliconyouth/project-architect --json tagName --jq .tagName 2>/dev/null | sed 's/^v//')
+   # Fall back to public GitHub API via curl (no auth needed for public repos)
+   if [ -z "$LATEST" ]; then
+     LATEST=$(curl -fsSL --max-time 5 https://api.github.com/repos/siliconyouth/project-architect/releases/latest 2>/dev/null \
+                | jq -r '.tag_name // empty' 2>/dev/null \
+                | sed 's/^v//')
+   fi
+   LATEST="${LATEST:-unknown}"
    ```
 
 3. **Compare** with semver-style ordering:
@@ -152,10 +160,16 @@ Detect if the loaded skill is older than the latest release at the source repo, 
    - If `LOADED < LATEST`: surface a one-time notice:
 
      > Loaded version v{{LOADED}} — a newer release v{{LATEST}} is available.
-     > To update, run in any terminal:
-     >   `claude plugin marketplace update local`
-     >   `claude plugin uninstall project-architect@local && claude plugin install project-architect@local`
-     >   `/reload-plugins`     (in this Claude session)
+     >
+     > To update (Claude Code with slash commands — recommended):
+     >   `/plugin`                  → detects + downloads the update
+     >   `/reload-plugins`          → applies it to the current session
+     >
+     > Fallback (older Claude Code without `/plugin` slash command):
+     >   `claude plugin marketplace update <marketplace>`
+     >   `claude plugin uninstall project-architect@<marketplace>`
+     >   `claude plugin install project-architect@<marketplace>`
+     >   `/reload-plugins`          (in this Claude session)
      >
      > Continue with v{{LOADED}} for this run? (yes / pause to update)
 
@@ -163,7 +177,7 @@ Detect if the loaded skill is older than the latest release at the source repo, 
 
 4. **Skip the check** silently if:
    - `${CLAUDE_PLUGIN_ROOT}` is unset (rare; older Claude Code versions).
-   - `gh` is not installed or not authenticated.
+   - `curl` is not installed AND `gh` is not authenticated.
    - The repo has no releases yet.
    - Network is unreachable.
 
