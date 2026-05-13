@@ -28,7 +28,7 @@ Both paths are relative to the **generated project's** root, not the plugin.
 | Preflight (Phase -1) completes | `state.json` created with `schema_version`, `plugin_version`, `started_at`, empty `decisions`, `phase = "preflight"`. |
 | Any batch / agent dispatch / commit | Orchestrator persists updated `state.json`. |
 | Resume invocation | Read `state.json`, validate schema, re-run preflight, jump to `state.phase`. |
-| Phase 6 cleanup | Delete `state.json` AND `_architect_state.lock`, then commit (`chore: clean up bootstrap state`). |
+| Phase 6 cleanup (v2.1.5 fix) | **Preserve** `state.json` (canonical cross-session entry point); release `_architect_state.lock` only. Commit `chore: release bootstrap lock`. The state.json is required for `/iterate-design` (v2.2) and for resume from another session. |
 | Clean exit (any phase) | Release lock (delete `_architect_state.lock`); leave `state.json` for next resume. |
 
 To re-bootstrap: delete `state.json` and re-invoke. Existing generated docs become reference material — the orchestrator diffs and asks rather than overwriting.
@@ -219,7 +219,7 @@ Path: `docs/_architect_state.lock`. Contents:
 3. **Stale window: 30 minutes.** If `now - acquired_at > 30 min`, lock is stale — offer the user: `"Stale lock from pid X on host Y (acquired 47 min ago). Clear and continue? (y/n)"`.
 4. **Live lock, same host, pid alive** (`now - acquired_at <= 30 min` AND `host` matches AND `kill -0 <pid>` succeeds): refuse with `"Another project-architect session appears to be running (pid X). If this is wrong, delete docs/_architect_state.lock and retry."`.
 5. **Live lock, different host or dead pid:** treat as stale; offer to clear.
-6. **Release at clean exit.** Phase 6 cleanup deletes BOTH state file and lockfile. Any other phase's clean exit deletes only the lockfile.
+6. **Release at clean exit.** Phase 6 cleanup deletes the lockfile only — the state file is preserved (v2.1.5 fix — bug #14, required for cross-session resume and `/iterate-design` in v2.2). Any other phase's clean exit also deletes only the lockfile.
 7. **Mirror.** Whenever the lockfile is written, also update `state.lock`. The file is canonical for cross-process coordination; the field is informational.
 
 ---

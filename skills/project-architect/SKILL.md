@@ -31,7 +31,7 @@ You orchestrate a 9-phase project bootstrap. You do not do the heavy lifting you
 
 ## State
 
-Persistent across the bootstrap: `docs/_architect_state.json`. Schema, lockfile protocol, and migration policy are documented in `references/state-schema.md`. Save after every batch, every agent dispatch, every commit. Delete only at end of Phase 6 cleanup.
+Persistent across the bootstrap: `docs/_architect_state.json`. Schema, lockfile protocol, and migration policy are documented in `references/state-schema.md`. Save after every batch, every agent dispatch, every commit. **Never deleted by the orchestrator** (v2.1.5 fix — bug #14): the state file is the canonical cross-session entry point and must persist past Phase 6 for re-invocations and (in v2.2) for `/iterate-design`.
 
 Lock file: `docs/_architect_state.lock` with `{pid, host, acquired_at}`. Held throughout the session. If a stale lock (>30 min old) exists at startup, offer to clear it.
 
@@ -645,7 +645,13 @@ State: `phase = "phase_6"` once (a) is chosen, save.
    ```
    If yes: execute. If customize: let user edit before running.
 5. **Final commit**: `chore: bootstrap complete` via `commit-commands:commit`.
-6. **Cleanup**: delete `docs/_architect_state.json`. Commit: `chore: clean up bootstrap state`.
+6. **Cleanup** (v2.1.5 fix — bug #14): the state.json is preserved. Do NOT remove `docs/_architect_state.json`. The state file is the canonical entry point for future re-invocations and (in v2.2) for `/iterate-design`. Optionally archive a copy to `docs/versions/v1.0/_architect_state.json` (in v2.2 this becomes mandatory; for v2.1.5 transitional, offer it as an option). Commit only the lockfile cleanup if the lock is held: `chore: release bootstrap lock`.
+
+   ```bash
+   # Release lock (delete lockfile only)
+   rm -f docs/_architect_state.lock
+   # IMPORTANT: never remove the state file — it is the cross-session entry point
+   ```
 7. Output: "✓ Project architect complete."
 8. State: phase = "complete".
 
@@ -662,7 +668,7 @@ If chosen in Phase 5 menu, or asked at the end of Phase 6:
 If yes:
 1. Invoke `Skill: superpowers:writing-plans` with context:
    - `spec_path: docs/PROJECT_REQUIREMENTS.md`
-   - `state_path: docs/_architect_state.json` (or note that it's been deleted; pass a state summary instead)
+   - `state_path: docs/_architect_state.json` (preserved through Phase 6 per v2.1.5)
    - "MVP focus" or "Phase 1 features" tagging.
 2. Control transfers to writing-plans. project-architect does not run after this.
 
