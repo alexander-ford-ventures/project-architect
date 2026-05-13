@@ -302,6 +302,65 @@ For each major decision, the orchestrator files an ADR (one per major: language,
 
 End-of-phase: `research-scout` on stack-combination gotchas. Findings → `docs/research/phase2-stack.md`.
 
+### Per-language CLI-UX library picker (v2.2 — sketch E)
+
+**Routing:** When `state.decisions.tech_stack.language` is set AND `state.decisions.cli_experience_model != "one_shot"`, ask the per-language picker below. The picker offers a 4-library shortlist per language for TUI / prompts / progress / color, gated on the universal CLI-experience-model answer captured in Phase 1 (v2.1.5).
+
+This sub-question runs once the language has been picked in Phase 2's "Language & runtime" batch. It deliberately follows the language decision because the shortlist depends on which ecosystem the project lives in. Save the selected libraries to `state.decisions.cli_ux_libraries` (object keyed by concern → library name).
+
+#### Rust
+
+| Concern | Recommended | Alternatives |
+|---|---|---|
+| TUI framework | `ratatui` | `crossterm` (lower-level), `cursive` |
+| Interactive prompts | `inquire` | `dialoguer` |
+| Progress bars | `indicatif` | `pbr` |
+| Color | `owo-colors` | `colored`, `nu-ansi-term` |
+
+#### Go
+
+| Concern | Recommended | Alternatives |
+|---|---|---|
+| TUI framework | `bubbletea` | `tview` |
+| Styling | `lipgloss` | `aec` |
+| Interactive forms | `huh` | `survey` |
+| Progress bars | `mpb` | `progressbar` |
+
+#### Python
+
+| Concern | Recommended | Alternatives |
+|---|---|---|
+| TUI framework | `textual` | `urwid` |
+| Rich output / colors | `rich` | `colorama` |
+| Interactive prompts | `prompt_toolkit` | `questionary`, `inquirer` |
+| CLI framework | `typer` | `click`, `argparse` |
+
+#### Node
+
+| Concern | Recommended | Alternatives |
+|---|---|---|
+| TUI framework | `ink` | `blessed` |
+| Interactive prompts | `@clack/prompts` | `inquirer`, `prompts` |
+| Task list / progress | `listr2` | `ora` |
+| Color | `chalk` | `kleur`, `picocolors` |
+
+#### Ruby
+
+| Concern | Recommended | Alternatives |
+|---|---|---|
+| TUI / forms / progress / color | TTY toolkit (`tty-prompt`, `tty-spinner`, `tty-progressbar`, `pastel`) | `curses` (stdlib) |
+
+#### C#
+
+| Concern | Recommended | Alternatives |
+|---|---|---|
+| TUI framework | `Spectre.Console` | (stdlib `System.Console`) |
+| TUI app (windowed) | `Terminal.Gui` | (rarely needed for CLI) |
+
+**Skip the picker** if `cli_experience_model == "one_shot"` (e.g., a script that emits text and exits — no need for color or progress libraries). For other language ecosystems not in this table (Java, Kotlin, Elixir, Swift, etc.), fall back to a free-form research-scout dispatch and record findings in `docs/research/phase2-cli-ux.md`.
+
+The selected libraries feed into `CLI_UX_DESIGN.md` (added v2.2) and influence the dependency footprint in Phase 4 (`SCAFFOLD_PLAN.md`).
+
 ---
 
 ## Cost Modeling (Phase 2.5)
