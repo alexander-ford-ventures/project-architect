@@ -416,7 +416,21 @@ End of phase: dispatch `research-scout` with Phase 3 prompt (pattern validation)
 
 Load `references/document-catalog.md` for selection rules and the topological sort key.
 
-1. **Select templates** by evaluating each template's `generate_when` expression against `state.decisions`. Always-generated + type-anchored + matching conditional templates → selected list.
+1. **Select templates** in two passes:
+   - **Pass A — `generate_when` evaluation**: evaluate each template's `generate_when` expression against `state.decisions`. Always-generated + type-anchored + matching conditional templates → `gw_selected` set.
+   - **Pass B — ADR `affected_docs` enforcement** (BUG-5 FIX, v2.1.5): compute the **union** of every ADR's `affected_docs` field across `state.adrs_filed`, **intersect** with the template catalog filenames, and **force-include** the result. This guarantees that if an ADR claims a doc as affected, that doc IS generated.
+
+   ```bash
+   # Pseudo-code for Pass B (executor: implement using jq + bash):
+   ALL_AFFECTED=$(jq -r '.adrs_filed[].affected_docs[]?' docs/_architect_state.json | sort -u)
+   CATALOG=$(ls skills/project-architect/references/templates/ | sed 's/\.md$//')
+   FORCED=$(comm -12 <(echo "$ALL_AFFECTED" | sort) <(echo "$CATALOG" | sort))
+   # Final selected set = gw_selected ∪ FORCED
+   ```
+
+   If a doc is in `FORCED` but missing from the catalog (typo in ADR `affected_docs`), surface a WARNING but proceed with the rest. If `FORCED` adds docs not present in `gw_selected`, log them as `affected_docs_only` for audit visibility.
+
+   The final `selected_templates` list is `gw_selected ∪ FORCED`. Topological sort (step 2) operates on the union.
 2. **Topologically sort** by `depends_on`. Write upstream docs first.
 3. **Compute state slices**: for each selected template, extract only the `required_decisions` + `optional_decisions` keys from `state.decisions`.
 4. **Dispatch `document-author` agents in parallel batches of 8** (per `superpowers:dispatching-parallel-agents` pattern):
