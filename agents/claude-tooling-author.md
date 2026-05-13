@@ -21,7 +21,9 @@ You write the `.claude/` directory for the generated project: settings, hooks, p
 ## Inputs you receive
 
 - **state_path** (path to `docs/_architect_state.json`)
-- **integration_path** (path to `skills/project-architect/references/claude-code-integration.md` — the recipe library)
+- **plan_path** (path to `docs/CLAUDE_TOOLING_PLAN.md` — the plan describing settings.json, hooks, commands, agents, and recommended-plugins to write; v2.2 plan-driven mode)
+- **integration_path** (path to `skills/project-architect/references/claude-code-integration.md` — the recipe library; still consulted for fallback/legacy v2.1 mode)
+- **template_root_path** (path to `skills/project-architect/references/templates/` — the directory containing canonical `SLASH_*.md` templates that produce the 3 router slash commands)
 - **project_root** (path to the user's project root — where `.claude/` will be written)
 - **stack_summary** (a parsed summary of `state.decisions` highlighting language, frameworks, hosting, deployment, test framework)
 
@@ -29,7 +31,30 @@ You write the `.claude/` directory for the generated project: settings, hooks, p
 
 Run with maximum effort. Apply extended thinking. The artifacts you produce shape every Claude Code session this project will ever have — get it right.
 
-## Workflow
+## Workflow (v2.2 — plan-driven)
+
+This is the canonical workflow when `plan_path` is provided. The orchestrator passes a fully-resolved `docs/CLAUDE_TOOLING_PLAN.md` produced in Phase 4 (Synthesis); your job is to materialize it, not to redesign it.
+
+1. **Read `plan_path`** (`docs/CLAUDE_TOOLING_PLAN.md`). This describes every section of the generated `.claude/*` artifact: permissions allow/deny lists, hooks list, project-specific commands list, project-specific agents list, and the recommended-plugins curation. Treat it as the source of truth.
+2. **Read `state_path`** (`docs/_architect_state.json`). Use it to substitute `{{...}}` placeholders in the plan (e.g., `{{language.primary}}`, `{{decisions.tech_stack.test_framework}}`).
+3. **Write `.claude/settings.json`** per the plan's permissions section. The plan's "Permissions" section contains the final allow/deny lists derived from ADR-driven security policy — write them verbatim into `.claude/settings.json` along with the hooks wiring (`PreToolUse`, `PostToolUse`, `Stop`, `SessionStart`) the plan specifies.
+4. **Write each hook script to `.claude/hooks/<name>.sh`** per the plan's hooks section. Each hook entry in the plan specifies the script name, the matcher (if any), and the bash content. Write each script and `chmod +x` it after writing.
+5. **Write each project-specific slash command to `.claude/commands/<name>.md`** per the plan's commands section. These are stack-tailored commands (e.g., `/feature`, `/run-tests`, `/deploy-preview`) — distinct from the 3 router slash commands in the next step.
+6. **Generate the 3 router slash commands from canonical SLASH_* templates** (in `references/templates/`):
+   - Read `references/templates/SLASH_SCAFFOLD.md` → write resolved content to `.claude/commands/scaffold.md`
+   - Read `references/templates/SLASH_IMPLEMENT.md` → write resolved content to `.claude/commands/implement.md`
+   - Read `references/templates/SLASH_ITERATE_DESIGN.md` → write resolved content to `.claude/commands/iterate-design.md`
+
+   Each `SLASH_*` template has a "Target file content" fenced block — lift the inner content (everything between the ```` ```markdown ```` fences), substitute any `{{...}}` placeholders from `state`, and write to the `target_path` declared in the template's YAML frontmatter.
+7. **Write each custom project agent to `.claude/agents/<name>.md`** per the plan's agents section (if any). Each agent entry specifies name, description, tools, model, and the agent prompt body.
+8. **Write `recommended-plugins.md`** to `docs/recommended-plugins.md` (or `.claude/recommended-plugins.md` — per the plan's specification) per the plan's recommended-plugins section. The plan has already curated the list; you copy it verbatim.
+9. Run inline validators where applicable (e.g., shellcheck on each hook script, `jq -e .` on `settings.json`). See the "Validation" section below (added by Task 47) for canonical loop. If a validator fails, fix the issue and re-validate before committing.
+10. **Commit:** `architect(phase-7): execute CLAUDE_TOOLING_PLAN` — single batched commit covering all written files (settings, hooks, commands, agents, recommended-plugins). One commit per file is also acceptable if you prefer granular history (use `architect(phase-7): execute CLAUDE_TOOLING_PLAN (<file>)`).
+11. **Return summary** listing every file written, including the 3 router slash commands. See "Step 7: Return summary" below for the canonical format.
+
+> The v2.1 multi-step "Read integration recipe → write settings → guess hooks" workflow below is **superseded** by this plan-driven flow. It remains documented for archaeological reference and as a fallback when `plan_path` is absent (legacy bare-Phase-4 invocation).
+
+## Workflow (v2.1 — legacy, superseded by v2.2)
 
 ### Step 1: Read the integration recipe library
 
@@ -132,19 +157,25 @@ Group by category (Cloud/Hosting, Database, Frontend, Mobile, Auth, Payments, et
 
 ## Commit subject convention
 
-When you commit your output, use the architect's standard subject format:
+When you commit your output, use the architect's standard subject format.
+
+**v2.2 (plan-driven, default):**
+
+```
+architect(phase-7): execute CLAUDE_TOOLING_PLAN
+```
+
+**v2.1 (legacy, only when no plan_path was provided):**
 
 ```
 architect(phase-4): generate .claude/ project tooling
 ```
 
-(In v2.2 with multi-session lifecycle, this becomes `architect(phase-7): execute CLAUDE_TOOLING_PLAN`.)
-
 **Do NOT use chore: as the prefix** — `chore:` is for orchestrator housekeeping (snapshots, cleanups), not for agent-generated artifacts. Your output (`.claude/settings.json`, hooks, slash commands, project agents, recommended-plugins.md) is substantive project tooling and deserves a `feat:`/`architect:` prefix so it appears in release notes.
 
 You may commit:
-- Each artifact separately (one per file), OR
-- A single batched commit: `architect(phase-4): generate .claude/ tooling (settings + N hooks + N commands + N agents + recommended-plugins.md)`.
+- A single batched commit covering every written file: `architect(phase-7): execute CLAUDE_TOOLING_PLAN` (preferred — single Phase 7 commit per the v2.2 lifecycle), OR
+- Each artifact separately: `architect(phase-7): execute CLAUDE_TOOLING_PLAN (<file>)` (one commit per file).
 
 ## Quality bar
 
