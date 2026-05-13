@@ -420,6 +420,20 @@ End of phase: dispatch `research-scout` with Phase 3 prompt (pattern validation)
 
 ## Phase 4: Document Generation
 
+### Phase 4 entry gate (added v2.2 — bug #4 fix)
+
+Before dispatching any document-author agent, verify Phase 3's prerequisites are satisfied:
+
+```bash
+PREREQS=$(jq -r '.phase_progress.phase_3.prerequisites_satisfied // false' docs/_architect_state.json)
+if [[ "$PREREQS" != "true" ]]; then
+  echo "Phase 3 prerequisites not satisfied; cannot enter Phase 4. Check that pattern-validation research has returned."
+  exit 1
+fi
+```
+
+This blocks the live-test bug where `document-author` dispatched in parallel with `research-scout` (pattern validation), causing research findings to land too late to inform doc generation.
+
 Load `references/document-catalog.md` for selection rules and the topological sort key.
 
 1. **Select templates** in two passes:

@@ -177,6 +177,27 @@ Each `phase_progress[<phase>]` entry tracks completion and work-in-flight state 
 
 `completed_at` is ISO8601 UTC. `*_remaining` arrays shrink as work completes; all other arrays are append-only.
 
+### `prerequisites_satisfied` (added v2.2)
+
+Each `phase_progress[<phase>]` entry gains a `prerequisites_satisfied: bool` field. The orchestrator MUST verify the upstream phase's `prerequisites_satisfied == true` before dispatching any agent for the downstream phase. This is the **phase-boundary gate** that prevents the bug surfaced during the md2pdf live test (pattern-validation research dispatched in parallel with Phase 4 instead of finishing before).
+
+| Phase | Prerequisites satisfied when |
+|---|---|
+| `preflight` | Always true once Preflight passes (no upstream). |
+| `phase_0a` | Preflight complete. |
+| `phase_0` | Phase 0a complete (or skipped). |
+| `phase_1` | Phase 0 complete AND domain-research findings file exists. |
+| `phase_2` | Phase 1 complete AND scope-research findings file exists. |
+| `phase_2.5` | Phase 2 complete AND stack-gotchas research findings file exists. |
+| `phase_3` | Phase 2.5 complete (cost model captured). |
+| `phase_4` | Phase 3 complete AND pattern-validation research findings file exists. **This is the bug-#4 fix.** |
+| `phase_5` | Phase 4 complete AND quality-gate-auditor returned (no BLOCKER findings, or user explicitly approved with BLOCKERs). |
+| `phase_6` | Phase 5 approved (user picked option a or equivalent). |
+| `phase_7` | Phase 6 complete AND user opted into tooling execution. |
+| `phase_8` | Phase 7 complete (or skipped via menu). |
+
+The orchestrator sets `prerequisites_satisfied = true` ONLY when all listed conditions are met. Auditor check 16 (B16, `phase_gates`) verifies this for the `state.phase` value at audit time.
+
 ---
 
 ## `recommended_plugins[]` fields
