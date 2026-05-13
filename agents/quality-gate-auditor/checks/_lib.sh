@@ -6,7 +6,8 @@
 # Shared helpers for quality-gate-auditor check scripts. Source from each
 # checks/check_NN_*.sh as: source "$(dirname "$0")/_lib.sh"
 #
-# Provides: emit_pass, emit_fail, truncate_json_string, relpath, is_external_url
+# Provides: emit_pass, emit_fail, truncate_json_string, relpath, is_external_url,
+#           read_md_corpus, require_valid_json
 
 # emit_pass <id> <severity> <check_name> <detail_text>
 # Emits a passing JSON finding to stdout. <detail_text> is JSON-escaped.
@@ -59,4 +60,25 @@ is_external_url() {
   [[ "$p" == mailto:* ]] && return 0
   [[ "$p" == tel:* ]] && return 0
   return 1
+}
+
+# read_md_corpus <docs_dir>
+# Concatenate every .md file under <docs_dir> into stdout, stripping NUL bytes
+# (which trigger bash command-substitution warnings on binary content).
+# Quiet on a missing directory.
+read_md_corpus() {
+  local docs_dir="$1"
+  [[ -d "$docs_dir" ]] || return 0
+  find "$docs_dir" -name "*.md" -type f -exec cat {} + 2>/dev/null | tr -d '\0'
+}
+
+# require_valid_json <path>
+# Returns 0 (success) if the file exists AND is valid JSON. Returns 1 otherwise.
+# Callers should defer to check_05_json_valid for the BLOCKER verdict; this
+# helper just lets each check decline to make a positive claim when state is
+# unreadable.
+require_valid_json() {
+  local path="$1"
+  [[ -f "$path" ]] || return 1
+  jq -e . "$path" >/dev/null 2>&1
 }

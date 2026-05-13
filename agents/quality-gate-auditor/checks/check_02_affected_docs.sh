@@ -36,6 +36,14 @@ if [[ ! -f "$STATE_PATH" ]]; then
   exit 0
 fi
 
+# Defer the JSON-validity verdict to check_05 (json_valid, BLOCKER). If state
+# is unparseable we must NOT emit a positive claim ("all affected_docs generated
+# or deferred") that downstream readers would trust.
+if ! require_valid_json "$STATE_PATH"; then
+  emit_pass "B02" "INFO" "adr_affected_docs" "state.json unparseable (deferred to json_valid check)"
+  exit 0
+fi
+
 # Build the sets of generated and deferred docs (basenames).
 # Normalise "name" entries so trailing ".md" is preserved exactly once.
 GENERATED=$(jq -r '

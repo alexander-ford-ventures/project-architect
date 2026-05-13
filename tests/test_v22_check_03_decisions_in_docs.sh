@@ -89,4 +89,18 @@ for r in "$RESULT_CLEAN" "$RESULT_NOT_MENTIONED" "$RESULT_MENTIONED" "$RESULT_ME
   fi
 done
 
+# Malformed JSON edge case: must NOT silently pass with positive claim
+BADJSON_TMP=$(mktemp -d)
+mkdir -p "$BADJSON_TMP/docs"
+echo '{"truncated":' > "$BADJSON_TMP/docs/_architect_state.json"  # invalid JSON
+RESULT_BADJSON=$(bash "$CHECK" "$BADJSON_TMP" "$BADJSON_TMP/docs/_architect_state.json")
+PASSED_BADJSON=$(echo "$RESULT_BADJSON" | jq -r .passed)
+SEVERITY_BADJSON=$(echo "$RESULT_BADJSON" | jq -r .severity)
+DETAIL_BADJSON=$(echo "$RESULT_BADJSON" | jq -r .detail)
+# Must pass with INFO severity AND detail must mention "unparseable" or "deferred"
+assert_eq "$PASSED_BADJSON" "true" "malformed JSON must pass with INFO (defer to json_valid)"
+assert_eq "$SEVERITY_BADJSON" "INFO" "malformed JSON must be INFO severity"
+[[ "$DETAIL_BADJSON" == *unparseable* || "$DETAIL_BADJSON" == *deferred* ]] && PASS_COUNT=$((PASS_COUNT+1)) || { FAIL_COUNT=$((FAIL_COUNT+1)); FAIL_MESSAGES+=("FAIL: detail must mention unparseable/deferred"); }
+rm -rf "$BADJSON_TMP"
+
 test_summary

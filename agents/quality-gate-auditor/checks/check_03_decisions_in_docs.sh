@@ -39,13 +39,24 @@ if [[ ! -f "$STATE_PATH" ]]; then
   exit 0
 fi
 
+# Defer the JSON-validity verdict to check_05 (json_valid, BLOCKER). If state
+# is unparseable we must NOT emit a positive claim ("all decisions mentioned in
+# docs") that downstream readers would trust.
+if ! require_valid_json "$STATE_PATH"; then
+  emit_pass "B03" "INFO" "decisions_in_docs" "state.json unparseable (deferred to json_valid check)"
+  exit 0
+fi
+
 if [[ ! -d "$DOCS_DIR" ]]; then
   emit_pass "B03" "INFO" "decisions_in_docs" "no docs/ directory"
   exit 0
 fi
 
 # Concatenate all doc content into a single search corpus (case-sensitive substring search).
-CORPUS=$(find "$DOCS_DIR" -name "*.md" -type f -exec cat {} + 2>/dev/null)
+# read_md_corpus strips NUL bytes via tr -d '\0' to silence the
+# "warning: command substitution: ignored null byte in input" diagnostic that
+# bash emits when a .md file accidentally contains binary content.
+CORPUS=$(read_md_corpus "$DOCS_DIR")
 
 # Walk decision leaves via jq. Output one record per leaf as "<dotted-path>\t<value>".
 # The recursive jq filter enumerates non-array/object leaves. Arrays are skipped (typically
