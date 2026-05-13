@@ -21,6 +21,7 @@ You write `/CLAUDE.md` (always) and per-folder CLAUDE.md files (when warranted) 
 ## Inputs you receive
 
 - **state_path** (path to `docs/_architect_state.json`)
+- **plan_path** (path to `docs/CLAUDE_MD_PLAN.md` — the plan describing what to write; v2.2 plan-driven mode)
 - **template_root_path** (`skills/project-architect/references/templates/CLAUDE_MD_ROOT.md`)
 - **template_subfolder_path** (`skills/project-architect/references/templates/CLAUDE_MD_SUBFOLDER.md`)
 - **doc_paths** (list of all generated doc filenames in the user's project, for cross-referencing)
@@ -30,7 +31,22 @@ You write `/CLAUDE.md` (always) and per-folder CLAUDE.md files (when warranted) 
 
 Run with maximum effort. Apply extended thinking. CLAUDE.md is loaded into every session — every word counts.
 
-## Workflow
+## Workflow (v2.2 — plan-driven)
+
+This is the canonical workflow when `plan_path` is provided. The orchestrator passes a fully-resolved `docs/CLAUDE_MD_PLAN.md` produced in Phase 4 (Synthesis); your job is to materialize it, not to redesign it.
+
+1. **Read `plan_path`.** This is a structured doc describing every section the future CLAUDE.md must contain (root + any per-subfolder files). Treat it as the source of truth.
+2. **Read `state_path`.** Use it to substitute `{{...}}` placeholders in the plan (e.g., `{{decisions.project.elevator_pitch}}`, `{{language.primary}}`).
+3. **Resolve `(see X)` references** into literal cross-links (e.g., `(see ADR 0003)` → `(see [ADR 0003](docs/adr/0003-*.md))`).
+4. **Write the resolved CLAUDE.md to `<project_root>/CLAUDE.md`.**
+5. **Per-subfolder CLAUDE.mds:** If the plan describes per-subfolder CLAUDE.mds (table in the "Per-subfolder CLAUDE.mds" section of the plan), write those files too. Each subfolder entry in the plan specifies the path, scope, and which sections to include.
+6. Optionally invoke `Skill: claude-md-management:claude-md-improver` on each file written; iterate on suggestions until the improver passes (skip if the skill is unavailable — note it in the summary).
+7. **Commit:** `architect(phase-7): execute CLAUDE_MD_PLAN` (one batched commit for the root + all subfolders, OR one commit per file if you prefer granular history).
+8. **Return summary** listing each file written with its audit status (see "Step 4: Return summary" below for the canonical format).
+
+> The v2.1 multi-step "Write template → derive content → guess sections" workflow below is **superseded** by this plan-driven flow. It remains documented for archaeological reference and as a fallback when `plan_path` is absent (legacy bare-Phase-4 invocation).
+
+## Workflow (v2.1 — legacy, superseded by v2.2)
 
 ### Step 1: Write the root CLAUDE.md
 
@@ -88,19 +104,25 @@ Total files: 4
 
 ## Commit subject convention
 
-When you commit your output, use the architect's standard subject format:
+When you commit your output, use the architect's standard subject format.
+
+**v2.2 (plan-driven, default):**
+
+```
+architect(phase-7): execute CLAUDE_MD_PLAN
+```
+
+**v2.1 (legacy, only when no plan_path was provided):**
 
 ```
 architect(phase-4): generate CLAUDE.md
 ```
 
-(In v2.2 with multi-session lifecycle, this becomes `architect(phase-7): execute CLAUDE_MD_PLAN`.)
-
 **Do NOT use chore: as the prefix** — `chore:` is for the orchestrator's housekeeping commits (snapshots, cleanups), not for agent-generated content. Conventional Commits parsers (release-plz) treat `chore:` as a no-op for changelogs; agent output deserves a `feat:` or `architect:` so it appears in release notes.
 
 If you generate multiple files, you can either:
-- Commit each file separately with `architect(phase-4): generate <X>` (one commit per file), OR
-- Batch into a single commit: `architect(phase-4): generate CLAUDE.md hierarchy (root + N subfolders)`.
+- Commit each file separately with `architect(phase-7): execute CLAUDE_MD_PLAN (<file>)` (one commit per file), OR
+- Batch into a single commit: `architect(phase-7): execute CLAUDE_MD_PLAN (root + N subfolders)`.
 
 ## Quality bar
 
