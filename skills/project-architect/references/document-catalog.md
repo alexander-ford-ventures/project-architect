@@ -13,6 +13,7 @@ The orchestrator queries this catalog before Phase 4 to decide which templates t
 - [Always-generated templates](#always-generated-templates)
 - [Type-anchored templates](#type-anchored-templates)
 - [Conditional matrix](#conditional-matrix)
+- [Plan documents](#plan-documents)
 - [Dependency / generation order](#dependency--generation-order)
 
 ---
@@ -115,6 +116,19 @@ Selected automatically when the top-level project type matches.
 | CONTRIBUTING | `decisions.open_source == true` |
 | RELEASE_PROCESS | `decisions.production_bound == true` |
 
+## Plan documents
+
+**Plan documents** are an intermediate artifact produced in Phase 6 (after the doc set is committed) and consumed in Phase 7 to actually generate CLAUDE.md files, scaffold the repository, write slash commands, and surface a next-step plan to the user. They are written to `docs/` like other catalog entries, but their downstream effect is *generative* — each plan describes what a Phase 7 agent will materialise on disk.
+
+| Template | `generate_when` | `depends_on` |
+|---|---|---|
+| CLAUDE_MD_PLAN | `always` | `PROJECT_OVERVIEW.md`, `TECH_STACK.md` |
+| CLAUDE_TOOLING_PLAN | `always` | `SECURITY_AND_COMPLIANCE.md`, `TECH_STACK.md`, `RELEASE_PROCESS.md` |
+| SCAFFOLD_PLAN | `project.sub_type != "documentation_only"` | `TECH_STACK.md`, `ARCHITECTURE.md`, `BUILD_AND_RUN.md`, `LICENSE_NOTICE.md` |
+| NEXT_STEP_PLAN | `always` | *(none)* |
+
+Plan files live in `templates/<NAME>.md` alongside other templates. They are dispatched by `document-author` in the same Phase 4 / 6 wave as other docs, but the orchestrator routes their outputs to Phase 7 executors (`claude-md-author`, `claude-tooling-author`, `scaffolder`) rather than treating them as final deliverables.
+
 ## Dependency / generation order
 
 The architect topologically sorts selected templates by `depends_on` before parallel dispatch, so cross-references resolve.
@@ -161,6 +175,11 @@ PROJECT_OVERVIEW
    ↓
 CLAUDE_MD_ROOT (depends on all)
 CLAUDE_MD_SUBFOLDER (per-folder, depends on root + folder-relevant docs)
+   ↓
+CLAUDE_MD_PLAN          ◄── PROJECT_OVERVIEW + TECH_STACK
+CLAUDE_TOOLING_PLAN     ◄── SECURITY_AND_COMPLIANCE + TECH_STACK + RELEASE_PROCESS
+SCAFFOLD_PLAN           ◄── TECH_STACK + ARCHITECTURE + BUILD_AND_RUN + LICENSE_NOTICE
+NEXT_STEP_PLAN          (no dependencies; written last as a forward-looking summary)
 ```
 
-The `claude-md-author` agent writes CLAUDE.md files **after** all other docs are committed. The `claude-tooling-author` runs in parallel with `claude-md-author`.
+The `claude-md-author` agent writes CLAUDE.md files **after** all other docs are committed. The `claude-tooling-author` runs in parallel with `claude-md-author`. In Phase 7 (Tooling Execution), the four plan documents above are consumed by Phase 7 agents (`claude-md-author`, `claude-tooling-author`, `scaffolder`) to materialise CLAUDE.md files, slash commands, and repo scaffolding on disk.
