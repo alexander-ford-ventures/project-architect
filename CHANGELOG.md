@@ -10,6 +10,27 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.1.5 — 2026-05-13
+
+Tactical fixes for bugs surfaced during the md2pdf live test (see `docs/tests/2026-05-13-md2pdf-live-test-report.md`). Larger architectural improvements ship in v2.2.
+
+### Fixed
+
+- **bug #1** — `state.schema_version` now correctly initializes to `"2.0"` (state-schema version), separate from `state.plugin_version` which carries the plugin's semver. Previously `schema_version` was incorrectly set to the plugin version.
+- **bug #2** — All timestamps in `state.json` now use ISO8601 UTC (`YYYY-MM-DDTHH:MM:SSZ`). Previously `started_at` could be written as a date-only string.
+- **bug #5** — Phase 4 template selection now force-includes the union of every ADR's `affected_docs`, intersected with the catalog. Previously, ADR-promised docs could be skipped if their `generate_when` expression didn't match.
+- **bug #7** — `claude-md-author` and `claude-tooling-author` now use `architect(phase-N): ...` commit subjects instead of `chore: ...`, matching the orchestrator's convention.
+- **bug #9** — `decision-revisor` agent prompt now includes explicit scope discipline + cost-budget guidance to prevent runtime overruns on surgical patches.
+- **bug #14** — Phase 6 no longer deletes `docs/_architect_state.json`. The state file is preserved as the canonical entry point for future re-invocations (and for `/iterate-design` in v2.2). Only the lockfile is released.
+
+### Added
+
+- Universal CLI-UX gate question in Phase 1 for CLI/TUI projects (sketch E micro-portion). Asks whether the tool is one-shot, interactive prompts, full TUI, or hybrid; routes follow-up questions accordingly. Per-language library picker ships in v2.2.
+
+### Test infrastructure
+
+- New `tests/` directory with shared `lib/test_helpers.sh` and `run_all.sh` runner. Every v2.1.5 fix has a corresponding `tests/test_v215_*.sh` file.
+
 ## [2.1.4] — 2026-05-12
 
 ### Changed
