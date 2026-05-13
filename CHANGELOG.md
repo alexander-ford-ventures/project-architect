@@ -16,7 +16,7 @@ Major architectural release. Implements the four validation sketches + cross-lan
 
 ### Added
 
-- **Sketch B**: New `quality-gate-auditor` agent runs 16 cross-cutting checks after Phase 4 closes. Findings auto-seed the Phase 5 iteration menu. Catches all 13 known live-test bugs plus 1 future code-emission class.
+- **Sketch B**: New `quality-gate-auditor` agent runs 16 cross-cutting checks after Phase 4 closes. Findings auto-seed the Phase 5 iteration menu. Together with v2.1.5's tactical fixes, this closes the full set of 14 live-test bugs (6 in v2.1.5, the remaining 8 via the auditor's BLOCKER/WARNING/INFO findings here).
 - **Sketch C**: Per-agent runtime budget frontmatter on all 6 agents. Orchestrator wraps every dispatch with an observer that surfaces "silent for too long" and "over budget" warnings. Never auto-kills — observation only. Telemetry feeds future tuning.
 - **Sketch D**: Multi-session lifecycle redesign. Phase 4 now generates 4 plan docs (CLAUDE_MD_PLAN, CLAUDE_TOOLING_PLAN, SCAFFOLD_PLAN, NEXT_STEP_PLAN) instead of producing tooling/code directly. New Phase 7 executes plans (claude-md-author and claude-tooling-author refactored to consume plan docs as input). New Phase 8 hands off via CLAUDE.md as router with 3 slash commands (`/scaffold`, `/implement`, `/iterate-design`). Adds `state.locked / version / locked_at` fields and per-phase memory persistence (8-9 memory writes per architect run for cross-session continuity).
 - **Sketch A**: Inline validators in `claude-tooling-author` (shellcheck, jq, python yaml). Catches malformed `.sh`/`.json` at write-time before declaring done.
