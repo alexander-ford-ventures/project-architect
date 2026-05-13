@@ -40,22 +40,12 @@ if ! command -v shellcheck >/dev/null 2>&1; then
   exit 0
 fi
 
-# Find every .sh file under PROJECT_ROOT, excluding fixtures and build dirs.
+# Find every .sh file under PROJECT_ROOT via the shared helper (exclusion list
+# is centralized in _lib.sh::find_project_files to avoid drift across checks).
 SH_FILES=()
 while IFS= read -r f; do
   [[ -n "$f" ]] && SH_FILES+=("$f")
-done < <(
-  find "$PROJECT_ROOT" -type f -name "*.sh" \
-    -not -path "*/tests/fixtures/*" \
-    -not -path "*/.git/*" \
-    -not -path "*/node_modules/*" \
-    -not -path "*/target/*" \
-    -not -path "*/dist/*" \
-    -not -path "*/build/*" \
-    -not -path "*/.venv/*" \
-    -not -path "*/__pycache__/*" \
-    2>/dev/null
-)
+done < <(find_project_files "$PROJECT_ROOT" -name "*.sh")
 
 if [[ ${#SH_FILES[@]} -eq 0 ]]; then
   emit_pass "B04" "BLOCKER" "shellcheck" "no shell scripts to check"

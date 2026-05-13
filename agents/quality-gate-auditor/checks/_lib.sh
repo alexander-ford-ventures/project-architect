@@ -72,6 +72,42 @@ read_md_corpus() {
   find "$docs_dir" -name "*.md" -type f -exec cat {} + 2>/dev/null | tr -d '\0'
 }
 
+# find_project_files <root> <find-test-args...>
+# Walks <root> for files matching the given find test args (e.g., '-name' '*.sh',
+# or multiple -name expressions wrapped in '\(' '\)') while excluding standard
+# test-fixture, VCS, build, vendor, and cache directories.
+# Outputs one path per line on stdout. Newlines-in-filenames are NOT supported.
+#
+# Usage examples:
+#   find_project_files "$PROJECT_ROOT" -name "*.sh"
+#   find_project_files "$PROJECT_ROOT" \( -name "*.json" -o -name "*.jsonc" \)
+find_project_files() {
+  local root="$1"
+  shift
+  find "$root" -type f "$@" \
+    -not -path "*/tests/fixtures/*" \
+    -not -path "*/.git/*" \
+    -not -path "*/node_modules/*" \
+    -not -path "*/vendor/*" \
+    -not -path "*/Pods/*" \
+    -not -path "*/target/*" \
+    -not -path "*/dist/*" \
+    -not -path "*/build/*" \
+    -not -path "*/.venv/*" \
+    -not -path "*/.tox/*" \
+    -not -path "*/__pycache__/*" \
+    -not -path "*/.mypy_cache/*" \
+    -not -path "*/.next/*" \
+    -not -path "*/.terraform/*" \
+    -not -path "*/coverage/*" \
+    -not -path "*/.cache/*" \
+    -not -path "*/.idea/*" \
+    -not -path "*/.vscode/*" \
+    -not -path "*/.gradle/*" \
+    -not -path "*/bower_components/*" \
+    2>/dev/null
+}
+
 # require_valid_json <path>
 # Returns 0 (success) if the file exists AND is valid JSON. Returns 1 otherwise.
 # Callers should defer to check_05_json_valid for the BLOCKER verdict; this
