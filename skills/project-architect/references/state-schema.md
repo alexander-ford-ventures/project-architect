@@ -127,6 +127,32 @@ A v2.1.4 plugin can write a state with `schema_version: "2.0"`. A future v3.0 pl
 
 The Preflight phase MUST initialize `schema_version` to the constant `"2.0"`, NOT to whatever value `plugin.json` reports. This was a bug in v2.1.4 and earlier — see `docs/tests/2026-05-13-md2pdf-live-test-report.md` bug #1.
 
+### Timestamps — always ISO8601 UTC, never date-only
+
+Every timestamp field in `state.json` and the lockfile uses **ISO8601 UTC datetime** format: `YYYY-MM-DDTHH:MM:SSZ` (e.g., `"2026-05-12T22:45:00Z"`).
+
+**Never date-only** (`"2026-05-12"`) — that strips the time component and is a bug. The fields affected:
+
+- `started_at` (state.json)
+- `last_updated_at` (state.json)
+- `phase_progress[<phase>].completed_at` (state.json)
+- `documents_generated[].generated_at` (state.json)
+- `research_findings[].dispatched_at` (state.json)
+- `recommended_plugins[].detected_at` (state.json)
+- `adrs_filed[].date` — by ADR convention this is date-only (matches the ADR document's `date:` frontmatter), but state.locked_at and state.locked_by_until-style fields are full ISO8601.
+- `lock.acquired_at` (lockfile)
+- `state.locked_at` (added in v2.2 Sketch D)
+
+The canonical Bash incantation to produce a correct timestamp is:
+
+```bash
+date -u +"%Y-%m-%dT%H:%M:%SZ"
+```
+
+The `-u` ensures UTC (no tz issue across machines); the `Z` suffix is ISO8601's UTC marker.
+
+**Validation:** at startup, the orchestrator (or quality-gate-auditor in v2.2) checks that `state.started_at` parses cleanly via Python's `datetime.fromisoformat()`. Date-only values fail this check.
+
 **Phase enum:** `"preflight" | "phase_0a" | "phase_0" | "phase_1" | "phase_2" | "phase_2.5" | "phase_3" | "phase_4" | "phase_5" | "phase_6" | "phase_7" | "complete"`
 
 ---
