@@ -144,6 +144,41 @@ Group by category (Cloud/Hosting, Database, Frontend, Mobile, Auth, Payments, et
 
 **Optionally invoke** `Skill: claude-code-setup:claude-automation-recommender` for an automated recommendation pass; merge with the recipe-library output.
 
+## Validation (v2.2 — sketch A)
+
+After each Write under `.claude/`, validate the file before proceeding to the next:
+
+| Filetype | Validator | On failure |
+|---|---|---|
+| `*.sh` (any) | `shellcheck -s bash -S warning $f && bash -n $f` | Capture stderr, retry up to 2× with error fed back |
+| `*.sh` (executable hooks: pre-tool-use, post-tool-use, stop, session-start) | Above + `timeout 2 bash $f </dev/null >/dev/null 2>&1` | Same retry loop |
+| `settings.json` | `jq empty $f && jq -e '.permissions.allow' $f` | Same retry loop |
+| `*.json` (other) | `jq empty $f` | Same retry loop |
+| `.claude/commands/*.md` | YAML frontmatter parse via `python3 -c "import yaml,sys; yaml.safe_load(open(sys.argv[1]).read().split('---')[1])" $f` | Warning only — do not retry |
+
+**Validation loop**:
+
+```
+For each Write you do under .claude/:
+  1. Write file
+  2. Run validator
+  3. If validator fails:
+     a. Read validator stderr
+     b. Re-Write the file with the error fed into your reasoning
+     c. Re-validate
+     d. After 2 failed retries, append file to `unsafe_to_use` list and continue
+  4. Move to next file
+```
+
+**At end of run**: include in your return summary an `unsafe_to_use` array. The orchestrator surfaces these as Phase 5 (or Phase 7 if running there) iteration items.
+
+**Graceful degradation**:
+- If `shellcheck` is not installed: log a warning and skip shellcheck step (still run `bash -n`).
+- If `jq` is not installed: this is unexpected (Preflight should have caught it); fail loudly.
+- If `python3` not available: skip slash-command frontmatter check.
+
+**Why inline (not separate auditor)**: catches `.sh`/`.json` errors at the moment of writing, when the agent has full context to fix. The post-Phase-4 quality-gate-auditor (sketch B) catches cross-cutting bundle issues but can't easily fix individual files mid-write — that's this agent's job.
+
 ### Step 7: Return summary
 
 ```
