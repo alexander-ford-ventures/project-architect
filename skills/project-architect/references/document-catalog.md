@@ -14,6 +14,7 @@ The orchestrator queries this catalog before Phase 4 to decide which templates t
 - [Type-anchored templates](#type-anchored-templates)
 - [Conditional matrix](#conditional-matrix)
 - [Plan documents](#plan-documents)
+- [Programming language design (v2.3, Sketch F)](#programming-language-design-v23-sketch-f)
 - [Dependency / generation order](#dependency--generation-order)
 
 ---
@@ -130,6 +131,24 @@ Selected automatically when the top-level project type matches.
 
 Plan files live in `templates/<NAME>.md` alongside other templates. They are dispatched by `document-author` in the same Phase 4 / 6 wave as other docs, but the orchestrator routes their outputs to Phase 7 executors (`claude-md-author`, `claude-tooling-author`, `scaffolder`) rather than treating them as final deliverables.
 
+## Programming language design (v2.3, Sketch F)
+
+**Programming-language templates** are a v2.3 addition (Sketch F — "Designing a programming language"). They activate when `project.sub_type` is one of the six PL variants: `general_purpose_language`, `domain_specific_language`, `query_language`, `configuration_language`, `educational_language`, or `transpiler_target`. All seven templates share a single gate — they are dispatched together whenever the project is a language design, and skipped entirely otherwise. They sit downstream of `PROJECT_OVERVIEW` and `TECH_STACK` (which capture *that* a language is being built and on *what* host runtime), and form their own dependency chain among themselves so that the grammar is pinned before semantics, semantics before types, and so on.
+
+| Template | `generate_when` | `depends_on` | Purpose |
+|---|---|---|---|
+| LANGUAGE_GRAMMAR | `project.sub_type in [PL-6]` | `PROJECT_OVERVIEW.md`, `TECH_STACK.md` | Surface syntax — lexer, parser, grammar, disambiguation rules. |
+| SEMANTICS | `project.sub_type in [PL-6]` | `LANGUAGE_GRAMMAR.md`, `TECH_STACK.md` | Dynamic semantics — what programs *mean* once parsed. |
+| TYPE_SYSTEM | `project.sub_type in [PL-6]` | `SEMANTICS.md`, `LANGUAGE_GRAMMAR.md` | Which programs are well-typed and what that guarantees. |
+| STDLIB | `project.sub_type in [PL-6]` | `SEMANTICS.md`, `TYPE_SYSTEM.md` | Shape of the standard library — what ships in the box vs delegated to a package manager. |
+| TOOLCHAIN | `project.sub_type in [PL-6]` | `SEMANTICS.md`, `LANGUAGE_GRAMMAR.md` | Developer-facing tooling — REPL, formatter, linter, LSP, debugger, package manager, build tool. |
+| BOOTSTRAP_PLAN | `project.sub_type in [PL-6]` | `LANGUAGE_GRAMMAR.md`, `SEMANTICS.md`, `TYPE_SYSTEM.md` | How v0.1 of the implementation gets built — host language, MVP scope, milestones to self-hosting. |
+| STABILITY_AND_RFC | `project.sub_type in [PL-6]` | `BOOTSTRAP_PLAN.md`, `TOOLCHAIN.md` | Social contract on change — versioning, stability tiers, breaking-change policy, RFC process, governance. |
+
+`[PL-6]` is shorthand for the six PL sub_types listed above. The actual template frontmatter expands the list in full so the matcher in `select_templates` sees a literal array.
+
+All seven templates depend (transitively) on `PROJECT_OVERVIEW.md` and `TECH_STACK.md` through `LANGUAGE_GRAMMAR.md`. The orchestrator topologically sorts them with the rest of the doc set, so a PL project's Phase 4 dispatch wave naturally places these between the always-generated docs and the closing `CLAUDE_MD_ROOT`.
+
 ## Dependency / generation order
 
 The architect topologically sorts selected templates by `depends_on` before parallel dispatch, so cross-references resolve.
@@ -176,6 +195,15 @@ PROJECT_OVERVIEW
    │
    ├─ CLI_UX_DESIGN ◄──── PROJECT_REQUIREMENTS + CLI_REFERENCE + ARCHITECTURE + TECH_STACK
    │   (CLI/TUI sub-types only; gated on project.sub_type)
+   │
+   ├─ Programming-language chain (v2.3, Sketch F — PL sub_types only):
+   │     LANGUAGE_GRAMMAR ◄──── PROJECT_OVERVIEW + TECH_STACK
+   │       └─ SEMANTICS ◄──── LANGUAGE_GRAMMAR + TECH_STACK
+   │            ├─ TYPE_SYSTEM ◄──── SEMANTICS + LANGUAGE_GRAMMAR
+   │            │    └─ STDLIB ◄──── SEMANTICS + TYPE_SYSTEM
+   │            ├─ TOOLCHAIN ◄──── SEMANTICS + LANGUAGE_GRAMMAR
+   │            └─ BOOTSTRAP_PLAN ◄──── LANGUAGE_GRAMMAR + SEMANTICS + TYPE_SYSTEM
+   │                 └─ STABILITY_AND_RFC ◄──── BOOTSTRAP_PLAN + TOOLCHAIN
    ↓
 CLAUDE_MD_ROOT (depends on all)
 CLAUDE_MD_SUBFOLDER (per-folder, depends on root + folder-relevant docs)
