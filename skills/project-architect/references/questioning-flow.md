@@ -120,6 +120,63 @@ Adaptive — keep asking batches until each relevant area is locked. Typical 3�
 - Cross-platform (Windows in scope)?
 - Telemetry policy (opt-in / opt-out / none)?
 
+#### CLI experience model (universal gate — added v2.1.5)
+
+For CLI projects (`sub_type` in `cli_tool`, `cli_with_subcommands`, `tui_app`, `interactive_cli`), ask this universal question via `AskUserQuestion`:
+
+**Q: CLI experience model — which best describes your tool's interaction style?**
+
+| Option | Description | Examples |
+|---|---|---|
+| **One-shot** | Input → output → exit. No prompts, no UI state. | md2pdf, jq, ripgrep, fd, gh CLI, kubectl |
+| **Interactive prompts** | CLI asks the user via prompts, then runs. | `npm init`, `cargo init`, `gh repo create`, Cookiecutter |
+| **Full TUI** | Keyboard-driven persistent terminal UI. | atuin, gitui, lazygit, zellij, helix, gh dash, tig |
+| **Hybrid** | One-shot default + optional interactive flag. | git (`git rebase -i`), aws-cli (`aws configure`) |
+
+Save the answer to `state.decisions.cli_experience_model`.
+
+**Routing:**
+- `one-shot` → skip the rest of CLI-UX questions
+- `interactive_prompts` → ask universal UX intent (style, output_format, color_policy, accessibility)
+- `tui` → ask universal UX intent + TUI-specific (input_patterns, persistence)
+- `hybrid` → ask both prompts + TUI questions
+
+The per-language library picker (`ratatui` vs `bubbletea` vs `textual` vs `ink` vs etc.) is asked in Phase 2 (added in v2.2). v2.1.5 only asks the universal experience-model question — the language-specific options come later.
+
+#### Universal UX intent (asked unless answer was `one-shot`)
+
+**Q-style-1**: Visual style?
+- Minimal (text only, no color, no banner)
+- Branded (banner + colors + spinners + progress)
+
+**Q-style-2**: Output format(s)?
+- Human-only (default)
+- Human + `--json` (machine-pipe)
+- `--quiet` / `--verbose` discipline
+
+**Q-style-3**: Color policy?
+- Auto-detect (NO_COLOR, FORCE_COLOR, CI, tty) — recommended default
+- Always-color (force, even in non-tty)
+- Never-color (text-only)
+
+**Q-style-4**: Accessibility commitments?
+- NO_COLOR support (mandatory baseline)
+- Screen-reader friendly (no purely-visual cues; semantic exit codes)
+- Low-bandwidth/SSH (banner sizes, animation throttling)
+
+#### TUI-specific (only if `tui` or `hybrid` chosen)
+
+**Q-tui-1**: Input/UX patterns? (multi-select)
+- Vi-style modal navigation
+- Emacs-style chord
+- Arrow keys + Tab + Enter only
+- Mouse-aware
+
+**Q-tui-2**: Persistence? (multi-select)
+- Reads/writes a config file (TOML/YAML/JSON) at `~/.config/$tool/`
+- Maintains a session/history database (e.g., SQLite)
+- Pure ephemeral
+
 ### Library / SDK / package
 - Target consumers (other devs / specific platform / public)?
 - Public-API discipline (semver, deprecation policy)?

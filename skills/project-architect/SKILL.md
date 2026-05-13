@@ -329,6 +329,12 @@ At end of phase:
 3. Optionally surface major implications to the user; offer to revisit Phase 1 answers if research suggests scope problems.
 4. State: `phase = "phase_2"`, save.
 
+### CLI sub-question routing (added v2.1.5)
+
+When `state.decisions.project.sub_type` is one of `cli_tool`, `cli_with_subcommands`, `tui_app`, or `interactive_cli`, dispatch the CLI experience-model gate question from `references/questioning-flow.md` (section "CLI experience model"). Save the answer to `state.decisions.cli_experience_model`. Route follow-up questions per the table in that reference.
+
+The per-language CLI-UX library picker (Phase 2) is added in v2.2; for v2.1.5, only the universal gate + universal UX intent questions ship.
+
 ---
 
 ## Phase 2: Tech Stack
