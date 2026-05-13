@@ -400,6 +400,59 @@ This sub-question runs once the language has been picked in Phase 2's "Language 
 
 The selected libraries feed into `CLI_UX_DESIGN.md` (added v2.2) and influence the dependency footprint in Phase 4 (`SCAFFOLD_PLAN.md`).
 
+### Programming language — PL-specific batch (v2.3 — sketch F)
+
+**Trigger:** runs when `state.decisions.project.sub_type` is one of the 6 PL variants (`general_purpose_language`, `domain_specific_language`, `query_language`, `configuration_language`, `educational_language`, `transpiler_target`). It replaces the normal Phase 2 "Language & runtime" batch — a *language being designed* needs its own implementation-strategy and host-runtime axes, not a framework picker.
+
+Skip the rest of Phase 2's category list (frontend / database / auth / hosting / styling / payments / email / file storage / AI / observability) entirely — a PL project's Phase 2 is just these two questions plus a Testing/CI batch. The host runtime and impl strategy together cover the "what tech does this run on" question that TECH_STACK.md captures for non-PL projects.
+
+#### Q-pl-2 · `impl_strategy` — how is v0.1 of the language implemented?
+
+Ask via `AskUserQuestion` (single-select). Save the answer to `state.decisions.impl_strategy` using the exact enum value (see `references/state-schema.md` § *Programming language decisions*).
+
+| Value | One-line distinguishing prompt |
+|---|---|
+| `tree_walking_interpreter` | **Simplest path.** Walk the AST node-by-node at runtime; no IR, no codegen. Right for educational languages and DSL bootstraps where you want to iterate on semantics weekly. (See `BOOTSTRAP_PLAN.md` § *Tree-walking v0.1*.) |
+| `bytecode_vm` | **Moderate complexity.** Compile to a custom bytecode and run on your own VM. Portable, faster than tree-walking, lets you ship a small runtime. Right when you outgrow tree-walking but don't need native speed. |
+| `native_compiler` | **AOT to machine code.** Highest performance. Pairs with `host_runtime = llvm | mlir | cranelift | qbe | native_no_runtime` below. Right for general-purpose languages targeting production workloads. |
+| `transpiler` | **Compile to an existing language.** Your output is *source code* (JS, C, Go, Rust), not a binary. Fastest path to a "real" language with full ecosystem inheritance. Mandatory if `project.sub_type == transpiler_target`. |
+| `hosted_embedded` | **DSL inside a host language.** Lua-in-C, Ruby DSL, Rust proc-macro, Python decorator, JS template-string. No standalone runtime — the host evaluates. Right for `domain_specific_language` and `configuration_language` sub_types that don't justify their own VM. |
+
+The orchestrator saves the chosen value to `state.decisions.impl_strategy`. Cross-references: `BOOTSTRAP_PLAN.md` § *Implementation-strategy decision table*, `SEMANTICS.md` § *Evaluation model*, `tech-stack-options.md` § *PL implementation backends* (added v2.3 — Task 12).
+
+#### Q-pl-3 · `host_runtime` — what runs the compiled/interpreted code?
+
+Ask via `AskUserQuestion` (single-select). Save the answer to `state.decisions.host_runtime`. The 14-option enum is research-informed as of 2026-05-13 — see `references/state-schema.md` § *`host_runtime`* for the full status table and `references/tech-stack-options.md` § *PL implementation backends* for the comparison matrix (added v2.3 — Task 12). Each option carries a status verdict (production / experimental-but-usable / research-only) inherited from the state-schema table.
+
+| Value | One-line distinguishing prompt (2026 status) |
+|---|---|
+| `llvm` | **Industrial default — production.** LLVM 22.x stable, broadest target coverage (x86_64, aarch64, riscv64, wasm, GPU, …). Right when you want production-grade native codegen and a deep optimizer. Used by Rust, Swift, Zig, Clang. |
+| `mlir` | **Accelerator-friendly — production-but-niche.** Dialect-driven compiler IR; first-class GPU/FPGA/TPU/quantum targets. Mojo proves general-purpose viability. Right when your language targets ML hardware or domain-specific accelerators. |
+| `cranelift` | **Fast-debug / Wasm — production.** Rust-native backend; the codegen for `wasmtime` and `rustc -Cback=cranelift`. Lower peak performance than LLVM but 10× faster build times. Right for Wasm runtimes and developer-tools languages. |
+| `qbe` | **Small-backend alternative — experimental-but-usable.** ~14 kLOC C; trivial to vendor into a teaching compiler. x86-64 / aarch64 / riscv64 only. Right for bootstrap compilers and educational projects (`educational_language`). |
+| `truffle` | **Host on GraalVM — production.** Truffle framework on GraalVM 24/25 LTS gives you a free JIT, Native Image AOT, and polyglot interop with JVM/JS/Python. Right when you want to inherit a mature managed runtime. |
+| `jvm` | **Target JVM bytecode — production.** Java 25 LTS; you ship `.class` files. Right for languages with JVM-shaped semantics (Kotlin, Scala, Clojure, Gleam-on-JVM). |
+| `beam` | **Erlang/OTP VM — production-but-niche.** Functional, actor-model, soft-real-time. Gleam is the 2026 exemplar. Right *only* if your language has actor/process semantics — don't pick BEAM for imperative code. |
+| `wasm` | **Raw Wasm 3.0 — production.** W3C standard since Sept 2025: WasmGC + EH + tail calls + multi-memory. Right for browser/edge/sandboxed embeds and language portability. |
+| `wasm_component` | **Component Model — experimental-but-usable.** WASI 0.2 stable, 0.3 RC. Right for cross-component composition (call Python from Rust from JS, all sandboxed). |
+| `js_host` | **Compile to JavaScript — production.** TypeScript, ClojureScript, ReScript, Elm, Kotlin/JS exemplars. Right when web-first or polyglot piggyback is the goal. Mandatory-ish for `transpiler_target` sub_type aiming at JS. |
+| `python_embedded` | **DSL inside Python 3.14+ — production.** Right for `domain_specific_language` and `configuration_language` sub_types embedded in scientific or data workflows. (No-GIL is opt-in; don't depend on it for v0.1.) |
+| `rust_host` | **Embedded DSL in Rust — production.** Proc-macro at compile time OR runtime interpreter (`rhai`, `rune`). Right when host is Rust and you want zero-cost or near-zero-cost integration. |
+| `native_no_runtime` | **Hand-rolled native codegen — expert-only.** No backend library; you emit machine code yourself. Right for research languages or when you need full control of the binary. |
+| `custom_vm` | **Hand-rolled bytecode VM — teaching/niche.** Like `bytecode_vm` impl_strategy but explicitly choosing to *write* the VM rather than reuse one. Right for `educational_language` and for "Crafting Interpreters"-style teaching projects. |
+
+The shortlist visible to the user is filtered by the `impl_strategy` answer:
+
+| `impl_strategy` answer | Shortlist filter |
+|---|---|
+| `tree_walking_interpreter` | host_runtime is informational only — the interpreter runs in its host language. Show `python_embedded`, `rust_host`, `js_host`, `custom_vm` as host-language candidates. |
+| `bytecode_vm` | Show `truffle`, `jvm`, `beam`, `wasm`, `wasm_component`, `custom_vm`. |
+| `native_compiler` | Show `llvm`, `mlir`, `cranelift`, `qbe`, `native_no_runtime`. |
+| `transpiler` | Show `js_host`, `wasm`, `wasm_component`. (Plus free-form "other target" — TS-to-Go, KCL-to-YAML, etc.) |
+| `hosted_embedded` | Show `python_embedded`, `rust_host`, `js_host`. |
+
+Cross-references: `tech-stack-options.md` § *PL implementation backends* (Task 12 — comparison matrix), `BOOTSTRAP_PLAN.md` § *Backend selection rationale*, `TOOLCHAIN.md` § *Build pipeline* (the host_runtime decides which build steps exist).
+
 ---
 
 ## Cost Modeling (Phase 2.5)
@@ -492,6 +545,44 @@ Per-area drill-downs. Only ask about areas that apply (per prior phases). Each a
 - Queue / event system?
 - Background jobs / scheduled tasks?
 - SDK quality / portability concerns?
+
+### Programming language — PL-specific batch (v2.3 — sketch F)
+
+**Trigger:** runs when `state.decisions.project.sub_type` is one of the 6 PL variants (`general_purpose_language`, `domain_specific_language`, `query_language`, `configuration_language`, `educational_language`, `transpiler_target`). It replaces the entire Phase 3 per-area drill-down list above (Auth / Database / API / Security / Frontend / Testing / DevOps / Monitoring / Third-party integrations) — those areas don't apply to a language being designed. Phase 3 for a PL project is just these two axes plus a Testing-strategy batch (which still applies, since the language itself needs a test suite).
+
+The two questions feed `TYPE_SYSTEM.md` (the canonical PL type-system document, added v2.3 — Task 4) and inform `SEMANTICS.md` (added v2.3 — Task 3). Cross-references at the bottom of each question.
+
+#### Q-pl-4 · `paradigm` — primary programming paradigm
+
+Ask via `AskUserQuestion` (single-select). Save the answer to `state.decisions.paradigm` using the exact enum value (see `references/state-schema.md` § *`paradigm`*).
+
+| Value | One-line distinguishing prompt | Examples |
+|---|---|---|
+| `imperative` | **Statements, mutable state, top-to-bottom control flow.** Pick when programs read like recipes — assign, loop, branch, call. | C, Go, Zig |
+| `functional` | **Expressions, immutable data, first-class functions.** Pick when programs read like math — map, fold, compose, no statements. | Haskell, OCaml, Elm |
+| `logic` | **Declarative facts + queries; the runtime is a solver.** Pick when programs describe *what* relations hold, not *how* to compute. | Prolog, miniKanren, Datalog |
+| `oop` | **Objects, messages, encapsulation, often dynamic dispatch.** Pick when programs read as "tell this object to do X." | Smalltalk, Java, Ruby |
+| `multi_paradigm` | **Deliberately blends two or more paradigms with equal first-class support.** Pick when the design intent is "you can write OO *or* functional *or* imperative in this language." | Rust, Scala, Swift, F# |
+| `data_oriented` | **Data layout and transformation are the primary abstraction.** Pick when the program is shaped around arrays / tables / EDN-like data structures rather than control flow. | Clojure, APL, J |
+
+Cross-references: `TYPE_SYSTEM.md` § *Paradigm interactions* (paradigm constrains type system choice — `logic` excludes `affine_linear`, `data_oriented` excludes `dependent`), `SEMANTICS.md` § *Evaluation model* (paradigm determines whether semantics are big-step / small-step / denotational).
+
+#### Q-pl-5 · `type_system` — primary static-analysis stance
+
+Ask via `AskUserQuestion` (single-select). Save the answer to `state.decisions.type_system` using the exact enum value (see `references/state-schema.md` § *`type_system`*). The chosen value becomes the canonical type-system axis recorded in `TYPE_SYSTEM.md` § *Stance*; the document then drills into per-feature decisions (subtyping, variance, inference, ad-hoc polymorphism, …).
+
+| Value | One-line distinguishing prompt | Examples |
+|---|---|---|
+| `static_strong` | **Static, no implicit coercion, no `Any` escape hatch.** All type errors caught at compile time; explicit casts only. | Rust, Haskell, OCaml |
+| `static_gradual` | **Static, with opt-in dynamic / opt-out static regions.** A `dynamic` (or `Any`-style) type lives alongside checked types. | TypeScript, Python + mypy, Dart, Hack |
+| `dynamic` | **Runtime types only.** No type-checker between source and execution; types are properties of values, not bindings. | Python, Ruby, JavaScript, Lua |
+| `dependent` | **Types depend on values.** `Vec n Int` (a vector of length `n`) is a type. Lets you express "this list is non-empty" or "this index is in-bounds" at the type level. | Lean 4 (closest to general-purpose 2026), Idris 2, Agda, Coq |
+| `affine_linear` | **Resources tracked by the type system.** Linear types must be used exactly once; affine types at most once. Right for ownership-tracking, file handles, capabilities. | Rust ownership, Linear Haskell, Austral |
+| `none_untyped` | **No type system at all.** Untyped lambda calculus, Forth-style stack languages. Right only for tiny educational languages or `none_untyped` is a deliberate research stance. | BF, untyped λ-calc, Forth |
+
+Cross-references: `TYPE_SYSTEM.md` (entire document — the type_system value is the *opening* decision the template drills into), `SEMANTICS.md` § *Type-system pairing* (static stances change which evaluation rules apply), `BOOTSTRAP_PLAN.md` § *Type-system rollout* (dependent and affine systems materially affect v0.1 scope — usually a deferred v0.2 feature).
+
+**Skip the rest of Phase 3** (the Auth / Database / API / Security / Frontend / DevOps / Monitoring / Third-party drill-downs above) once a PL sub_type has been chosen. The only Phase 3 area that *does* still apply is Testing strategy — a language project needs a test framework for its compiler/interpreter, and the existing Testing-strategy batch covers that without modification.
 
 After all areas: **inline consistency check** (architect cross-checks decisions; surfaces contradictions for user resolution before doc gen).
 
