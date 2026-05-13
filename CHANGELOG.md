@@ -10,6 +10,38 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.2.0 — 2026-05-13
+
+Major architectural release. Implements the four validation sketches + cross-language CLI-UX picker designed during the md2pdf live test (see `docs/tests/2026-05-13-md2pdf-live-test-report.md`).
+
+### Added
+
+- **Sketch B**: New `quality-gate-auditor` agent runs 16 cross-cutting checks after Phase 4 closes. Findings auto-seed the Phase 5 iteration menu. Catches all 13 known live-test bugs plus 1 future code-emission class.
+- **Sketch C**: Per-agent runtime budget frontmatter on all 6 agents. Orchestrator wraps every dispatch with an observer that surfaces "silent for too long" and "over budget" warnings. Never auto-kills — observation only. Telemetry feeds future tuning.
+- **Sketch D**: Multi-session lifecycle redesign. Phase 4 now generates 4 plan docs (CLAUDE_MD_PLAN, CLAUDE_TOOLING_PLAN, SCAFFOLD_PLAN, NEXT_STEP_PLAN) instead of producing tooling/code directly. New Phase 7 executes plans (claude-md-author and claude-tooling-author refactored to consume plan docs as input). New Phase 8 hands off via CLAUDE.md as router with 3 slash commands (`/scaffold`, `/implement`, `/iterate-design`). Adds `state.locked / version / locked_at` fields and per-phase memory persistence (8-9 memory writes per architect run for cross-session continuity).
+- **Sketch A**: Inline validators in `claude-tooling-author` (shellcheck, jq, python yaml). Catches malformed `.sh`/`.json` at write-time before declaring done.
+- **Sketch E**: Per-language CLI-UX library picker added to Phase 2 (Rust ratatui/inquire/indicatif/owo-colors, Go bubbletea/lipgloss, Python textual/rich, Node ink/clack, Ruby TTY, C# Spectre.Console + Terminal.Gui). New `CLI_UX_DESIGN.md` template.
+
+### Changed
+
+- Phase 4 no longer generates `CLAUDE.md` or `.claude/*` directly — those move to Phase 7.
+- Phase 6 LOCK now snapshots state to `docs/versions/{version}/` and sets `state.locked = true`. Does NOT delete state.json (continuing v2.1.5's bug-#14 fix).
+- `claude-md-author` and `claude-tooling-author` now consume plan docs as input rather than reading state directly.
+- `state.json` schema gains `locked`, `version`, `locked_at`, `memory_pointer`, `phase_progress[].prerequisites_satisfied`.
+- Phase enum extended with `phase_7` and `phase_8`.
+
+### Phase boundary gates
+
+`state.phase_progress[N].prerequisites_satisfied` blocks downstream agent dispatch until upstream phase signals are met. Specifically: Phase 4 won't dispatch document-author until Phase 3's pattern-validation research has returned. Catches the live-test bug-#4 (research dispatched in parallel with Phase 4).
+
+### Migration
+
+Existing v2.1.x users: state.json schema is forward-compatible. New fields default to safe values. The plugin will offer to migrate at startup if it sees a v2.1.x state.
+
+### Test coverage
+
+Full TDD coverage in `tests/`. Run `bash tests/run_all.sh` to verify. 54 test files covering all 16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, cross-language CLI-UX picker, and end-to-end Rust/Python/Go fixtures.
+
 ## v2.1.5 — 2026-05-13
 
 Tactical fixes for bugs surfaced during the md2pdf live test (see `docs/tests/2026-05-13-md2pdf-live-test-report.md`). Larger architectural improvements ship in v2.2.

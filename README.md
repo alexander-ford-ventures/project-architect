@@ -21,15 +21,39 @@ From _"I want to build X"_ to _"docs, CLAUDE.md, ADRs, and a `.claude/` config �
 [![Stars](https://img.shields.io/github/stars/siliconyouth/project-architect?style=social)](https://github.com/siliconyouth/project-architect)
 [![Last commit](https://img.shields.io/github/last-commit/siliconyouth/project-architect)](https://github.com/siliconyouth/project-architect/commits/main)
 [![Plugin validate](https://img.shields.io/badge/plugin%20validate-✓%20passing-success)](.claude-plugin/plugin.json)
-[![Tests](https://img.shields.io/badge/tests-8%20files%20·%2036%20assertions%20·%20passing-success)](tests/)
+[![Tests](https://img.shields.io/badge/tests-54%20files%20·%20passing-success)](tests/)
 
 </div>
 
 ---
 
-## What's new in v2.1.5 _(2026-05-13)_
+## What's new in v2.2.0 _(2026-05-13)_
 
-Tactical fixes for 6 bugs surfaced during a comprehensive end-to-end live test against an `md2pdf`-style Rust CLI project. See the [full live-test report](docs/tests/2026-05-13-md2pdf-live-test-report.md) for the methodology and bug list, and [CHANGELOG.md](CHANGELOG.md) for per-bug fix details.
+Major architectural release. Four validation sketches + a cross-language CLI-UX picker, all designed during the md2pdf live test and now shipped as a single coherent bundle. See the [full live-test report](docs/tests/2026-05-13-md2pdf-live-test-report.md), the [sketches spec](docs/superpowers/specs/2026-05-13-v2.2-validation-sketches.md), and [CHANGELOG.md](CHANGELOG.md) for the unabridged release notes.
+
+| Sketch | What it ships |
+|---|---|
+| **B** quality-gate-auditor | New 6th subagent. Runs 16 cross-cutting checks (link integrity, ADR coverage, shellcheck, JSON validity, hierarchy, attribution, placeholders, TODOs, YAML frontmatter, schema version, ISO8601 timestamps, state drift, numerical consistency, phase-prerequisite gates). Findings auto-seed the Phase 5 iteration menu. |
+| **C** runtime budgets | Per-agent `runtime_budget` frontmatter on all 6 agents. Orchestrator observer surfaces "silent for too long" and "over budget" warnings — observation only, never auto-kills. |
+| **D** multi-session lifecycle | Phase 4 now emits 4 plan docs (CLAUDE_MD_PLAN, CLAUDE_TOOLING_PLAN, SCAFFOLD_PLAN, NEXT_STEP_PLAN). New Phase 7 executes plans. New Phase 8 hands off via CLAUDE.md router with 3 slash commands (`/scaffold`, `/implement`, `/iterate-design`). Per-phase memory persistence + `state.locked/version/locked_at` for cross-session continuity. |
+| **A** inline validators | `claude-tooling-author` now runs shellcheck on `.sh`, `jq` on `.json`, and `python -c yaml.safe_load` on `.yml` before declaring done. Catches malformed tooling at write-time. |
+| **E** CLI-UX picker | Phase 2 per-language library picker: Rust (ratatui/inquire/indicatif/owo-colors), Go (bubbletea/lipgloss), Python (textual/rich), Node (ink/clack), Ruby (TTY), C# (Spectre.Console + Terminal.Gui). New `CLI_UX_DESIGN.md` template. Builds on v2.1.5's universal CLI-UX gate question. |
+
+**Phase boundary gates** — `state.phase_progress[N].prerequisites_satisfied` blocks downstream dispatch until upstream phases finish. Catches the live-test bug-#4 class (research dispatched in parallel with Phase 4).
+
+**Migration from v2.1.x** — state.json schema is forward-compatible. New fields default to safe values. The plugin offers to migrate at startup if it sees a v2.1.x state.
+
+**Test coverage** — 55 test files covering all 16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, cross-language CLI-UX picker, and end-to-end Rust/Python/Go fixtures.
+
+```bash
+bash tests/run_all.sh
+# Test files passed: 54 · All tests passed.
+```
+
+<details>
+<summary>v2.1.5 — tactical fixes _(2026-05-13)_</summary>
+
+Fixes for 6 bugs surfaced during the md2pdf live test:
 
 | Bug | Fix |
 |---|---|
@@ -40,18 +64,9 @@ Tactical fixes for 6 bugs surfaced during a comprehensive end-to-end live test a
 | **#9** `decision-revisor` cost overruns | Agent prompt now has explicit scope discipline + `PARTIAL_COMPLETION` escape hatch |
 | **#14** state.json deleted at Phase 6 | State file is now preserved as the canonical re-invocation entry point; only the lockfile is released |
 
-Plus one new feature:
+Plus: Universal CLI-UX gate question in Phase 1 (the per-language library picker shipped in v2.2 above).
 
-- **Universal CLI-UX gate question in Phase 1** — for any CLI/TUI project the architect now asks whether the tool is one-shot, interactive prompts, full TUI, or hybrid (and routes follow-up questions accordingly). The per-language library picker (ratatui / bubbletea / textual / ink / Spectre.Console / etc.) ships in v2.2.
-
-**Test infrastructure** (`tests/`) — every fix has a `tests/test_v215_*.sh` companion. Run the full suite with:
-
-```bash
-bash tests/run_all.sh
-# Test files passed: 8 · All tests passed.
-```
-
-**v2.2 (in flight)** — quality-gate-auditor (16 cross-cutting checks), per-agent runtime budgets, multi-session lifecycle (Phase 4 emits plan docs; new Phase 7 executes them; Phase 8 hands off via CLAUDE.md as router with 3 slash commands), inline shell/JSON validators, and per-language CLI-UX picker. Full plan: [`docs/superpowers/plans/2026-05-13-v2.2-implementation.md`](docs/superpowers/plans/2026-05-13-v2.2-implementation.md).
+</details>
 
 ---
 
@@ -93,7 +108,7 @@ Then inside Claude:
 ```console
 $ /project-architect
 
-✓ Preflight (v2.1.5)
+✓ Preflight (v2.2.0)
   ✓ Model: claude-opus-4-7[1m]   ✓ Effort: max
   ✓ Recommended plugins: 6/6
   ✓ Version freshness: current

@@ -17,3 +17,10 @@ Thumbs.db
 # Local environment
 .env
 .env.local
+
+# Local Claude Code session config (not part of release artifacts)
+.claude/
+
+# Python bytecode (auditor checks are Python)
+__pycache__/
+*.pyc
