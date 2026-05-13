@@ -115,6 +115,7 @@ Selected automatically when the top-level project type matches.
 | ONBOARDING | `decisions.team_size != "solo"` |
 | CONTRIBUTING | `decisions.open_source == true` |
 | RELEASE_PROCESS | `decisions.production_bound == true` |
+| CLI_UX_DESIGN | `project.sub_type in ["cli_tool", "cli_with_subcommands", "tui_app", "interactive_cli"]` — depends on `PROJECT_REQUIREMENTS.md`, `CLI_REFERENCE.md`, `ARCHITECTURE.md`, `TECH_STACK.md` |
 
 ## Plan documents
 
@@ -172,6 +173,9 @@ PROJECT_OVERVIEW
    │   INTERNATIONALIZATION | ACCESSIBILITY | BACKGROUND_JOBS |
    │   ONBOARDING | CONTRIBUTING | RELEASE_PROCESS | SDK_DESIGN
    │   (feature-area templates; depend on PROJECT_REQUIREMENTS only)
+   │
+   ├─ CLI_UX_DESIGN ◄──── PROJECT_REQUIREMENTS + CLI_REFERENCE + ARCHITECTURE + TECH_STACK
+   │   (CLI/TUI sub-types only; gated on project.sub_type)
    ↓
 CLAUDE_MD_ROOT (depends on all)
 CLAUDE_MD_SUBFOLDER (per-folder, depends on root + folder-relevant docs)
