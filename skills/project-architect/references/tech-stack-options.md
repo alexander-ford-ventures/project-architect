@@ -434,3 +434,7 @@ Concise option lists with trade-offs for each technology category. Present relev
 | **AWS CDK** | AWS-only, TypeScript/Python | AWS lock-in |
 | **SST** | Serverless + Next.js + AWS | Opinionated |
 | **Crossplane** | K8s-native infrastructure | K8s required |
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

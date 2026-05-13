@@ -91,3 +91,7 @@ The orchestrator decides whether to extend, split, or escalate. Do NOT silently 
 - Modify any file in `project_root` or anywhere else.
 - Suppress findings to "be helpful" — every BLOCKER must surface.
 - Add or invent checks not in the documented 16-check list. Out-of-scope checks become Phase 5 menu items via the orchestrator, not auditor output.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

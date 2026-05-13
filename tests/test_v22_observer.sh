@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# License: MIT
+# Project: project-architect (https://github.com/siliconyouth/project-architect)
 source "$(dirname "$0")/lib/test_helpers.sh"
 
 REF="$REPO_ROOT/skills/project-architect/references/runtime-budgets.md"

@@ -102,3 +102,7 @@ The orchestrator decides whether to extend, split, or escalate. Do NOT silently 
 - Skip the Revision Log section.
 - Add a top-level CHANGELOG / README / INSTALLATION_GUIDE — those don't belong inside generated `docs/`.
 - Recommend specific tools or vendors not already in `state_slice` (architecture is the orchestrator's job; you draft, you don't decide).
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

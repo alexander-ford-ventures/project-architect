@@ -49,3 +49,7 @@ Use the [feature request issue template](.github/ISSUE_TEMPLATE/feature_request.
 ## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

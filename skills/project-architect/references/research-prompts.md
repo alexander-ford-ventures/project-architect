@@ -103,3 +103,7 @@ The scout's return value to the orchestrator is a short text summary (≤20 line
 | Ad-hoc | depends on trigger; default 12 months unless specified |
 
 Tune these per project if the user has unusual stability or recency requirements.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

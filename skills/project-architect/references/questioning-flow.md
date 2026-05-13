@@ -481,3 +481,7 @@ Skip questions when prior answers make them irrelevant.
 | AI features = yes | AI/ML section, vector DB, embeddings |
 | Stage = greenfield | Commit on `main`; no branch strategy questions |
 | Stage = extending/rewriting/migrating | Create `bootstrap/architect-<date>` branch |
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

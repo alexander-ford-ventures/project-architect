@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# License: MIT
+# Project: project-architect (https://github.com/siliconyouth/project-architect)
 source "$(dirname "$0")/lib/test_helpers.sh"
 
 declare -A EXPECTED_TYPICAL=( [research-scout]=5 [document-author]=3 [decision-revisor]=5 [claude-md-author]=3 [claude-tooling-author]=10 [quality-gate-auditor]=5 )

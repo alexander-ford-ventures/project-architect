@@ -245,3 +245,7 @@ When the revisor rewrites a section:
 3. **Preserve diagrams** unless the diagram explicitly depicts the changing decision.
 4. **Preserve `## Revision Log` ordering** (append, don't reorder).
 5. If a section heading changes, **grep the rest of the doc-set** for back-references and update them in the same revision.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

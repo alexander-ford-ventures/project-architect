@@ -169,3 +169,7 @@ The orchestrator decides whether to extend, split, or escalate. Do NOT silently 
 - Add a Revision Log to CLAUDE.md (it's iterated freely; ADRs cover decision changes).
 - Skip the improver audit unless the skill is genuinely unavailable.
 - Write sub-CLAUDE.md for dirs that don't have materially different conventions.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

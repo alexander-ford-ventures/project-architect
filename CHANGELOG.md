@@ -10,6 +10,38 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.2.1 — 2026-05-13
+
+Patch release that lands a development-workflow `CLAUDE.md`, captures the 8 documentation commits that drifted past the `v2.2.0` tag, and brings every project-internal file into attribution-convention compliance. No new features; everything below was either drift cleanup or workflow codification.
+
+### Changed (behaviour)
+
+- **Preflight version-freshness check** now uses a `gh release view` → `curl https://api.github.com/...` cascade. End users without `gh` installed (or unauthenticated) now still get the freshness notice. Previously the check skipped silently for them.
+- **Preflight update-notice text** modernised: `/plugin` + `/reload-plugins` is presented as the primary update flow; the older `claude plugin ...` CLI form remains as a fallback for older Claude Code builds.
+
+### Added
+
+- **`CLAUDE.md`** at the repo root — codifies the development workflow (TDD discipline, subagent-driven plan execution, opus + max-effort directive, combined-review + parallel-dispatch, rule-of-2.5 helper extraction), the release workflow (release commit must be the last commit before the tag — the rule that prevented this drift from happening cleanly), and the file-attribution convention.
+- **README.md** now has a "Keeping project-architect up to date" section documenting the `/plugin` + `/reload-plugins` flow with a `claude plugin ...` fallback and `Watch → Releases only` as zero-poll notification.
+
+### Docs
+
+- README.md refreshed for v2.2.0 reality — 6 specialised subagents (was 5), 11 phases (was 9), 54 test files, 5 shipped sketches, expanded architecture mermaid, refreshed phases-at-a-glance table.
+- CHANGELOG v2.2.0 entry tightened to reference "the full set of 14 live-test bugs (6 in v2.1.5, the remaining 8 via the auditor here)".
+- Live-test report (`docs/tests/2026-05-13-md2pdf-live-test-report.md`) updated with "All 14 bugs resolved" header banner + per-bug fixed-in-vX.Y.Z commit map.
+- SKILL.md preamble + Phase order block updated for v2.2.0 (11-phase project bootstrap; Phase 7 = Tooling Execution; Phase 8 = Handoff).
+- Marketplace manifest description aligned with `plugin.json`'s v2.2.0 surface area (was last touched in the v2.0.x era).
+- v2.2 implementation plan annotated with full per-task → commit-SHA map at the top.
+- CLI-UX questioning/templates spec re-marked as shipped in v2.2.0.
+
+### Chore
+
+- **Attribution sweep:** 15 markdown files gained the `*★ Skillfully made with [project-architect](...)*` footer (6 agent docs, `SKILL.md`, 7 references, `CONTRIBUTING.md`). 14 test scripts (`tests/test_v22_*.sh`) gained the 3-line bash-comment author/license/project header. Frozen historical docs (2026-05-12 plans/specs) and convention exceptions (`CHANGELOG.md`, `.github/pull_request_template.md`, `REVISION_LOG_FRAGMENT.md`, `.remember/*`) intentionally left untouched.
+
+### Test coverage
+
+54/54 test files green throughout. No new tests added (this is a docs + workflow release); no test files retired.
+
 ## v2.2.0 — 2026-05-13
 
 Major architectural release. Implements the four validation sketches + cross-language CLI-UX picker designed during the md2pdf live test (see `docs/tests/2026-05-13-md2pdf-live-test-report.md`).

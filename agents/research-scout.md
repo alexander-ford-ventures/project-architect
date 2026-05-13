@@ -138,3 +138,7 @@ The orchestrator decides whether to extend, split, or escalate. Do NOT silently 
 - Quote pricing without citing the official pricing page.
 - Make recommendations beyond what the sources support.
 - Skip the Implications section.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

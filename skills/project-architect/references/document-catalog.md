@@ -187,3 +187,7 @@ NEXT_STEP_PLAN          (no dependencies; written last as a forward-looking summ
 ```
 
 The `claude-md-author` agent writes CLAUDE.md files **after** all other docs are committed. The `claude-tooling-author` runs in parallel with `claude-md-author`. In Phase 7 (Tooling Execution), the four plan documents above are consumed by Phase 7 agents (`claude-md-author`, `claude-tooling-author`, `scaffolder`) to materialise CLAUDE.md files, slash commands, and repo scaffolding on disk.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

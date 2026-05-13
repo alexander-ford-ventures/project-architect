@@ -257,3 +257,7 @@ The orchestrator decides whether to extend, split, or escalate. Do NOT silently 
 - Skip permission tightening (a blanket allow list is unsafe).
 - Skip `chmod +x` on hook scripts (they won't run).
 - Recommend plugins unrelated to the project's actual stack.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

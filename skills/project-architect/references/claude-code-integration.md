@@ -491,3 +491,7 @@ Run:
 
 Report the preview URL when the deploy completes.
 ```
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

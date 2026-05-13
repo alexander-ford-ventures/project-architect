@@ -145,3 +145,7 @@ The orchestrator decides whether to extend, split, or escalate. Do NOT silently 
 - File the new ADR before validating the rewrites.
 - Commit anything (the orchestrator handles commits via `commit-commands:commit`).
 - Modify decisions not listed in the input.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -315,3 +315,7 @@ Currently empty: `2.0` is the first schema version using this layout.
 ## Revision Log
 
 (none yet)
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

@@ -982,3 +982,7 @@ When resuming from `state.json`:
 - Generate icons / branding / mockups (defer to relevant `document-skills` skills via recommended-plugins).
 - Validate the chosen stack works (compile/smoke-test) — that's Phase 7+ territory.
 - Replace user judgment on decisions.
+
+---
+
+*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*

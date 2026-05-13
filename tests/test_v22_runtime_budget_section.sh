@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# License: MIT
+# Project: project-architect (https://github.com/siliconyouth/project-architect)
 source "$(dirname "$0")/lib/test_helpers.sh"
 
 for agent in research-scout document-author decision-revisor claude-md-author claude-tooling-author quality-gate-auditor; do
