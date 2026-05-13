@@ -551,11 +551,39 @@ Load `references/document-catalog.md` for selection rules and the topological so
 
 9. State: `phase = "phase_5"`, save.
 
+10. **Dispatch quality-gate-auditor** (added v2.2, sketch B):
+
+    ```
+    Agent({
+      subagent_type: "project-architect:quality-gate-auditor",
+      model: "opus",
+      description: "Phase 4 → Phase 5 audit",
+      prompt: """
+        [MODEL DIRECTIVE]
+        Run with maximum effort. Apply extended thinking. Be thorough.
+
+        [INPUTS]
+        project_root: {{user project root}}
+        state_path: docs/_architect_state.json
+        catalog_path: skills/project-architect/references/templates/
+        adr_dir: docs/decisions/
+
+        [TASK]
+        Run all 16 checks via run_all.sh. Return the aggregate JSON.
+        Do NOT modify any files.
+      """
+    })
+    ```
+
+11. Parse the auditor's JSON output. Save `findings` + `summary` into `state.last_audit`. Save `phase_5_seed_items` into `state.phase_5_seed_items` (consumed by the iteration menu in step seeding below).
+
+12. If `summary.blocker > 0`: do NOT auto-advance to Phase 5. Print the BLOCKER findings and ask the user how to proceed (revise via `decision-revisor` / approve anyway / abort). Only after the user explicitly chooses to continue should the orchestrator enter the Phase 5 menu.
+
 ---
 
 ## Phase 5: Iteration
 
-Print a decision summary and offer the iteration menu:
+Print a decision summary AND the auditor's seed items (the seed items come from `state.phase_5_seed_items`; the audit summary comes from `state.last_audit.summary`):
 
 ```
 ✓ Bootstrap complete.
@@ -572,13 +600,25 @@ DECISIONS:
   │ Generated {{N}} docs · {{M}} ADRs · {{K}} research findings  │
   └─────────────────────────────────────────────────────────────┘
 
+QUALITY GATE AUDIT:
+  BLOCKER count: {{count}}    WARNING: {{count}}    INFO: {{count}}
+
+  {{for each finding from state.last_audit.findings}}
+    [{{severity}}] {{detail}}
+       → suggested: {{remediation}}
+  {{end}}
+
 What next?
-  (a) Approve all → Phase 6 (commit + plugin install)
-  (b) Revisit a decision → type its key
-  (c) Snapshot current as v1.0 → docs/versions/v1.0/ and continue
-  (d) Generate the implementation plan → Phase 7
-  (e) Show full decision tree
-  (f) Exit (resume later)
+  (auto-seeded from auditor)
+  {{for each item in state.phase_5_seed_items}}
+    ({{letter}}) {{item.label}}{{ if item.selected_default then " [default — fixes a BLOCKER]"}}
+  {{end}}
+  ({{next_letter}}) Approve all → Phase 6 (commit + plugin install)
+  ({{next}})       Revisit a decision → type its key
+  ({{next}})       Snapshot current as v1.0 → docs/versions/v1.0/ and continue
+  ({{next}})       Generate the implementation plan → Phase 7
+  ({{next}})       Show full decision tree
+  ({{next}})       Exit (resume later)
 ```
 
 ### Iteration loop
