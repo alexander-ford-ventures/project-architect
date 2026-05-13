@@ -3,8 +3,8 @@
 # License: MIT
 # Project: project-architect (https://github.com/siliconyouth/project-architect)
 # Check 4 (B04): every .sh file under <project_root> passes shellcheck -s bash -S warning.
-# Excludes test fixtures (tests/fixtures/) and common build/vendor dirs (.git, node_modules,
-# target, dist, build, .venv, __pycache__).
+# Uses _lib.sh::find_project_files which excludes test fixtures, VCS, build, vendor,
+# and cache directories. See _lib.sh for the full exclusion list.
 #
 # Inputs:
 #   $1 = PROJECT_ROOT (project directory to scan)

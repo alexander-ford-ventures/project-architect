@@ -2,7 +2,7 @@
 # Author: Vladimir Dukelic <vladimir@dukelic.com>
 # License: MIT
 # Project: project-architect (https://github.com/siliconyouth/project-architect)
-# Check 5 (B05): every .json file under <project_root> is valid JSON (jq empty).
+# Check 5 (B05): every .json file under <project_root> is valid JSON (jq -e .).
 # Excludes test fixtures and standard build/vendor/cache dirs via find_project_files.
 #
 # Inputs:
@@ -53,10 +53,14 @@ if [[ ${#JSON_FILES[@]} -eq 0 ]]; then
   exit 0
 fi
 
-# Validate each .json file with jq empty (cheap parse-only check).
+# Validate each .json file with `jq -e . >/dev/null` (cheap parse-only check).
+# NOTE: do NOT use `jq empty` here — it exits 0 on empty/whitespace-only input,
+# silently letting a 0-byte state.json sneak past the BLOCKER. `jq -e .` requires
+# at least one value and fails on empty input, which is the exact failure class
+# this check exists to catch.
 FAILURES=()
 for f in "${JSON_FILES[@]}"; do
-  if ! jq empty "$f" 2>/dev/null; then
+  if ! jq -e . "$f" >/dev/null 2>&1; then
     FAILURES+=("$(relpath "$f")")
   fi
 done
@@ -79,4 +83,4 @@ done
 DETAIL="${#FAILURES[@]} invalid JSON file(s): ${JOINED}"
 # UTF-8-safe character truncation via the _lib.sh helper.
 DETAIL_TRUNC=$(truncate_json_string "$DETAIL" 300 | jq -r .)
-emit_fail "B05" "BLOCKER" "json_valid" "$DETAIL_TRUNC" "run 'jq empty <file>' on each invalid file and fix the syntax error" false
+emit_fail "B05" "BLOCKER" "json_valid" "$DETAIL_TRUNC" "run 'jq -e . <file>' on each invalid file and fix the syntax error" false

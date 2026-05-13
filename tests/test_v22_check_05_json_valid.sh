@@ -44,8 +44,22 @@ assert_contains "$DETAIL_BAD" "settings.json" "detail must name the failing JSON
 assert_contains "$DETAIL_BAD" "invalid JSON" "detail must label the failure mode"
 rm -rf "$BAD_TMP"
 
+# Empty-file regression: `jq empty` silently exits 0 on empty/whitespace-only
+# input, letting a 0-byte state.json sneak past the BLOCKER. `jq -e .` requires
+# at least one value and fails on empty input. Lock that behavior here.
+EMPTY_TMP=$(mktemp -d)
+touch "$EMPTY_TMP/empty.json"
+RESULT_EMPTY=$(bash "$CHECK" "$EMPTY_TMP")
+PASSED_EMPTY=$(echo "$RESULT_EMPTY" | jq -r .passed)
+assert_eq "$PASSED_EMPTY" "false" "empty file must be flagged as invalid JSON"
+SEVERITY_EMPTY=$(echo "$RESULT_EMPTY" | jq -r .severity)
+assert_eq "$SEVERITY_EMPTY" "BLOCKER" "empty-file failure must be BLOCKER"
+DETAIL_EMPTY=$(echo "$RESULT_EMPTY" | jq -r .detail)
+assert_contains "$DETAIL_EMPTY" "empty.json" "detail must name the empty JSON file"
+rm -rf "$EMPTY_TMP"
+
 # All outputs valid JSON.
-for r in "$RESULT_CLEAN" "$RESULT_PROJECT" "$RESULT_BAD"; do
+for r in "$RESULT_CLEAN" "$RESULT_PROJECT" "$RESULT_BAD" "$RESULT_EMPTY"; do
   if echo "$r" | jq -e . >/dev/null 2>&1; then
     PASS_COUNT=$((PASS_COUNT + 1))
   else

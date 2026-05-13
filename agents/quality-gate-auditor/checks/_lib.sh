@@ -81,6 +81,12 @@ read_md_corpus() {
 # Usage examples:
 #   find_project_files "$PROJECT_ROOT" -name "*.sh"
 #   find_project_files "$PROJECT_ROOT" \( -name "*.json" -o -name "*.jsonc" \)
+#
+#   IMPORTANT: Multi-name expressions with -o MUST be wrapped in \( ... \).
+#   Without grouping, the find precedence rule makes -not -path bind only
+#   to the right side of -o, silently leaking exclusions for the left side.
+#   Right:  find_project_files "$ROOT" \( -name "*.json" -o -name "*.jsonc" \)
+#   Wrong:  find_project_files "$ROOT" -name "*.json" -o -name "*.jsonc"
 find_project_files() {
   local root="$1"
   shift
@@ -97,10 +103,15 @@ find_project_files() {
     -not -path "*/.tox/*" \
     -not -path "*/__pycache__/*" \
     -not -path "*/.mypy_cache/*" \
+    -not -path "*/.pytest_cache/*" \
+    -not -path "*/.ruff_cache/*" \
+    -not -path "*/.ipynb_checkpoints/*" \
     -not -path "*/.next/*" \
     -not -path "*/.terraform/*" \
     -not -path "*/coverage/*" \
     -not -path "*/.cache/*" \
+    -not -path "*/.claude/*" \
+    -not -path "*/.serena/*" \
     -not -path "*/.idea/*" \
     -not -path "*/.vscode/*" \
     -not -path "*/.gradle/*" \
