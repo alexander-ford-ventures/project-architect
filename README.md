@@ -21,8 +21,37 @@ From _"I want to build X"_ to _"docs, CLAUDE.md, ADRs, and a `.claude/` config �
 [![Stars](https://img.shields.io/github/stars/siliconyouth/project-architect?style=social)](https://github.com/siliconyouth/project-architect)
 [![Last commit](https://img.shields.io/github/last-commit/siliconyouth/project-architect)](https://github.com/siliconyouth/project-architect/commits/main)
 [![Plugin validate](https://img.shields.io/badge/plugin%20validate-✓%20passing-success)](.claude-plugin/plugin.json)
+[![Tests](https://img.shields.io/badge/tests-8%20files%20·%2036%20assertions%20·%20passing-success)](tests/)
 
 </div>
+
+---
+
+## What's new in v2.1.5 _(2026-05-13)_
+
+Tactical fixes for 6 bugs surfaced during a comprehensive end-to-end live test against an `md2pdf`-style Rust CLI project. See the [full live-test report](docs/tests/2026-05-13-md2pdf-live-test-report.md) for the methodology and bug list, and [CHANGELOG.md](CHANGELOG.md) for per-bug fix details.
+
+| Bug | Fix |
+|---|---|
+| **#1** state.schema_version conflated with plugin version | `schema_version` now correctly initializes to literal `"2.0"`, separate from `state.plugin_version` |
+| **#2** date-only timestamps | All `state.json` timestamps now use ISO8601 UTC (`YYYY-MM-DDTHH:MM:SSZ`) |
+| **#5** ADR-promised docs sometimes missed | Phase 4 now force-includes the union of every ADR's `affected_docs`, intersected with the catalog |
+| **#7** wrong commit-subject prefix from agents | `claude-md-author` and `claude-tooling-author` now use `architect(phase-N): ...` instead of `chore: ...` |
+| **#9** `decision-revisor` cost overruns | Agent prompt now has explicit scope discipline + `PARTIAL_COMPLETION` escape hatch |
+| **#14** state.json deleted at Phase 6 | State file is now preserved as the canonical re-invocation entry point; only the lockfile is released |
+
+Plus one new feature:
+
+- **Universal CLI-UX gate question in Phase 1** — for any CLI/TUI project the architect now asks whether the tool is one-shot, interactive prompts, full TUI, or hybrid (and routes follow-up questions accordingly). The per-language library picker (ratatui / bubbletea / textual / ink / Spectre.Console / etc.) ships in v2.2.
+
+**Test infrastructure** (`tests/`) — every fix has a `tests/test_v215_*.sh` companion. Run the full suite with:
+
+```bash
+bash tests/run_all.sh
+# Test files passed: 8 · All tests passed.
+```
+
+**v2.2 (in flight)** — quality-gate-auditor (16 cross-cutting checks), per-agent runtime budgets, multi-session lifecycle (Phase 4 emits plan docs; new Phase 7 executes them; Phase 8 hands off via CLAUDE.md as router with 3 slash commands), inline shell/JSON validators, and per-language CLI-UX picker. Full plan: [`docs/superpowers/plans/2026-05-13-v2.2-implementation.md`](docs/superpowers/plans/2026-05-13-v2.2-implementation.md).
 
 ---
 
@@ -64,7 +93,7 @@ Then inside Claude:
 ```console
 $ /project-architect
 
-✓ Preflight (v2.1.0)
+✓ Preflight (v2.1.5)
   ✓ Model: claude-opus-4-7[1m]   ✓ Effort: max
   ✓ Recommended plugins: 6/6
   ✓ Version freshness: current
@@ -227,6 +256,32 @@ flowchart LR
 | `hookify` | Hook authoring patterns for generated `.claude/hooks/` |
 | `document-skills` | Writing-quality conventions absorbed by `document-author` |
 | `fewer-permission-prompts` | Tightens the generated `.claude/settings.json` permissions allowlist |
+
+## Tests
+
+`tests/` ships with the plugin. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`. The infrastructure is:
+
+```text
+tests/
+├── lib/test_helpers.sh          ← shared assert_eq, assert_contains, assert_file_exists, etc.
+├── run_all.sh                   ← discovers and runs every test_*.sh
+├── test_v215_state_schema.sh
+├── test_v215_iso8601_timestamps.sh
+├── test_v215_affected_docs_enforcement.sh
+├── test_v215_decision_revisor_scope.sh
+├── test_v215_commit_subjects.sh
+├── test_v215_cli_ux_gate.sh
+├── test_v215_no_state_deletion.sh
+└── test_v215_version_bump.sh
+```
+
+Run the full suite:
+
+```bash
+bash tests/run_all.sh
+```
+
+Tests are pure Bash (using the helpers in `lib/test_helpers.sh`) and assert against the actual plugin files (`SKILL.md`, `agents/*.md`, `references/*.md`, `.claude-plugin/plugin.json`). No external test framework needed; only `bash`, `jq`, and the standard Unix toolchain.
 
 ## Versioning policy
 
