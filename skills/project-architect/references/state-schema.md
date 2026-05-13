@@ -142,6 +142,28 @@ After Phase 6 completes, the architect run is "locked" — the design is frozen 
 
 These fields live at the top of state.json alongside `schema_version` and `plugin_version`. The Preflight phase initializes them as `locked: false`, `version: null`, `locked_at: null`. Phase 6 LOCK sets `locked: true`, `version: "v1.0"`, and `locked_at` to the current ISO8601 UTC timestamp. The `/iterate-design` command (v2.2) flips `locked` back to false, sets `version` to `"<prev>-draft"` (e.g., `"v1.1-draft"`), and clears `locked_at`; the post-iterate re-lock writes the bumped version (`"v1.1"`) and a fresh `locked_at`.
 
+### `memory_pointer` (added v2.2 — sketch D, per-phase memory persistence)
+
+After the first memory write in Phase 0a, the orchestrator records where it wrote to:
+
+```json
+"memory_pointer": {
+  "name": "project_architect_md2pdf.md",
+  "path": "/Users/<user>/.claude/projects/.../memory/project_architect_md2pdf.md",
+  "last_synced": "2026-05-13T01:23:45Z"
+}
+```
+
+Fields:
+
+- `name` (string): the basename of the memory file (e.g., `project_architect_md2pdf.md`)
+- `path` (string): absolute path to the memory file
+- `last_synced` (ISO8601 datetime): timestamp of the last successful write/update
+
+Subsequent phase updates Edit this same file. If memory is missing or moved, regenerate from state and update pointer. See `references/memory-persistence.md` for cadence and entry template.
+
+Initialized as `null` at Preflight; set on first write at Phase 0a; updated on every subsequent phase write.
+
 ### Timestamps — always ISO8601 UTC, never date-only
 
 Every timestamp field in `state.json` and the lockfile uses **ISO8601 UTC datetime** format: `YYYY-MM-DDTHH:MM:SSZ` (e.g., `"2026-05-12T22:45:00Z"`).
