@@ -39,6 +39,35 @@ Lock file: `docs/_architect_state.lock` with `{pid, host, acquired_at}`. Held th
 
 If `docs/_architect_state.json` exists at startup, read it, validate `schema_version`, print a resume summary, and jump to `state.phase`. If schema version is older than current plugin version, migrate (or refuse with a clear message).
 
+### Resume from locked state (v2.2 — sketch D)
+
+If `state.locked == true` at startup, the design is at a named version (e.g., `v1.0`). The orchestrator does NOT silently re-enter Phase 5 — that would risk overwriting locked decisions. Instead, surface the locked status to the user and offer three explicit options:
+
+```
+This project's design is locked at {{state.version}} (locked at {{state.locked_at}}).
+
+What would you like to do?
+  (a) Unlock and revise — bump to {{state.version}}+0.1-draft, re-enter Phase 5
+  (b) Open the v1.0 snapshot for reference (read-only)
+  (c) Exit — no changes
+```
+
+On **(a) Unlock and revise**:
+- Snapshot the currently-locked docs to `docs/versions/{{state.version}}/` BEFORE unlocking (preserves the immutable lock-point so the user can always diff against it).
+- Set `state.locked = false`.
+- Set `state.version = "<previous>+0.1-draft"` (e.g., `"v1.0" → "v1.1-draft"`).
+- Set `state.locked_at = null`.
+- Re-enter Phase 5 with all prior ADRs and docs intact; the user revises in place.
+- When the user re-locks at end of Phase 6, version becomes `<previous>+0.1` without the draft suffix (e.g., `"v1.1-draft" → "v1.1"`), and re-snapshot the new locked docs to `docs/versions/{{new_version}}/`.
+
+On **(b) Open the v1.0 snapshot for reference (read-only)**:
+- Surface the path `docs/versions/{{state.version}}/` and list its top-level files. Do not modify state. Do not enter any phase. Exit cleanly.
+
+On **(c) Exit**:
+- Save no changes. Release the lockfile and exit.
+
+This is also the path that the `/iterate-design` slash command takes (see `references/templates/SLASH_ITERATE_DESIGN.md` template). When `/iterate-design` is invoked on a locked project, it short-circuits directly to option (a) without re-prompting.
+
 ---
 
 ## Phase -1: Preflight
