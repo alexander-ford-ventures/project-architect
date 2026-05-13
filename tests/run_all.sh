@@ -7,7 +7,7 @@
 
 set -uo pipefail
 
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
 TOTAL_PASS=0
 TOTAL_FAIL=0
 FAILED_FILES=()
