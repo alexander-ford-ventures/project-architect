@@ -285,6 +285,78 @@ Path: `docs/_architect_state.lock`. Contents:
 
 ---
 
+### Programming language project sub_types (added v2.3 — Sketch F)
+
+Specialised sub_types for `project.sub_type` when the user is designing a new programming language. The 6 variants partition the design space by intended scope/audience; they gate the v2.3 family of PL design templates (LANGUAGE_GRAMMAR, SEMANTICS, TYPE_SYSTEM, STDLIB, TOOLCHAIN, BOOTSTRAP_PLAN, STABILITY_AND_RFC).
+
+| sub_type | Description | Exemplars |
+|---|---|---|
+| `general_purpose_language` | Broad, full-featured language. Needs stdlib, type system, GC/ownership, full toolchain. | Rust, Go, Python clone |
+| `domain_specific_language` | Narrow grammar; embedded use or standalone. | HCL, regex, Terraform-class |
+| `query_language` | Declarative data querying; needs schema model + optimizer. | SQL/GraphQL/OQL dialects |
+| `configuration_language` | Total functions, hermetic; type system + import semantics. | Nix, Dhall, CUE, Jsonnet |
+| `educational_language` | Teaching tool; minimal stdlib, clarity over performance. | Crafting Interpreters-class, BF clone |
+| `transpiler_target` | Compiles to existing language; needs host-language interop. | TypeScript→JS, Elm→JS, CoffeeScript |
+
+### Programming language decisions (added v2.3 — Sketch F)
+
+When `project.sub_type` is one of the PL variants above, four additional decision axes are recorded in `state.decisions`. Enum values are normative — agents and templates assume these exact strings.
+
+#### `impl_strategy` — how the language is implemented in v0.1
+
+| Value | When to pick |
+|---|---|
+| `tree_walking_interpreter` | Simplest path; educational or DSL bootstrapping. |
+| `bytecode_vm` | Moderate complexity; custom VM, portable. |
+| `native_compiler` | Highest performance; AOT to machine code. |
+| `transpiler` | Compiles to existing language; fastest path to "real" language. |
+| `hosted_embedded` | DSL inside a host language (Lua-in-C-style). |
+
+#### `host_runtime` — what runs the compiled/interpreted code
+
+Research-informed enum as of 2026-05-13 (see plan preamble for citations). 14 values; choose by use-case fit, not by familiarity.
+
+| Value | When to pick (2026 status) |
+|---|---|
+| `llvm` | Industrial default (LLVM 22.x stable); broadest target coverage. |
+| `mlir` | Accelerator-friendly (GPU/FPGA/TPU/quantum); dialect-driven design. Mojo proves general-purpose viability. |
+| `cranelift` | Wasm runtimes or fast-debug-build Rust codegen (production for Wasm/JIT). |
+| `qbe` | Small-backend alternative (~14 kLOC C); teaching/bootstrap. x86-64/aarch64/riscv64 only. |
+| `truffle` | Host a new language on GraalVM (24/25 LTS) — free JIT + Native Image + polyglot. |
+| `jvm` | Target JVM bytecode directly (Java 25 LTS). |
+| `beam` | Functional/actor-shaped languages only (Gleam exemplar). |
+| `wasm` | Raw Wasm 3.0 target (W3C standard since Sept 2025: WasmGC + EH + tail calls + multi-memory). |
+| `wasm_component` | Component Model target for cross-component composition (WASI 0.2 stable; 0.3 RC). |
+| `js_host` | Compile to JavaScript for web embedding or polyglot piggyback. |
+| `python_embedded` | DSL inside Python 3.14+ — prototyping/education. (No-GIL opt-in only.) |
+| `rust_host` | Embedded DSL in Rust — proc-macro or runtime interpreter. |
+| `native_no_runtime` | Hand-rolled native codegen; expert-only. |
+| `custom_vm` | Hand-rolled bytecode VM; teaching/niche. |
+
+#### `paradigm` — primary programming paradigm
+
+| Value | Examples |
+|---|---|
+| `imperative` | C, Go |
+| `functional` | Haskell, OCaml |
+| `logic` | Prolog, miniKanren |
+| `oop` | Smalltalk, Java |
+| `multi_paradigm` | Rust, Scala, Swift |
+| `data_oriented` | Clojure, APL |
+
+#### `type_system` — primary static-analysis stance
+
+| Value | Description |
+|---|---|
+| `static_strong` | Statically typed, no implicit coercion. Rust, Haskell, OCaml. |
+| `static_gradual` | Static with opt-in/opt-out gradual typing. TypeScript, Python+mypy. |
+| `dynamic` | Runtime types only. Python, Ruby, JavaScript. |
+| `dependent` | Types depend on values. Lean 4 (closest to general-purpose 2026), Idris 2 (research), Agda (research). |
+| `affine_linear` | Linear or affine resource types. Rust ownership, Linear Haskell. |
+| `none_untyped` | No types (untyped lambda calc, Forth). |
+
+---
+
 ## Migration policy
 
 At startup, compare `state.schema_version` against the current plugin's expected schema:
