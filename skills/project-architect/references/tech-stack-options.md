@@ -437,4 +437,29 @@ Concise option lists with trade-offs for each technology category. Present relev
 
 ---
 
+## Programming language implementation backends (v2.3, Sketch F)
+
+When `project.sub_type` is one of the v2.3 PL variants (`general_purpose_language`, `domain_specific_language`, `query_language`, `configuration_language`, `educational_language`, `transpiler_target`), the `host_runtime` decision picks the implementation backend the new language sits on top of. The 14 enum values below are the canonical options surfaced in Phase 2 / Phase 3 PL question batches; pick by use-case fit, not by familiarity. 2026 status notes are research-anchored as of 2026-05-13 — re-verify before locking a v1.0 design if more than ~6 months have passed.
+
+| host_runtime | Maturity | Complexity | Ecosystem fit | Typical use case | 2026 version/cite |
+|---|---|---|---|---|---|
+| `llvm` | production | high | broad | industrial default | LLVM 22.x stable |
+| `mlir` | production (Mojo proves general) | very high | accelerator-friendly (GPU/FPGA/TPU) | dialect-driven design | Mojo 2026 |
+| `cranelift` | production for Wasm/JIT; experimental general | medium | Wasm runtimes | fast-debug Rust codegen | Wasmtime 26+ |
+| `qbe` | production for niche | low | small backend (~14 kLOC C) | teaching/bootstrap; x86-64/aarch64/riscv64 | active |
+| `truffle` | production | medium | GraalVM 24/25 LTS | host a new language with free JIT+Native+polyglot | GraalVM 24/25 LTS |
+| `jvm` | production | medium | massive ecosystem | target JVM bytecode | Java 25 LTS |
+| `beam` | production but narrow | medium | functional/actor only | Gleam exemplar | OTP 27+ |
+| `wasm` | production | medium | portable target | raw Wasm 3.0 (WasmGC + EH + tail calls + multi-memory shipped Sept 2025) | Wasm 3.0 W3C |
+| `wasm_component` | stable on WASI 0.2; 0.3 RC | medium | cross-component composition | plug-in architecture | WASI 0.2 stable |
+| `js_host` | production | low | web embedding | compile to JS | ES2026 |
+| `python_embedded` | production but narrow | low | DSL inside Python | prototyping/education; no-GIL opt-in only | Python 3.14 |
+| `rust_host` | production | medium | embedded DSL in Rust | proc-macro or runtime interpreter | Rust 1.86+ |
+| `native_no_runtime` | expert-only | very high | minimal deps | hand-rolled codegen | varies |
+| `custom_vm` | production for niche | medium | teaching/educational | hand-rolled bytecode VM | varies |
+
+**Cross-references:** the chosen `host_runtime` shapes downstream PL templates. See `references/templates/BOOTSTRAP_PLAN.md` for the v0.0 → v0.1 → v1.0 bootstrap plan that operationalises this choice (which compiler/VM the implementation rides), and `references/templates/TYPE_SYSTEM.md` for the type-system stance that interacts with it (e.g., affine/linear typing on LLVM vs Cranelift, dependent types on a custom VM, gradual typing on `js_host`).
+
+---
+
 *★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
