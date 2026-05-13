@@ -25,8 +25,8 @@ You orchestrate a 9-phase project bootstrap. You do not do the heavy lifting you
  3.  Architecture          — per-area drill-downs + inline consistency check
  4.  Document Generation   — parallel agent dispatch
  5.  Iteration             — decision-revisor loop, snapshot option
- 6.  Post-Generation Setup — commit/push, plugin install offers
- 7.  Plan Handoff (opt)    — invoke superpowers:writing-plans
+ 6.  Post-Generation Setup — commit/push, plugin install offers, LOCK v1.0
+ 7.  Tooling Execution     — execute CLAUDE_MD_PLAN / CLAUDE_TOOLING_PLAN / SCAFFOLD_PLAN
 ```
 
 ## State
@@ -734,20 +734,108 @@ State: `phase = "phase_6"` once (a) is chosen, save.
 
 ---
 
-## Phase 7 (optional): Implementation Plan Handoff
+## Phase 7: Tooling Execution (v2.2, sketch D)
 
-If chosen in Phase 5 menu, or asked at the end of Phase 6:
+After lock, ask the user which plans to execute:
+
 ```
-"Generate an MVP implementation plan? (uses superpowers:writing-plans)
-   Yes / Skip"
+✓ Architecture locked at v1.0.
+
+Phase 7: Tooling Execution
+
+Which plans to execute now?
+  (a) Execute CLAUDE_MD_PLAN  → generates CLAUDE.md (claude-md-author)
+  (b) Execute CLAUDE_TOOLING_PLAN → generates .claude/* (claude-tooling-author + slash commands)
+  (c) Hand off SCAFFOLD_PLAN to superpowers (writing-plans → SDD)
+  (d) Skip all execution (close out with plans only)
+  (e) (a) + (b) + offer (c) — recommended productive path
 ```
 
-If yes:
-1. Invoke `Skill: superpowers:writing-plans` with context:
-   - `spec_path: docs/PROJECT_REQUIREMENTS.md`
-   - `state_path: docs/_architect_state.json` (preserved through Phase 6 per v2.1.5)
-   - "MVP focus" or "Phase 1 features" tagging.
-2. Control transfers to writing-plans. project-architect does not run after this.
+For each chosen execution:
+
+- **(a) CLAUDE_MD_PLAN**: dispatch `claude-md-author` with `plan_path: docs/CLAUDE_MD_PLAN.md` as input. Agent reads plan, substitutes placeholders from state, writes CLAUDE.md. Commit: `architect(phase-7): execute CLAUDE_MD_PLAN`.
+
+  ```
+  Agent({
+    subagent_type: "project-architect:claude-md-author",
+    model: "opus",
+    description: "Execute CLAUDE_MD_PLAN",
+    prompt: """
+      [MODEL DIRECTIVE]
+      Run with maximum effort. Apply extended thinking. Be thorough.
+
+      [INPUTS]
+      plan_path: docs/CLAUDE_MD_PLAN.md
+      state_path: docs/_architect_state.json
+
+      [TASK]
+      Read the plan. Resolve every placeholder against state.decisions.
+      Write the root CLAUDE.md and any subfolder CLAUDE.md files per the
+      plan's hierarchy section. Run claude-md-management:claude-md-improver
+      on each and iterate until pass. Return the list of files written.
+    """
+  })
+  ```
+
+- **(b) CLAUDE_TOOLING_PLAN**: dispatch `claude-tooling-author` with `plan_path: docs/CLAUDE_TOOLING_PLAN.md`. Agent reads plan, generates `.claude/*` tree including the 3 router slash commands (`/scaffold`, `/implement`, `/iterate-design`). Commit: `architect(phase-7): execute CLAUDE_TOOLING_PLAN`.
+
+  ```
+  Agent({
+    subagent_type: "project-architect:claude-tooling-author",
+    model: "opus",
+    description: "Execute CLAUDE_TOOLING_PLAN",
+    prompt: """
+      [MODEL DIRECTIVE]
+      Run with maximum effort. Apply extended thinking. Be thorough.
+
+      [INPUTS]
+      plan_path: docs/CLAUDE_TOOLING_PLAN.md
+      state_path: docs/_architect_state.json
+
+      [TASK]
+      Read the plan. Generate .claude/settings.json, .claude/hooks/*,
+      .claude/agents/*, .claude/commands/* (including /scaffold, /implement,
+      /iterate-design router slash commands), and .claude/recommended-plugins.md
+      exactly as the plan specifies. Return artifact counts.
+    """
+  })
+  ```
+
+- **(c) SCAFFOLD_PLAN**: invoke `Skill: superpowers:writing-plans` with `spec_path: docs/SCAFFOLD_PLAN.md` and execution mode `subagent-driven-development`. Control transfers to superpowers. The architect's responsibility ends here for code emission.
+
+- **(d) Skip**: proceed to Phase 8 with no execution. The user runs `/scaffold` etc. in a future session.
+
+- **(e) Default productive path**: do (a) + (b) automatically; then offer (c) as a separate question.
+
+Re-dispatch `quality-gate-auditor` after each execution to re-validate the bundle (now includes the just-generated CLAUDE.md/.claude/*):
+
+```
+Agent({
+  subagent_type: "project-architect:quality-gate-auditor",
+  model: "opus",
+  description: "Phase 7 post-execution audit",
+  prompt: """
+    [MODEL DIRECTIVE]
+    Run with maximum effort. Apply extended thinking. Be thorough.
+
+    [INPUTS]
+    project_root: {{user project root}}
+    state_path: docs/_architect_state.json
+    catalog_path: skills/project-architect/references/templates/
+    adr_dir: docs/decisions/
+
+    [TASK]
+    Run all 16 checks via run_all.sh against the now-executed bundle.
+    Return the aggregate JSON. Do NOT modify any files.
+  """
+})
+```
+
+Save the auditor result into `state.last_audit` (overwriting the Phase 4 audit). If `summary.blocker > 0`, surface to the user before advancing.
+
+Commit:
+- After each execution: per the per-option commit messages above.
+- After all executions: state save, `phase = "phase_8"`.
 
 ---
 
