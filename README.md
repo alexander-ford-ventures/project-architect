@@ -43,7 +43,7 @@ Major architectural release. Four validation sketches + a cross-language CLI-UX 
 
 **Migration from v2.1.x** — state.json schema is forward-compatible. New fields default to safe values. The plugin offers to migrate at startup if it sees a v2.1.x state.
 
-**Test coverage** — 55 test files covering all 16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, cross-language CLI-UX picker, and end-to-end Rust/Python/Go fixtures.
+**Test coverage** — 54 test files covering all 16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, cross-language CLI-UX picker, and end-to-end Rust/Python/Go fixtures.
 
 ```bash
 bash tests/run_all.sh
@@ -72,9 +72,9 @@ Plus: Universal CLI-UX gate question in Phase 1 (the per-language library picker
 
 ## What it does
 
-`project-architect` is a Claude Code **orchestrator skill** that walks you through **9 phases** — from the elevator pitch to a fully-committed project with architecture docs, ADRs, per-folder `CLAUDE.md`, and a stack-aware `.claude/` configuration.
+`project-architect` is a Claude Code **orchestrator skill** that walks you through **11 phases** — from the elevator pitch to a fully-committed project with architecture docs, ADRs, plan docs, per-folder `CLAUDE.md`, and a stack-aware `.claude/` configuration with router slash commands.
 
-Under the hood it dispatches **5 specialized subagents** (research-scout, document-author, decision-revisor, claude-md-author, claude-tooling-author) in parallel where it's safe, files Architecture Decision Records as the interview progresses, and ends with an optional handoff to `superpowers:writing-plans` for an MVP implementation plan.
+Under the hood it dispatches **6 specialized subagents** (research-scout, document-author, decision-revisor, quality-gate-auditor, claude-md-author, claude-tooling-author) in parallel where it's safe, files Architecture Decision Records as the interview progresses, runs a 16-check post-Phase-4 quality gate, and ends with an explicit handoff to `superpowers:writing-plans` (via Phase 7 menu option) for an MVP implementation plan.
 
 ## Quick start
 
@@ -180,14 +180,15 @@ Implications for this project:
 | -1 | **Preflight** | Verify Opus 4.7 (1M context) at max effort. Auto-fix `.remember/logs/`. Check soft-deps. Compare cached version to latest release. Clean stale cache dirs. |
 | 0a | **Repo Init** _(optional)_ | `git init` and optionally `gh repo create`. |
 | 0 | **Universal Kickoff** | 3 batches of multi-choice questions (Q1–Q8). Classifies the project type. Dispatches the first research-scout. |
-| 1 | **Vision & Scope** | Type-specific drill-down. Ad-hoc + end-of-phase research. |
-| 2 | **Tech Stack** | Type-aware option presentation. ADR per major decision. End-of-phase research on stack gotchas. |
+| 1 | **Vision & Scope** | Type-specific drill-down. Ad-hoc + end-of-phase research. Universal CLI-UX gate question for CLI/TUI projects. |
+| 2 | **Tech Stack** | Type-aware option presentation. Per-language CLI-UX library picker (Rust/Go/Python/Node/Ruby/C#). ADR per major decision. End-of-phase research on stack gotchas. |
 | 2.5 | **Cost Modeling** | Pricing research → `COST_MODEL.md` data. |
-| 3 | **Architecture Deep Dive** | Per-area drill-downs + inline consistency check. |
-| 4 | **Document Generation** | Parallel `document-author` × N + `claude-md-author` + `claude-tooling-author`. |
-| 5 | **Iteration** | Decision-revisor loop, snapshot option, or proceed. |
-| 6 | **Post-Generation Setup** | Plugin install offers, push, optional `cargo new` / `pnpm install`. |
-| 7 | **Plan Handoff** _(optional)_ | Hand off to `superpowers:writing-plans` for MVP plan. |
+| 3 | **Architecture Deep Dive** | Per-area drill-downs + inline consistency check. Phase 4 entry gate verifies pattern-validation research has returned. |
+| 4 | **Document Generation** | Parallel `document-author` × N writes design docs (PROJECT_OVERVIEW, ARCHITECTURE, etc.) and 4 plan docs (CLAUDE_MD_PLAN, CLAUDE_TOOLING_PLAN, SCAFFOLD_PLAN, NEXT_STEP_PLAN). `quality-gate-auditor` runs 16 cross-cutting checks; findings auto-seed Phase 5. |
+| 5 | **Iteration** | Auto-seeded menu from auditor findings. Decision-revisor loop, snapshot option, or proceed. Auditor re-runs after each revision wave. |
+| 6 | **Post-Generation Setup (LOCK)** | Plugin install offers, push, final commit, then **LOCK**: snapshot to `docs/versions/v1.0/`, set `state.locked = true / version / locked_at`. State.json preserved as cross-session entry point. |
+| 7 | **Tooling Execution** | Menu: (a) execute CLAUDE_MD_PLAN → CLAUDE.md, (b) execute CLAUDE_TOOLING_PLAN → `.claude/*` + 3 router slash commands, (c) hand off SCAFFOLD_PLAN to `superpowers:writing-plans`, (d) skip, (e) (a)+(b)+offer (c) (default). Auditor re-runs after each execution. |
+| 8 | **Handoff** | Print restart instructions. Future sessions auto-load the new CLAUDE.md as a router exposing `/scaffold`, `/implement <feature>`, `/iterate-design`. |
 
 ## Architecture
 
@@ -197,23 +198,29 @@ flowchart LR
     SKILL --> Phase0[Phase 0<br/>Universal Kickoff]
     Phase0 --> Phase123[Phases 1-3<br/>Vision · Stack · Architecture]
     Phase123 --> Research[research-scout<br/>per phase + ad-hoc]
-    Phase123 --> Phase4[Phase 4<br/>Doc Generation]
+    Phase123 --> Phase4[Phase 4<br/>Design + Plan Docs]
     Phase4 --> DocAgents[document-author × N<br/>parallel batches]
-    Phase4 --> MdAgent[claude-md-author<br/>root + per-folder]
-    Phase4 --> ToolAgent[claude-tooling-author<br/>.claude/ config]
-    Phase4 --> Phase5[Phase 5<br/>Iteration]
+    Phase4 --> Plans[4 Plan Docs<br/>CLAUDE_MD_PLAN<br/>CLAUDE_TOOLING_PLAN<br/>SCAFFOLD_PLAN<br/>NEXT_STEP_PLAN]
+    Phase4 --> Auditor[quality-gate-auditor<br/>16 cross-cutting checks]
+    Auditor --> Phase5[Phase 5<br/>Iteration · auto-seeded menu]
     Phase5 -->|revise| Revisor[decision-revisor<br/>+ ADR supersession]
-    Phase5 -->|approve| Output([Generated Project])
-    Output --> Docs[docs/<br/>+ ADRs<br/>+ research/]
-    Output --> Claude[CLAUDE.md<br/>+ per-folder]
-    Output --> ClaudeConfig[.claude/<br/>settings · hooks · agents · commands]
+    Phase5 -->|approve| Phase6[Phase 6<br/>LOCK at v1.0]
+    Phase6 --> Phase7[Phase 7<br/>Tooling Execution menu]
+    Phase7 -->|a| MdAgent[claude-md-author<br/>consumes CLAUDE_MD_PLAN]
+    Phase7 -->|b| ToolAgent[claude-tooling-author<br/>consumes CLAUDE_TOOLING_PLAN<br/>+ inline validators]
+    Phase7 -->|c| Superpowers[superpowers:writing-plans<br/>+ SDD]
+    Phase7 --> Phase8[Phase 8<br/>Handoff via CLAUDE.md router]
+    Phase8 --> Output([Generated Project])
+    Output --> Docs[docs/<br/>+ ADRs<br/>+ research/<br/>+ versions/v1.0/]
+    Output --> Claude[CLAUDE.md router<br/>+ per-folder]
+    Output --> ClaudeConfig[.claude/<br/>settings · hooks · agents<br/>/scaffold · /implement · /iterate-design]
 ```
 
 ## What it generates
 
 ```text
 <your-project>/
-├── CLAUDE.md                           ← root, loaded into every Claude session
+├── CLAUDE.md                           ← root router, loaded into every Claude session
 ├── apps/web/CLAUDE.md                  ← per-folder when conventions differ
 ├── packages/crypto/CLAUDE.md
 ├── .claude/
@@ -221,6 +228,8 @@ flowchart LR
 │   ├── hooks/                          ← lint-on-save, test-on-stop, dangerous-command guard
 │   ├── agents/                         ← test-runner, migration-checker, deploy-verifier
 │   ├── commands/                       ← /feature, /run-tests, /deploy-preview
+│   │                                     PLUS router commands (Phase 7 output):
+│   │                                     /scaffold · /implement · /iterate-design
 │   └── recommended-plugins.md
 └── docs/
     ├── PROJECT_OVERVIEW.md             ← master hub
@@ -228,16 +237,24 @@ flowchart LR
     ├── AUTHENTICATION_SYSTEM.md        ← when auth.enabled
     ├── DATABASE_DESIGN.md              ← when DB present
     ├── API_GATEWAY.md                  ← when building an API
+    ├── CLI_UX_DESIGN.md                ← for CLI/TUI projects (v2.2)
     ├── ... 40+ more conditional templates
+    ├── CLAUDE_MD_PLAN.md               ← Phase 4 design-first plan (consumed by Phase 7)
+    ├── CLAUDE_TOOLING_PLAN.md          ← Phase 4 design-first plan (consumed by Phase 7)
+    ├── SCAFFOLD_PLAN.md                ← Phase 4 design-first plan (consumed by superpowers)
+    ├── NEXT_STEP_PLAN.md               ← Phase 4 design-first plan (post-bootstrap roadmap)
     ├── decisions/                      ← ADRs, sequential, supersession-chain audit trail
     │   ├── 0001-language-runtime.md
     │   └── 0007-revisit-database-choice.md
     ├── research/                       ← findings from research-scout
     │   ├── phase0-domain.md
     │   └── phase2-stack-combination.md
-    └── versions/                       ← snapshot bundles at milestones
-        └── v1.0/
+    ├── versions/                       ← snapshot bundles at lock milestones
+    │   └── v1.0/                       ← docs + state.json archived at LOCK
+    └── _architect_state.json           ← preserved across sessions; entry point for /iterate-design
 ```
+
+**Design-first lifecycle.** Phase 4 emits 4 plan docs (CLAUDE_MD_PLAN, CLAUDE_TOOLING_PLAN, SCAFFOLD_PLAN, NEXT_STEP_PLAN). Phase 5 lets you edit those plans before execution. Phase 6 LOCKs the design at `v1.0`. Phase 7 executes the plans: `claude-md-author` consumes `CLAUDE_MD_PLAN.md`, `claude-tooling-author` consumes `CLAUDE_TOOLING_PLAN.md`, and `SCAFFOLD_PLAN.md` hands off to `superpowers:writing-plans` + `subagent-driven-development` for code emission. Phase 8 prints a restart message; future sessions auto-load the new CLAUDE.md as a router exposing `/scaffold`, `/implement <feature>`, `/iterate-design`.
 
 ## Project types supported (18+)
 
@@ -265,7 +282,7 @@ flowchart LR
 | Plugin | Role |
 |---|---|
 | `commit-commands` _(required)_ | Auto-commit cadence per batch / artifact / phase |
-| `superpowers` | Optional Phase 7 handoff to `writing-plans` |
+| `superpowers` | Phase 7 SCAFFOLD_PLAN handoff to `writing-plans` + `subagent-driven-development` |
 | `claude-md-management` | Audits the generated `CLAUDE.md` files |
 | `claude-code-setup` | Source of stack → skill recommendations |
 | `hookify` | Hook authoring patterns for generated `.claude/hooks/` |
@@ -274,12 +291,15 @@ flowchart LR
 
 ## Tests
 
-`tests/` ships with the plugin. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`. The infrastructure is:
+`tests/` ships with the plugin. **54 test files** cover every v2.1.5 fix and every v2.2 sketch. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`; v2.2 work has `tests/test_v22_*.sh` (16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, CLI-UX picker, and three end-to-end language fixtures).
 
 ```text
 tests/
-├── lib/test_helpers.sh          ← shared assert_eq, assert_contains, assert_file_exists, etc.
-├── run_all.sh                   ← discovers and runs every test_*.sh
+├── lib/test_helpers.sh                              ← shared assert_eq, assert_contains, assert_file_exists, etc.
+├── run_all.sh                                       ← discovers and runs every test_*.sh
+├── fixtures/                                        ← e2e fixtures (Rust CLI, Python TUI, Go CLI, root-only CLAUDE.md)
+│
+│  # v2.1.5 — tactical fixes
 ├── test_v215_state_schema.sh
 ├── test_v215_iso8601_timestamps.sh
 ├── test_v215_affected_docs_enforcement.sh
@@ -287,16 +307,62 @@ tests/
 ├── test_v215_commit_subjects.sh
 ├── test_v215_cli_ux_gate.sh
 ├── test_v215_no_state_deletion.sh
-└── test_v215_version_bump.sh
+│
+│  # v2.2 sketch B — quality-gate-auditor (16 checks)
+├── test_v22_auditor_skeleton.sh
+├── test_v22_auditor_wired.sh
+├── test_v22_check_01_links.sh        ...  test_v22_check_16_phase_gates.sh
+├── test_v22_phase_prerequisites.sh
+│
+│  # v2.2 sketch C — runtime budgets
+├── test_v22_runtime_budget_frontmatter.sh
+├── test_v22_runtime_budget_section.sh
+├── test_v22_observer.sh
+│
+│  # v2.2 sketch D — multi-session lifecycle
+├── test_v22_template_claude_md_plan.sh
+├── test_v22_template_claude_tooling_plan.sh
+├── test_v22_template_scaffold_plan.sh
+├── test_v22_template_next_step_plan.sh
+├── test_v22_catalog_plan_templates.sh
+├── test_v22_state_locked.sh
+├── test_v22_phase7_dispatch.sh
+├── test_v22_phase8_handoff.sh
+├── test_v22_slash_commands.sh
+├── test_v22_claude_md_router.sh
+├── test_v22_claude_md_author_consumes_plan.sh
+├── test_v22_claude_tooling_author_consumes_plan.sh
+├── test_v22_memory_persistence_reference.sh
+├── test_v22_memory_persistence_skill.sh
+├── test_v22_resume_from_locked.sh
+│
+│  # v2.2 sketch A — inline validators
+├── test_v22_inline_validators_section.sh
+├── test_v22_inline_validators_e2e_sh.sh
+├── test_v22_inline_validators_e2e_json.sh
+│
+│  # v2.2 sketch E — CLI-UX picker
+├── test_v22_catalog_cli_ux.sh
+├── test_v22_cli_ux_picker.sh
+├── test_v22_cli_ux_template.sh
+│
+│  # v2.2 end-to-end fixtures
+├── test_v22_e2e_rust_cli.sh
+├── test_v22_e2e_python_tui.sh
+├── test_v22_e2e_go_cli.sh
+│
+│  # v2.2 release gate
+└── test_v22_version_bump.sh                         ← asserts plugin.json + CHANGELOG content
 ```
 
 Run the full suite:
 
 ```bash
 bash tests/run_all.sh
+# Test files passed: 54 · All tests passed.
 ```
 
-Tests are pure Bash (using the helpers in `lib/test_helpers.sh`) and assert against the actual plugin files (`SKILL.md`, `agents/*.md`, `references/*.md`, `.claude-plugin/plugin.json`). No external test framework needed; only `bash`, `jq`, and the standard Unix toolchain.
+Tests are pure Bash (using the helpers in `lib/test_helpers.sh`) and assert against the actual plugin files (`SKILL.md`, `agents/*.md`, `references/*.md`, `.claude-plugin/plugin.json`). No external test framework needed; only `bash`, `jq`, `shellcheck`, and the standard Unix toolchain.
 
 ## Versioning policy
 
@@ -306,15 +372,15 @@ Procedure for maintainers:
 
 ```bash
 # 1. Bump plugin.json
-python3 -c "import json,sys; p='.claude-plugin/plugin.json'; d=json.load(open(p)); d['version']=sys.argv[1]; open(p,'w').write(json.dumps(d,indent=2)+'\n')" 2.1.1
+python3 -c "import json,sys; p='.claude-plugin/plugin.json'; d=json.load(open(p)); d['version']=sys.argv[1]; open(p,'w').write(json.dumps(d,indent=2)+'\n')" 2.2.1
 
 # 2. Add a [<version>] block to CHANGELOG.md
 
 # 3. Commit, tag, push
 git add .claude-plugin/plugin.json CHANGELOG.md
-git commit -m "chore(release): bump to 2.1.1"
-git tag -a v2.1.1 -m "..."
-git push origin main && git push origin v2.1.1
+git commit -m "chore(release): bump to 2.2.1"
+git tag -a v2.2.1 -m "..."
+git push origin main && git push origin v2.2.1
 
 # 4. Refresh local cache (only needed if you're testing your own change locally)
 claude plugin marketplace update siliconyouth
@@ -348,4 +414,4 @@ If you fork the skill itself or build on top of it, the source-file attribution 
 
 This repo is its own Claude Code marketplace. The plugin manifest is at `.claude-plugin/plugin.json`; the orchestrator skill body is at `skills/project-architect/SKILL.md`; references and templates live under `skills/project-architect/references/`; subagents live under `agents/`.
 
-The full v2.0 design spec is at [`docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md`](docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md) and the implementation plan at [`docs/superpowers/plans/2026-05-12-project-architect-v2-implementation.md`](docs/superpowers/plans/2026-05-12-project-architect-v2-implementation.md). Reading those is the fastest way to understand *how* it was built — and the strongest signal that this isn't a toy.
+The full v2.0 design spec is at [`docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md`](docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md) and the implementation plan at [`docs/superpowers/plans/2026-05-12-project-architect-v2-implementation.md`](docs/superpowers/plans/2026-05-12-project-architect-v2-implementation.md). The v2.2 architecture (validation sketches + multi-session lifecycle + CLI-UX picker) is documented at [`docs/superpowers/specs/2026-05-13-v2.2-validation-sketches.md`](docs/superpowers/specs/2026-05-13-v2.2-validation-sketches.md), with the implementation plan at [`docs/superpowers/plans/2026-05-13-v2.2-implementation.md`](docs/superpowers/plans/2026-05-13-v2.2-implementation.md) and the live-test evidence trail at [`docs/tests/2026-05-13-md2pdf-live-test-report.md`](docs/tests/2026-05-13-md2pdf-live-test-report.md). Reading those is the fastest way to understand *how* it was built — and the strongest signal that this isn't a toy.
