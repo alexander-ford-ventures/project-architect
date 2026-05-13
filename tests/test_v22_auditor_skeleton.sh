@@ -16,11 +16,6 @@ assert_contains "$CONTENT" 'model: opus' 'agent must use opus model'
 assert_contains "$CONTENT" 'tools: [Read, Bash, Grep, Glob]' 'agent must be read-only (no Edit/Write)'
 
 # run_all.sh must be executable
-[[ -x "$RUN_ALL" ]] && {
-  PASS_COUNT=$((PASS_COUNT + 1))
-} || {
-  FAIL_COUNT=$((FAIL_COUNT + 1))
-  FAIL_MESSAGES+=("FAIL: run_all.sh must be executable")
-}
+assert_executable "$RUN_ALL" "run_all.sh must be executable"
 
 test_summary

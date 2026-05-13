@@ -20,15 +20,27 @@ BLOCKER=0
 WARNING=0
 INFO=0
 
-for check_script in "${CHECKS_DIR}"/check_*.{sh,py}; do
+mapfile -t CHECK_SCRIPTS < <(find "$CHECKS_DIR" -maxdepth 1 -type f \( -name 'check_*.sh' -o -name 'check_*.py' \) 2>/dev/null | sort)
+
+for check_script in "${CHECK_SCRIPTS[@]}"; do
   [[ -f "$check_script" ]] || continue
   case "$check_script" in
-    *.sh) RESULT=$(bash "$check_script" "$PROJECT_ROOT" "$STATE_PATH" "$CATALOG_PATH" "$ADR_DIR" 2>&1) ;;
-    *.py) RESULT=$(python3 "$check_script" "$PROJECT_ROOT" "$STATE_PATH" "$CATALOG_PATH" "$ADR_DIR" 2>&1) ;;
+    *.sh) RAW=$(bash "$check_script" "$PROJECT_ROOT" "$STATE_PATH" "$CATALOG_PATH" "$ADR_DIR" 2>&1) ;;
+    *.py) RAW=$(python3 "$check_script" "$PROJECT_ROOT" "$STATE_PATH" "$CATALOG_PATH" "$ADR_DIR" 2>&1) ;;
   esac
 
-  PASSED=$(echo "$RESULT" | jq -r .passed 2>/dev/null || echo "true")
-  SEVERITY=$(echo "$RESULT" | jq -r .severity 2>/dev/null || echo "INFO")
+  if echo "$RAW" | jq -e . >/dev/null 2>&1; then
+    RESULT="$RAW"
+  else
+    # Check script crashed or returned non-JSON. Synthesize a BLOCKER finding so it
+    # surfaces in the audit AND the aggregate stays valid JSON.
+    ESCAPED=$(printf '%s' "$RAW" | jq -Rs .)
+    CHECK_NAME=$(basename "$check_script")
+    RESULT="{\"id\":\"INTERNAL_ERROR\",\"severity\":\"BLOCKER\",\"check\":\"${CHECK_NAME}\",\"passed\":false,\"detail\":\"check script did not return valid JSON\",\"remediation\":${ESCAPED},\"auto_fixable\":false}"
+  fi
+
+  PASSED=$(echo "$RESULT" | jq -r .passed)
+  SEVERITY=$(echo "$RESULT" | jq -r .severity)
 
   if [[ "$PASSED" == "false" ]]; then
     case "$SEVERITY" in
@@ -46,7 +58,8 @@ echo '{'
 echo "  \"summary\": { \"blocker\": $BLOCKER, \"warning\": $WARNING, \"info\": $INFO },"
 echo '  "findings": ['
 for i in "${!FINDINGS[@]}"; do
-  echo "    ${FINDINGS[$i]}$([ $i -lt $((${#FINDINGS[@]} - 1)) ] && echo ',' || echo '')"
+  echo "    ${FINDINGS[$i]}$([ "$i" -lt $((${#FINDINGS[@]} - 1)) ] && echo ',' || echo '')"
 done
-echo '  ]'
+echo '  ],'
+echo '  "phase_5_seed_items": []'
 echo '}'

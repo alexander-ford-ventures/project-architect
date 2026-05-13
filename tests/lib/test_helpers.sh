@@ -88,6 +88,20 @@ assert_dir_exists() {
   fi
 }
 
+# assert_executable <path> <message>
+assert_executable() {
+  local path="$1"
+  local msg="${2:-(no message)}"
+  if [[ -x "$path" ]]; then
+    PASS_COUNT=$((PASS_COUNT + 1))
+    return 0
+  else
+    FAIL_COUNT=$((FAIL_COUNT + 1))
+    FAIL_MESSAGES+=("FAIL: $msg — file '$path' is not executable")
+    return 1
+  fi
+}
+
 # assert_exit_code <expected_code> <command...>
 assert_exit_code() {
   local expected="$1"

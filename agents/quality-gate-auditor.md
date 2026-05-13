@@ -31,7 +31,7 @@ Run with maximum effort. Apply extended thinking. Be thorough — your findings 
 
 ## Workflow
 
-1. Source the runner: `bash agents/quality-gate-auditor/run_all.sh <project_root> <state_path>`. The runner invokes each `checks/check_NN_*.sh` (or `.py`) script and aggregates results.
+1. Source the runner: `bash agents/quality-gate-auditor/run_all.sh <project_root> <state_path> <catalog_path> <adr_dir>`. The runner invokes each `checks/check_NN_*.sh` (or `.py`) script and aggregates results.
 2. Each check returns structured JSON to stdout in this shape:
    ```json
    {
