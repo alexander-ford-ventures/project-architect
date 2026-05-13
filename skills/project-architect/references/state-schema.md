@@ -45,6 +45,11 @@ To re-bootstrap: delete `state.json` and re-invoke. Existing generated docs beco
   "started_at": "2026-05-12T14:00:00Z",     // ISO8601 UTC. Set at file creation.
   "last_updated_at": "2026-05-12T16:30:00Z",// ISO8601 UTC. Rewritten on every save.
 
+  // Lock (added v2.2 — sketch D). See "`locked`, `version`, `locked_at`" section below.
+  "locked": false,                          // Boolean. False during run; true after Phase 6 LOCK.
+  "version": null,                          // String|null. e.g., "v1.0" after Phase 6; "v1.1-draft" during /iterate-design.
+  "locked_at": null,                        // String|null. ISO8601 UTC timestamp of last lock; null when unlocked.
+
   // Phase pointer
   "phase": "preflight",                     // Enum (see below).
   "current_doc_version": "1.0",             // String. Bumped on snapshot.
@@ -127,6 +132,16 @@ A v2.1.4 plugin can write a state with `schema_version: "2.0"`. A future v3.0 pl
 
 The Preflight phase MUST initialize `schema_version` to the constant `"2.0"`, NOT to whatever value `plugin.json` reports. This was a bug in v2.1.4 and earlier — see `docs/tests/2026-05-13-md2pdf-live-test-report.md` bug #1.
 
+### `locked`, `version`, `locked_at` (added v2.2 — sketch D)
+
+After Phase 6 completes, the architect run is "locked" — the design is frozen at a named version, and `/iterate-design` is the canonical way to re-open it.
+
+- `locked` (bool): false during the architect run; true after Phase 6 LOCK.
+- `version` (string): semver-style label, e.g., `"v1.0"`. After `/iterate-design`, becomes `"v1.1-draft"`. Re-locks to `"v1.1"`.
+- `locked_at` (ISO8601 datetime, nullable): timestamp of last lock. Null when unlocked.
+
+These fields live at the top of state.json alongside `schema_version` and `plugin_version`. The Preflight phase initializes them as `locked: false`, `version: null`, `locked_at: null`. Phase 6 LOCK sets `locked: true`, `version: "v1.0"`, and `locked_at` to the current ISO8601 UTC timestamp. The `/iterate-design` command (v2.2) flips `locked` back to false, sets `version` to `"<prev>-draft"` (e.g., `"v1.1-draft"`), and clears `locked_at`; the post-iterate re-lock writes the bumped version (`"v1.1"`) and a fresh `locked_at`.
+
 ### Timestamps — always ISO8601 UTC, never date-only
 
 Every timestamp field in `state.json` and the lockfile uses **ISO8601 UTC datetime** format: `YYYY-MM-DDTHH:MM:SSZ` (e.g., `"2026-05-12T22:45:00Z"`).
@@ -153,7 +168,9 @@ The `-u` ensures UTC (no tz issue across machines); the `Z` suffix is ISO8601's 
 
 **Validation:** at startup, the orchestrator (or quality-gate-auditor in v2.2) checks that `state.started_at` parses cleanly via Python's `datetime.fromisoformat()`. Date-only values fail this check.
 
-**Phase enum:** `"preflight" | "phase_0a" | "phase_0" | "phase_1" | "phase_2" | "phase_2.5" | "phase_3" | "phase_4" | "phase_5" | "phase_6" | "phase_7" | "complete"`
+**Phase enum:** `"preflight" | "phase_0a" | "phase_0" | "phase_1" | "phase_2" | "phase_2.5" | "phase_3" | "phase_4" | "phase_5" | "phase_6" | "phase_7" | "phase_8" | "complete"`
+
+`phase_7` and `phase_8` were added in v2.2 (sketch D) — they correspond to the new Tooling Execution and Handoff phases that run after Phase 6 LOCK. See SKILL.md Phase 7 and Phase 8.
 
 ---
 
@@ -173,7 +190,8 @@ Each `phase_progress[<phase>]` entry tracks completion and work-in-flight state 
 | `phase_4` | `complete`, `docs_remaining` (string[]) | Resume at next pending batch of 8. |
 | `phase_5` | `complete`, `revisions_made` (int) | Re-enter menu loop. |
 | `phase_6` | `complete`, `plugins_installed` (string[]) | Resume at next unresolved plugin offer. |
-| `phase_7` | `complete`, `handoff_invoked` (bool) | If handoff invoked, do not re-invoke. |
+| `phase_7` | `complete`, `tooling_executed` (bool) | Tooling Execution phase (v2.2 — sketch D). Skip if already executed. |
+| `phase_8` | `complete`, `handoff_invoked` (bool) | Handoff phase (v2.2 — sketch D). If handoff invoked, do not re-invoke. |
 
 `completed_at` is ISO8601 UTC. `*_remaining` arrays shrink as work completes; all other arrays are append-only.
 

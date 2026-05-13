@@ -712,15 +712,25 @@ State: `phase = "phase_6"` once (a) is chosen, save.
    ```
    If yes: execute. If customize: let user edit before running.
 5. **Final commit**: `chore: bootstrap complete` via `commit-commands:commit`.
-6. **Cleanup** (v2.1.5 fix — bug #14): the state.json is preserved. Do NOT remove `docs/_architect_state.json`. The state file is the canonical entry point for future re-invocations and (in v2.2) for `/iterate-design`. Optionally archive a copy to `docs/versions/v1.0/_architect_state.json` (in v2.2 this becomes mandatory; for v2.1.5 transitional, offer it as an option). Commit only the lockfile cleanup if the lock is held: `chore: release bootstrap lock`.
+6. **LOCK** (v2.2 — sketch D): freeze the design at version `v1.0`. Set the three lock fields on `state.json` BEFORE the lockfile cleanup so the locked state is what persists for future `/iterate-design` invocations:
+
+   ```bash
+   # Phase 6 LOCK step (v2.2 — sketch D)
+   NOW=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+   jq --arg now "$NOW" '.locked = true | .version = "v1.0" | .locked_at = $now' \
+     docs/_architect_state.json > /tmp/state.tmp && mv /tmp/state.tmp docs/_architect_state.json
+   ```
+
+   Then commit the locked state via `commit-commands:commit` with subject `architect(lock): v1.0`.
+7. **Cleanup** (v2.1.5 fix — bug #14): the state.json is preserved. Do NOT remove `docs/_architect_state.json`. The state file is the canonical entry point for future re-invocations and (in v2.2) for `/iterate-design`. Optionally archive a copy to `docs/versions/v1.0/_architect_state.json` (in v2.2 this becomes mandatory; for v2.1.5 transitional, offer it as an option). Commit only the lockfile cleanup if the lock is held: `chore: release bootstrap lock`.
 
    ```bash
    # Release lock (delete lockfile only)
    rm -f docs/_architect_state.lock
    # IMPORTANT: never remove the state file — it is the cross-session entry point
    ```
-7. Output: "✓ Project architect complete."
-8. State: phase = "complete".
+8. Output: "✓ Project architect complete."
+9. State: phase = "complete".
 
 ---
 
