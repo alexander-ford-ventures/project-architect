@@ -229,6 +229,7 @@ CRITICAL: `schema_version` is the literal string `"2.0"` — never substitute th
 7. Set `state.git.repo_init = true`, `state.git.has_remote`, `state.git.remote_url`, `state.git.branch`.
 8. Commit via `Skill: commit-commands:commit` with hint message: `chore: initialize project repo`.
 9. State: `phase = "phase_0a"`, mark phase complete, save.
+10. **Memory persistence:** Create the project memory file at `~/.claude/projects/<project-id>/memory/project_architect_<slug>.md` per `references/memory-persistence.md`. Append one-line entry to `MEMORY.md`. Set `state.memory_pointer = { name, path, last_synced }`.
 
 ---
 
@@ -289,6 +290,7 @@ After Batch 3:
 5. Append the resulting research file to `state.research_findings`.
 6. Commit via `commit-commands:commit`: `architect(phase-0-research): domain research`.
 7. State: `phase = "phase_0"`, mark complete, save.
+8. **Memory persistence:** Edit the pointed-to file per `references/memory-persistence.md` with a Phase 0 entry (kickoff decisions + domain research summary). If `state.memory_pointer` is null (e.g., user skipped Phase 0a), create it now.
 
 ---
 
@@ -302,6 +304,23 @@ Every `Agent({...})` dispatch is wrapped with the runtime-budget observer per `r
 - **Never auto-kills** the agent — observation only
 
 This is the bug-#9 mitigation (decision-revisor 6× cost overrun). With observation, the user sees the overrun in real time and can `Esc` if appropriate; the orchestrator records the telemetry for future tuning.
+
+---
+
+## Memory persistence (v2.2 — sketch D)
+
+Every phase boundary updates a persistent memory file per `references/memory-persistence.md`. This keeps cross-session continuity for multi-day project-architect runs.
+
+Cadence:
+- **Phase 0a** (first write): create `~/.claude/projects/<project-id>/memory/project_architect_<slug>.md`; append one-line entry to `MEMORY.md`; record path in `state.memory_pointer`.
+- **Phases 1, 2, 2.5, 3, 4, 5** (per-phase updates): Edit the pointed-to file with a new dated entry summarizing what was decided/generated.
+- **Phase 6** (major update): write "LOCKED at v1.0" header + full design summary; update `MEMORY.md` to mark project as locked.
+- **Phase 7, 8** (final updates): record execution outcome + handoff summary.
+
+If `state.memory_pointer` is null at startup: this is the first write; create it.
+If non-null but the pointed-to file is missing: regenerate from state.json + update `state.memory_pointer.last_synced`.
+
+See `references/memory-persistence.md` for the entry template and `MEMORY.md` index format.
 
 ---
 
@@ -341,6 +360,7 @@ At end of phase:
 2. Commit findings.
 3. Optionally surface major implications to the user; offer to revisit Phase 1 answers if research suggests scope problems.
 4. State: `phase = "phase_2"`, save.
+5. **Memory persistence:** Edit the pointed-to file per `references/memory-persistence.md` with a Phase 1 entry (domain research summary + scope/feasibility framing).
 
 ### CLI sub-question routing (added v2.1.5)
 
@@ -367,6 +387,7 @@ At end of phase:
 1. Dispatch `research-scout` with the Phase 2 prompt (stack combination gotchas).
 2. Commit findings.
 3. State: `phase = "phase_2.5"`, save.
+4. **Memory persistence:** Edit the pointed-to file per `references/memory-persistence.md` with a Phase 2 entry (chosen tech stack + ADR ids).
 
 ### Filing an ADR
 
@@ -392,6 +413,7 @@ For each major decision (one that warrants a record):
 6. The `COST_MODEL.md` doc itself is generated during Phase 4 — the pricing research is its input data.
 7. Commit: `architect(phase-2.5): cost model research`.
 8. State: `phase = "phase_3"`, save.
+9. **Memory persistence:** Edit the pointed-to file per `references/memory-persistence.md` with a Phase 2.5 entry (stack gotchas + cost model snapshot).
 
 ---
 
@@ -427,7 +449,7 @@ Before exiting Phase 3, cross-check decisions for contradictions:
 
 For each contradiction: surface to user with explanation and choices ("revise A, revise B, accept tradeoff"). User-chosen revisions dispatch `decision-revisor`.
 
-End of phase: dispatch `research-scout` with Phase 3 prompt (pattern validation). Commit findings. State: `phase = "phase_4"`, save.
+End of phase: dispatch `research-scout` with Phase 3 prompt (pattern validation). Commit findings. State: `phase = "phase_4"`, save. **Memory persistence:** Edit the pointed-to file per `references/memory-persistence.md` with a Phase 3 entry (architecture decisions + per-area ADR ids + consistency-check outcomes).
 
 ---
 
@@ -592,6 +614,8 @@ Load `references/document-catalog.md` for selection rules and the topological so
 
 12. If `summary.blocker > 0`: do NOT auto-advance to Phase 5. Print the BLOCKER findings and ask the user how to proceed (revise via `decision-revisor` / approve anyway / abort). Only after the user explicitly chooses to continue should the orchestrator enter the Phase 5 menu.
 
+13. **Memory persistence:** Edit the pointed-to file per `references/memory-persistence.md` with a Phase 4 entry (generated doc list + quality-gate audit summary: BLOCKER / WARNING / INFO counts).
+
 ---
 
 ## Phase 5: Iteration
@@ -686,7 +710,7 @@ Use `AskUserQuestion` for the menu.
 - **(e) Tree**: print full decision tree (group by domain: project meta, language, frontend, backend, db, auth, hosting, security, testing, monitoring), with ADR references. Loop back to menu.
 - **(f) Exit**: save state, push if `per_phase`, return. The user can resume later by invoking the architect again.
 
-State: `phase = "phase_6"` once (a) is chosen, save.
+State: `phase = "phase_6"` once (a) is chosen, save. **Memory persistence:** Edit the pointed-to file per `references/memory-persistence.md` with a Phase 5 entry per major revision wave (one append per revisor-driven decision change); if no revisions occurred (user chose (a) immediately), append a short "no revisions" entry.
 
 ---
 
@@ -729,8 +753,9 @@ State: `phase = "phase_6"` once (a) is chosen, save.
    rm -f docs/_architect_state.lock
    # IMPORTANT: never remove the state file — it is the cross-session entry point
    ```
-8. Output: "✓ Project architect complete."
-9. State: phase = "complete".
+8. **Memory persistence (major update):** Edit the pointed-to file per `references/memory-persistence.md` with a new section: `## LOCKED at v{{state.version}} — <ISO8601 timestamp>` followed by the full design summary (final ADR list, doc count, locked_at). Then update the `MEMORY.md` index entry to mark the project as locked (replace the in-design suffix with `locked at <version> (<locked_at>)`).
+9. Output: "✓ Project architect complete."
+10. State: phase = "complete".
 
 ---
 
@@ -837,6 +862,8 @@ Commit:
 - After each execution: per the per-option commit messages above.
 - After all executions: state save, `phase = "phase_8"`.
 
+**Memory persistence:** Edit the pointed-to file per `references/memory-persistence.md` with a Phase 7 entry recording execution outcome (CLAUDE.md y/n, `.claude/*` y/n, scaffold y/n, post-execution audit summary).
+
 ---
 
 ## Phase 8: Handoff (v2.2, sketch D)
@@ -868,7 +895,7 @@ Slash commands available after restart:
 Architect session ending. Type /exit when ready.
 ```
 
-State: `phase = "complete"`, `prerequisites_satisfied = true`. Save. Architect returns control to user.
+State: `phase = "complete"`, `prerequisites_satisfied = true`. Save. **Memory persistence (final update):** Edit the pointed-to file per `references/memory-persistence.md` with a Phase 8 handoff entry (closing summary + next-step recommendations); this is the entry future sessions grep for context. Architect returns control to user.
 
 ---
 
