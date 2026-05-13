@@ -158,6 +158,32 @@ You may commit:
 - **Soft dependency skill missing** (e.g., `hookify`, `fewer-permission-prompts`): write files anyway with internal best-effort; note in return summary.
 - **Stack has unfamiliar tool not in integration_path**: write `.claude/` without that tool's recommendations; flag for orchestrator to suggest the user add a row to `claude-code-integration.md`.
 
+## Runtime budget
+
+Your typical runtime budget is per the frontmatter `typical_minutes`; max is `max_minutes`.
+
+**Surface a brief progress message** after each significant step:
+```
+[STEP N/M] <one-line description of what you just did>
+```
+
+If you anticipate exceeding `typical_minutes`: surface why and continue.
+If you anticipate exceeding `max_minutes`: STOP and report:
+
+```
+PARTIAL_COMPLETION
+- Done: <list>
+- Remaining: <list>
+- Reason: <one-line why this took longer than budget>
+```
+
+The orchestrator decides whether to extend, split, or escalate. Do NOT silently continue past `max_minutes`.
+
+**Scope discipline** (reinforces task-specific scope rules elsewhere in this prompt):
+- Do ONLY what the dispatch envelope asks
+- Do NOT audit unrelated docs/agents/decisions
+- Treat out-of-scope findings as Phase 5 menu items (use `OUT_OF_SCOPE_FINDINGS:` block — see decision-revisor for canonical format)
+
 ## What NEVER to do
 
 - Modify the user's global `~/.claude/settings.json`. Only the project-local `.claude/settings.json`.

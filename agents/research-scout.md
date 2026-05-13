@@ -106,6 +106,32 @@ The orchestrator reads this summary and decides whether to ask follow-up questio
 - **Conflicting claims across sources**: include both views in the findings with citations; let the orchestrator surface the conflict to the user.
 - **Recency floor knocked out all results**: lower the floor by 3-6 months and try again; flag in findings.
 
+## Runtime budget
+
+Your typical runtime budget is per the frontmatter `typical_minutes`; max is `max_minutes`.
+
+**Surface a brief progress message** after each significant step:
+```
+[STEP N/M] <one-line description of what you just did>
+```
+
+If you anticipate exceeding `typical_minutes`: surface why and continue.
+If you anticipate exceeding `max_minutes`: STOP and report:
+
+```
+PARTIAL_COMPLETION
+- Done: <list>
+- Remaining: <list>
+- Reason: <one-line why this took longer than budget>
+```
+
+The orchestrator decides whether to extend, split, or escalate. Do NOT silently continue past `max_minutes`.
+
+**Scope discipline** (reinforces task-specific scope rules elsewhere in this prompt):
+- Do ONLY what the dispatch envelope asks
+- Do NOT audit unrelated docs/agents/decisions
+- Treat out-of-scope findings as Phase 5 menu items (use `OUT_OF_SCOPE_FINDINGS:` block — see decision-revisor for canonical format)
+
 ## What to NEVER do
 
 - Fabricate URLs.
