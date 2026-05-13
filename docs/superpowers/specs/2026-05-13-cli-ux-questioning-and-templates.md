@@ -5,7 +5,7 @@
 ---
 name: CLI UX questioning + templates (cross-language)
 date: 2026-05-13
-status: Phase 1 universal question SHIPPED in v2.1.5 (commit ad32619, tag v2.1.5); per-language Phase 2 picker + CLI_UX_DESIGN template PENDING v2.2 (plan Tasks 50-52)
+status: SHIPPED. Phase 1 universal question landed in v2.1.5 (commit ad32619, tag v2.1.5); per-language Phase 2 picker + CLI_UX_DESIGN.md template landed in v2.2.0 as Sketch E (plan Tasks 50-52, commits 26fd1ef / 70b0121 / fdc6a5a, tag v2.2.0).
 audience: future v2.x design decision
 ---
 
