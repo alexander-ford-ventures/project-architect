@@ -292,6 +292,19 @@ After Batch 3:
 
 ---
 
+## Agent dispatch — observer wrapper (v2.2, sketch C)
+
+Every `Agent({...})` dispatch is wrapped with the runtime-budget observer per `references/runtime-budgets.md`. The observer:
+- Records dispatch start/end timestamps in `state.agent_dispatches`
+- Surfaces "silent for too long" warnings inline
+- Surfaces "over budget" warnings inline
+- Pre-populates Phase 5 menu with `"review scope of <agent>"` items for over-budget runs
+- **Never auto-kills** the agent — observation only
+
+This is the bug-#9 mitigation (decision-revisor 6× cost overrun). With observation, the user sees the overrun in real time and can `Esc` if appropriate; the orchestrator records the telemetry for future tuning.
+
+---
+
 ## Tool availability
 
 The `AskUserQuestion` tool is deferred — it may not be loaded into your context at startup. Before Phase 0 Batch 1, run:
