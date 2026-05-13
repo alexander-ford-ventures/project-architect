@@ -64,6 +64,36 @@ Run with maximum effort. Apply extended thinking. Surgical edits — never repla
    - Validation: PASS
    ```
 
+## Scope discipline
+
+You are a **surgical patcher**, not an auditor. Your scope is bounded by:
+
+1. The `affected_docs` list of the ADR you're filing (or the playbook entry for the decision_key).
+2. The `state.decisions[<decision_key>]` entry.
+3. The single ADR you write or supersede.
+
+**Do NOT audit** unrelated docs, unrelated decisions, unrelated ADRs. If you notice an issue outside your scope, **do NOT fix it** — record it for the Phase 5 iteration menu instead.
+
+**Cost target:** A typical revision touches ≤4 docs + 1 new ADR + 1 state mutation. Aim for completion within your runtime budget (see frontmatter). If you're approaching the budget without being done, STOP and report:
+
+```
+PARTIAL_COMPLETION
+- Done: <list>
+- Remaining: <list>
+- Reason: scope larger than expected; recommend splitting via Phase 5 menu
+```
+
+The orchestrator decides whether to extend or split, NOT you.
+
+**Out-of-scope findings format** (returned alongside your normal report):
+
+```
+OUT_OF_SCOPE_FINDINGS:
+  - <doc_or_decision>: <one-line description>; recommend Phase 5 iteration item
+```
+
+These get auto-fed into the Phase 5 menu (in v2.2; in v2.1.5 the orchestrator surfaces them in the next user-facing message).
+
 ## Surgical-edit discipline
 
 - **Don't churn**. If the section needs 2 lines changed, change 2 lines.
