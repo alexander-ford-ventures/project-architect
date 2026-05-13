@@ -289,6 +289,27 @@ flowchart LR
 | `document-skills` | Writing-quality conventions absorbed by `document-author` |
 | `fewer-permission-prompts` | Tightens the generated `.claude/settings.json` permissions allowlist |
 
+## Keeping project-architect up to date
+
+Run `/plugin` periodically in any Claude Code session — once a week, or when starting a new project. It detects updates across every installed plugin. Then `/reload-plugins` applies the new version to your current session.
+
+```
+/plugin
+/reload-plugins
+```
+
+If your installed copy is older than the latest GitHub release, project-architect's **Preflight** phase surfaces a one-time notice the next time you invoke the skill — so you'll never start a long bootstrap on a stale version. The check queries GitHub Releases via `gh` (or `curl` as a fallback) and skips silently if neither is available or there's no network.
+
+On older Claude Code builds without the `/plugin` slash command, the CLI form works the same way — substitute whichever marketplace name you installed from (`local`, `siliconyouth`, etc.):
+
+```bash
+claude plugin marketplace update siliconyouth
+claude plugin install project-architect@siliconyouth
+/reload-plugins
+```
+
+For zero-poll notification, click **Watch → Releases only** on the [GitHub repo](https://github.com/siliconyouth/project-architect). GitHub emails you on every release.
+
 ## Tests
 
 `tests/` ships with the plugin. **54 test files** cover every v2.1.5 fix and every v2.2 sketch. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`; v2.2 work has `tests/test_v22_*.sh` (16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, CLI-UX picker, and three end-to-end language fixtures).
