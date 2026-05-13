@@ -1,82 +1,76 @@
+<!-- Author: Vladimir Dukelic <vladimir@dukelic.com> -->
+<!-- License: MIT -->
+<!-- Project: project-architect (https://github.com/siliconyouth/project-architect) -->
+
 ---
 template_name: CLAUDE_MD_ROOT
-generate_when: "always"
+target_path: CLAUDE.md
+generate_when: always
 required_decisions:
   - project.name
-  - project.type
-  - language.primary
-optional_decisions:
-  - frontend.framework
-  - backend.framework
-  - database.engine
-  - auth.provider
-  - hosting.frontend
-  - hosting.backend
-  - testing.unit_framework
-  - package_manager
-depends_on: [PROJECT_OVERVIEW, PROJECT_REQUIREMENTS]
+  - project.elevator_pitch
+  - tech_stack.language
+depends_on:
+  - CLAUDE_MD_PLAN.md
 revision_triggers:
-  - language.primary
-  - frontend.framework
-  - backend.framework
-  - database.engine
-  - auth.provider
-  - project.type
-  - testing.unit_framework
-  - package_manager
+  - project.name
+  - project.elevator_pitch
+  - state.locked
 ---
 
-<!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
-License: MIT
--->
+# CLAUDE.md (router) template
 
-# {{project_name}}
+When `claude-md-author` consumes this template in Phase 7, it writes the resolved content to `<project_root>/CLAUDE.md` — a short router doc that fresh Claude sessions auto-load.
 
-> 📌 **Status:** v{{document_version}} · **Last revised:** {{last_revised_date}} · **ADRs:** {{adr_links}}
+## Target file content
 
-## Table of contents
-- [🎯 Project Overview](#project-overview)
-- [Tech Stack](#tech-stack)
-- [🏗️ Project Structure](#project-structure)
-- [Development Commands](#development-commands)
-- [Code Conventions](#code-conventions)
-- [🏗️ Architecture Notes](#architecture-notes)
-- [Key Files](#key-files)
-- [Where to look](#where-to-look)
+```markdown
+# {{project.name}}
 
-## 🎯 Project Overview
-One sentence: what this project is. Link to `docs/PROJECT_OVERVIEW.md` for the full pitch.
+## State
 
-## Tech Stack
-Concise table — one row per major layer.
+{{ if state.locked then "Architecture locked at " + state.version + " (designed via project-architect; see docs/PROJECT_OVERVIEW.md)." else "Currently in design — run /iterate-design to revise." }}
 
-## 🏗️ Project Structure
-Brief listing of key directories with one-line purpose each. Highlight which subdirs have their own CLAUDE.md.
+Locked at: {{state.locked_at}}
 
-## Development Commands
-Install, dev, build, test, lint, typecheck. Stack-specific (pnpm / cargo / pip / go).
+## Quick context
 
-## Code Conventions
-- Naming: {{convention}}
-- Formatting: {{tool + config file}}
-- Linting: {{tool + config file}}
-- Test placement: {{co-located / __tests__ / tests/}}
-- Commit style: {{conventional / freeform}}
+{{project.name}} is {{project.elevator_pitch}}.
 
-## 🏗️ Architecture Notes
-Key architectural decisions that affect coding patterns. One line per decision, link to ADR.
+Built with {{tech_stack.language}}{{ if tech_stack.frontend then " + " + tech_stack.frontend }}{{ if tech_stack.backend then " + " + tech_stack.backend }}.
 
-## Key Files
-Path → purpose, one line each. Limit to ~10 most-important files.
+See `docs/PROJECT_OVERVIEW.md` for the full pitch, `docs/ARCHITECTURE.md` for system design, `docs/TECH_STACK.md` for runtime/build choices.
 
-## Where to look
-- `docs/` — full architecture documentation
-- `docs/decisions/` — ADRs
-- `docs/research/` — research findings from bootstrap
-- `<subdir>/CLAUDE.md` — area-specific conventions (if applicable)
+## Working in this project
+
+Invariants pulled from the locked ADRs:
+
+- **Language**: {{tech_stack.language}} {{tech_stack.language_edition}} per ADR {{tech_stack.language.adr}}
+- **Test discipline**: {{decisions.testing.discipline}} per ADR {{decisions.testing.adr}}
+- **Commit style**: Conventional Commits ({{decisions.release_automation.commit_convention}}) per ADR {{decisions.release_automation.adr}}
+- **Security boundary**: {{decisions.security.policy}} per ADR {{decisions.security.adr}}
+
+Edit `CLAUDE_MD_PLAN.md` (in `docs/`) to change which invariants land here.
+
+## Next steps
+
+- `/scaffold` — scaffold the codebase from `docs/SCAFFOLD_PLAN.md` (uses `superpowers:writing-plans` + subagent-driven-development)
+- `/implement <feature-name>` — implement a specific feature from `docs/PROJECT_REQUIREMENTS.md`
+- `/iterate-design` — re-launch `project-architect` to revise the locked design (bumps {{state.version}} → next draft)
+
+Each slash command is defined in `.claude/commands/`. If a command appears missing, check that Phase 7 (Tooling Execution) actually ran — see `docs/NEXT_STEP_PLAN.md` for manual recovery.
 
 ---
 
 *★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+```
+
+## Notes for the executor
+
+When `claude-md-author` consumes this template in Phase 7:
+1. Substitute every `{{...}}` placeholder from `state.decisions` and `state` root fields.
+2. Resolve every conditional (`{{ if X then Y else Z }}`) inline.
+3. Write the resolved content to `<project_root>/CLAUDE.md`.
+4. Commit: `architect(phase-7): execute CLAUDE_MD_PLAN`.
+
+This template is a router — short, focused, with explicit pointers to deeper docs. The detailed content lives in `docs/`; CLAUDE.md is the table of contents + invariants header for fresh Claude sessions.
