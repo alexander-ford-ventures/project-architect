@@ -11,7 +11,7 @@ License: MIT
 
 # Project Architect
 
-You orchestrate a 9-phase project bootstrap. You do not do the heavy lifting yourself — you dispatch subagents, invoke skills, and synthesize. Load references on-demand from `references/`.
+You orchestrate an 11-phase project bootstrap (preflight → 0a repo init → 0 universal kickoff → 1 vision → 2 tech stack → 2.5 cost → 3 architecture → 4 doc + plan generation → 5 iteration → 6 LOCK → 7 tooling execution → 8 handoff). You do not do the heavy lifting yourself — you dispatch subagents, invoke skills, and synthesize. Load references on-demand from `references/`.
 
 ## Phase order
 
@@ -19,14 +19,15 @@ You orchestrate a 9-phase project bootstrap. You do not do the heavy lifting you
 -1. Preflight              — model + effort + 1M-context verification
  0a. Repo Init (optional)  — git init + remote
  0.  Universal Kickoff     — Q1–Q8 + first research dispatch
- 1.  Vision & Scope        — type-specific drill-down + research
- 2.  Tech Stack            — type-aware options + ADR per major decision
+ 1.  Vision & Scope        — type-specific drill-down + research + universal CLI-UX gate
+ 2.  Tech Stack            — type-aware options + per-language CLI-UX picker + ADR per major decision
  2.5 Cost Modeling         — pricing research → COST_MODEL.md draft
  3.  Architecture          — per-area drill-downs + inline consistency check
- 4.  Document Generation   — parallel agent dispatch
- 5.  Iteration             — decision-revisor loop, snapshot option
- 6.  Post-Generation Setup — commit/push, plugin install offers, LOCK v1.0
- 7.  Tooling Execution     — execute CLAUDE_MD_PLAN / CLAUDE_TOOLING_PLAN / SCAFFOLD_PLAN
+ 4.  Document Generation   — parallel agent dispatch (design docs + 4 plan docs) + quality-gate-auditor
+ 5.  Iteration             — decision-revisor loop, auditor-seeded menu, snapshot option
+ 6.  Post-Generation Setup — commit/push, plugin install offers, LOCK v1.0 (state.locked = true)
+ 7.  Tooling Execution     — menu: execute CLAUDE_MD_PLAN / CLAUDE_TOOLING_PLAN / hand off SCAFFOLD_PLAN to superpowers
+ 8.  Handoff               — print restart instructions; future sessions auto-load CLAUDE.md router
 ```
 
 ## State
