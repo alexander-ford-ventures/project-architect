@@ -839,6 +839,39 @@ Commit:
 
 ---
 
+## Phase 8: Handoff (v2.2, sketch D)
+
+Print the handoff message and end the architect run.
+
+```
+✓ Architecture locked at v{{state.version}}
+✓ {{N}} design docs in docs/
+✓ {{M}} plan docs in docs/*PLAN.md
+{{✓ CLAUDE.md generated | ⊘ CLAUDE.md skipped (plan exists at CLAUDE_MD_PLAN.md)}}
+{{✓ .claude/* generated | ⊘ .claude/* skipped (plan exists at CLAUDE_TOOLING_PLAN.md)}}
+✓ Final commit: {{HEAD sha}}
+{{✓ Pushed to origin: {{url}} | ⊘ No remote configured}}
+
+Next step: restart Claude Code to load the new CLAUDE.md and .claude/ tooling.
+   Type `/exit` then run `claude` in this directory.
+
+After restart, the new session will:
+   • Auto-load your new CLAUDE.md as the project's operating manual
+   • Auto-load .claude/settings.json (permissions) and .claude/hooks/
+   • Offer next-step options via the slash commands defined in .claude/commands/
+
+Slash commands available after restart:
+   /scaffold        — scaffold the actual code (uses superpowers if installed)
+   /implement <X>   — implement a specific feature from requirements
+   /iterate-design  — re-open the design for revision
+
+Architect session ending. Type /exit when ready.
+```
+
+State: `phase = "complete"`, `prerequisites_satisfied = true`. Save. Architect returns control to user.
+
+---
+
 ## Failure modes & recovery
 
 | Failure | Recovery |
