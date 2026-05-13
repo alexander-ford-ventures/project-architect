@@ -21,15 +21,41 @@ From _"I want to build X"_ to _"docs, CLAUDE.md, ADRs, and a `.claude/` config �
 [![Stars](https://img.shields.io/github/stars/siliconyouth/project-architect?style=social)](https://github.com/siliconyouth/project-architect)
 [![Last commit](https://img.shields.io/github/last-commit/siliconyouth/project-architect)](https://github.com/siliconyouth/project-architect/commits/main)
 [![Plugin validate](https://img.shields.io/badge/plugin%20validate-✓%20passing-success)](.claude-plugin/plugin.json)
-[![Tests](https://img.shields.io/badge/tests-54%20files%20·%20passing-success)](tests/)
+[![Tests](https://img.shields.io/badge/tests-68%20files%20·%20passing-success)](tests/)
 
 </div>
 
 ---
 
-## What's new in v2.2.0 _(2026-05-13)_
+## What's new in v2.3.0 _(2026-05-13)_
 
-Major architectural release. Four validation sketches + a cross-language CLI-UX picker, all designed during the md2pdf live test and now shipped as a single coherent bundle. See the [full live-test report](docs/tests/2026-05-13-md2pdf-live-test-report.md), the [sketches spec](docs/superpowers/specs/2026-05-13-v2.2-validation-sketches.md), and [CHANGELOG.md](CHANGELOG.md) for the unabridged release notes.
+Minor release. **Programming language design** is now a first-class project sub_type. 6 PL sub_types, 7 dedicated design templates, 4 new decision axes, 2 end-to-end fixtures. Same orchestrator, same 11 phases, same 6 subagents, same 16-check auditor — just a new branch in the project-type taxonomy with type-aware questioning and templates.
+
+Run `/skill project-architect:project-architect` and answer "design a new programming language" — the architect now drives `impl_strategy` (tree-walking / bytecode VM / JIT / AOT / transpiled), `host_runtime` (LLVM 22.x, Cranelift, QBE, Truffle/GraalVM 24/25 LTS, JVM 25, BEAM, Wasm 3.0 + Component Model, js_host, python_embedded, rust_host, native_no_runtime, custom_vm — 14 research-informed values), `paradigm` (imperative / functional / OO / logic / array / multi-paradigm), and `type_system` (dynamic / static-nominal / static-structural / gradual / dependent / none) decisions, files each as an ADR, then emits the 7 PL design docs: `LANGUAGE_GRAMMAR`, `SEMANTICS`, `TYPE_SYSTEM`, `STDLIB`, `TOOLCHAIN`, `BOOTSTRAP_PLAN`, `STABILITY_AND_RFC`. End-to-end fixtures: `lume` (Rust-host tree-walking educational interpreter) and `fern` (static gradual functional language transpiled to JS).
+
+| Area | What it ships |
+|---|---|
+| **6 PL sub_types** | `general_purpose_language`, `domain_specific_language`, `query_language`, `configuration_language`, `educational_language`, `transpiler_target` |
+| **7 PL templates** | `LANGUAGE_GRAMMAR` · `SEMANTICS` · `TYPE_SYSTEM` · `STDLIB` · `TOOLCHAIN` · `BOOTSTRAP_PLAN` · `STABILITY_AND_RFC` |
+| **4 PL decision axes** | `impl_strategy` (5 values) · `host_runtime` (14 values incl. LLVM 22.x, Wasm 3.0, JVM 25 LTS, BEAM, Truffle/GraalVM 24/25 LTS) · `paradigm` (6 values) · `type_system` (6 values incl. dependent for Lean 4-class) |
+| **Phase 1 routing** | PL-detection gate in `questioning-flow.md` — short-circuits non-PL projects to existing flow |
+| **Phase 2 / 3 batches** | impl_strategy + host_runtime batch in Phase 2; paradigm + type_system batch in Phase 3; both ADR-tracked |
+| **Tech-stack table** | New "PL implementation backends" comparison in `tech-stack-options.md` (research dated 2026-05-13) |
+| **2 e2e fixtures** | `lume` Rust-host tree-walking interpreter (educational) · `fern` transpiler-to-JS (static-gradual functional) |
+
+**Migration from v2.2.x** — Forward-compatible. New fields default to safe absent values. Existing `state.json` from v2.2.x continues to work. No breaking changes.
+
+**Test coverage** — 68 test files (was 54 at v2.2.1). v2.3 added 14 new tests covering each template, each catalog registration, each questioning batch, each tech-stack section, and both fixtures.
+
+```bash
+bash tests/run_all.sh
+# Test files passed: 68 · All tests passed.
+```
+
+<details>
+<summary>v2.2.0 — sketches B/C/D/A/E + CLI-UX picker _(2026-05-13)_</summary>
+
+Major architectural release. Four validation sketches + a cross-language CLI-UX picker, all designed during the md2pdf live test and shipped as a single coherent bundle. See the [full live-test report](docs/tests/2026-05-13-md2pdf-live-test-report.md), the [sketches spec](docs/superpowers/specs/2026-05-13-v2.2-validation-sketches.md), and [CHANGELOG.md](CHANGELOG.md) for the unabridged release notes.
 
 | Sketch | What it ships |
 |---|---|
@@ -39,16 +65,9 @@ Major architectural release. Four validation sketches + a cross-language CLI-UX 
 | **A** inline validators | `claude-tooling-author` now runs shellcheck on `.sh`, `jq` on `.json`, and `python -c yaml.safe_load` on `.yml` before declaring done. Catches malformed tooling at write-time. |
 | **E** CLI-UX picker | Phase 2 per-language library picker: Rust (ratatui/inquire/indicatif/owo-colors), Go (bubbletea/lipgloss), Python (textual/rich), Node (ink/clack), Ruby (TTY), C# (Spectre.Console + Terminal.Gui). New `CLI_UX_DESIGN.md` template. Builds on v2.1.5's universal CLI-UX gate question. |
 
-**Phase boundary gates** — `state.phase_progress[N].prerequisites_satisfied` blocks downstream dispatch until upstream phases finish. Catches the live-test bug-#4 class (research dispatched in parallel with Phase 4).
+Phase boundary gates — `state.phase_progress[N].prerequisites_satisfied` blocks downstream dispatch until upstream phases finish.
 
-**Migration from v2.1.x** — state.json schema is forward-compatible. New fields default to safe values. The plugin offers to migrate at startup if it sees a v2.1.x state.
-
-**Test coverage** — 54 test files covering all 16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, cross-language CLI-UX picker, and end-to-end Rust/Python/Go fixtures.
-
-```bash
-bash tests/run_all.sh
-# Test files passed: 54 · All tests passed.
-```
+</details>
 
 <details>
 <summary>v2.1.5 — tactical fixes _(2026-05-13)_</summary>
@@ -108,7 +127,7 @@ Then inside Claude:
 ```console
 $ /project-architect
 
-✓ Preflight (v2.2.0)
+✓ Preflight (v2.3.0)
   ✓ Model: claude-opus-4-7[1m]   ✓ Effort: max
   ✓ Recommended plugins: 6/6
   ✓ Version freshness: current
@@ -256,7 +275,7 @@ flowchart LR
 
 **Design-first lifecycle.** Phase 4 emits 4 plan docs (CLAUDE_MD_PLAN, CLAUDE_TOOLING_PLAN, SCAFFOLD_PLAN, NEXT_STEP_PLAN). Phase 5 lets you edit those plans before execution. Phase 6 LOCKs the design at `v1.0`. Phase 7 executes the plans: `claude-md-author` consumes `CLAUDE_MD_PLAN.md`, `claude-tooling-author` consumes `CLAUDE_TOOLING_PLAN.md`, and `SCAFFOLD_PLAN.md` hands off to `superpowers:writing-plans` + `subagent-driven-development` for code emission. Phase 8 prints a restart message; future sessions auto-load the new CLAUDE.md as a router exposing `/scaffold`, `/implement <feature>`, `/iterate-design`.
 
-## Project types supported (18+)
+## Project types supported (19+)
 
 - Web app (SaaS / marketplace / dashboard / e-commerce / community / wiki / newsletter / portfolio / internal tool)
 - Mobile (consumer / B2B / enterprise / health / finance / productivity / media)
@@ -276,6 +295,7 @@ flowchart LR
 - Web3 / smart contracts (EVM / Solana / Aptos-Sui / Starknet)
 - Scientific computing (numerical / data analysis / reproducible / bio / GIS)
 - AR / VR / spatial (visionOS / Quest / mobile AR / WebXR)
+- **Programming language design** (general-purpose / DSL / query / config / educational / transpiler target — _v2.3_)
 
 ## Recommended plugins (Preflight auto-detects)
 
@@ -312,7 +332,7 @@ For zero-poll notification, click **Watch → Releases only** on the [GitHub rep
 
 ## Tests
 
-`tests/` ships with the plugin. **54 test files** cover every v2.1.5 fix and every v2.2 sketch. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`; v2.2 work has `tests/test_v22_*.sh` (16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, CLI-UX picker, and three end-to-end language fixtures).
+`tests/` ships with the plugin. **68 test files** cover every v2.1.5 fix, every v2.2 sketch, and every v2.3 PL design surface. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`; v2.2 work has `tests/test_v22_*.sh` (16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, CLI-UX picker, three end-to-end language fixtures); v2.3 work has `tests/test_v23_*.sh` (7 PL templates, catalog registration, Phase 1 PL-routing, Phase 2/3 PL question batches, PL implementation backends in tech-stack-options, two e2e PL fixtures, version-bump gate).
 
 ```text
 tests/
@@ -372,15 +392,31 @@ tests/
 ├── test_v22_e2e_python_tui.sh
 ├── test_v22_e2e_go_cli.sh
 │
-│  # v2.2 release gate
-└── test_v22_version_bump.sh                         ← asserts plugin.json + CHANGELOG content
+│  # v2.3 — programming-language project sub_type (7 templates + 4 decision axes)
+├── test_v23_sub_types.sh
+├── test_v23_template_language_grammar.sh
+├── test_v23_template_semantics.sh
+├── test_v23_template_type_system.sh
+├── test_v23_template_stdlib.sh
+├── test_v23_template_toolchain.sh
+├── test_v23_template_bootstrap_plan.sh
+├── test_v23_template_stability_and_rfc.sh
+├── test_v23_catalog_pl_templates.sh
+├── test_v23_questioning_pl_routing.sh
+├── test_v23_questioning_pl_phase2_phase3.sh
+├── test_v23_tech_stack_pl_backends.sh
+├── test_v23_e2e_pl_interpreter.sh                   ← `lume` Rust-host tree-walking interpreter
+├── test_v23_e2e_pl_transpiler.sh                    ← `fern` transpiler-to-JS DSL
+│
+│  # v2.3 release gate
+└── test_v23_version_bump.sh                         ← asserts plugin.json + CHANGELOG content
 ```
 
 Run the full suite:
 
 ```bash
 bash tests/run_all.sh
-# Test files passed: 54 · All tests passed.
+# Test files passed: 68 · All tests passed.
 ```
 
 Tests are pure Bash (using the helpers in `lib/test_helpers.sh`) and assert against the actual plugin files (`SKILL.md`, `agents/*.md`, `references/*.md`, `.claude-plugin/plugin.json`). No external test framework needed; only `bash`, `jq`, `shellcheck`, and the standard Unix toolchain.
@@ -393,15 +429,15 @@ Procedure for maintainers:
 
 ```bash
 # 1. Bump plugin.json
-python3 -c "import json,sys; p='.claude-plugin/plugin.json'; d=json.load(open(p)); d['version']=sys.argv[1]; open(p,'w').write(json.dumps(d,indent=2)+'\n')" 2.2.1
+python3 -c "import json,sys; p='.claude-plugin/plugin.json'; d=json.load(open(p)); d['version']=sys.argv[1]; open(p,'w').write(json.dumps(d,indent=2)+'\n')" 2.3.0
 
 # 2. Add a [<version>] block to CHANGELOG.md
 
 # 3. Commit, tag, push
 git add .claude-plugin/plugin.json CHANGELOG.md
-git commit -m "chore(release): bump to 2.2.1"
-git tag -a v2.2.1 -m "..."
-git push origin main && git push origin v2.2.1
+git commit -m "chore(release): bump to 2.3.0"
+git tag -a v2.3.0 -m "..."
+git push origin main && git push origin v2.3.0
 
 # 4. Refresh local cache (only needed if you're testing your own change locally)
 claude plugin marketplace update siliconyouth
@@ -435,4 +471,4 @@ If you fork the skill itself or build on top of it, the source-file attribution 
 
 This repo is its own Claude Code marketplace. The plugin manifest is at `.claude-plugin/plugin.json`; the orchestrator skill body is at `skills/project-architect/SKILL.md`; references and templates live under `skills/project-architect/references/`; subagents live under `agents/`.
 
-The full v2.0 design spec is at [`docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md`](docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md) and the implementation plan at [`docs/superpowers/plans/2026-05-12-project-architect-v2-implementation.md`](docs/superpowers/plans/2026-05-12-project-architect-v2-implementation.md). The v2.2 architecture (validation sketches + multi-session lifecycle + CLI-UX picker) is documented at [`docs/superpowers/specs/2026-05-13-v2.2-validation-sketches.md`](docs/superpowers/specs/2026-05-13-v2.2-validation-sketches.md), with the implementation plan at [`docs/superpowers/plans/2026-05-13-v2.2-implementation.md`](docs/superpowers/plans/2026-05-13-v2.2-implementation.md) and the live-test evidence trail at [`docs/tests/2026-05-13-md2pdf-live-test-report.md`](docs/tests/2026-05-13-md2pdf-live-test-report.md). Reading those is the fastest way to understand *how* it was built — and the strongest signal that this isn't a toy.
+The full v2.0 design spec is at [`docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md`](docs/superpowers/specs/2026-05-12-project-architect-v2-redesign-design.md) and the implementation plan at [`docs/superpowers/plans/2026-05-12-project-architect-v2-implementation.md`](docs/superpowers/plans/2026-05-12-project-architect-v2-implementation.md). The v2.2 architecture (validation sketches + multi-session lifecycle + CLI-UX picker) is documented at [`docs/superpowers/specs/2026-05-13-v2.2-validation-sketches.md`](docs/superpowers/specs/2026-05-13-v2.2-validation-sketches.md), with the implementation plan at [`docs/superpowers/plans/2026-05-13-v2.2-implementation.md`](docs/superpowers/plans/2026-05-13-v2.2-implementation.md) and the live-test evidence trail at [`docs/tests/2026-05-13-md2pdf-live-test-report.md`](docs/tests/2026-05-13-md2pdf-live-test-report.md). The v2.3 programming-language project-type plan is at [`docs/superpowers/plans/2026-05-13-v2.3-programming-language-type.md`](docs/superpowers/plans/2026-05-13-v2.3-programming-language-type.md). Reading those is the fastest way to understand *how* it was built — and the strongest signal that this isn't a toy.

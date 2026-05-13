@@ -10,6 +10,57 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.3.0 — 2026-05-13
+
+**Programming language design as a first-class project sub_type — 6 sub_types, 7 design templates, 4 decision axes, 2 e2e fixtures.**
+
+Minor release. Lets users invoke `/skill project-architect:project-architect` for "design a new programming language" and get a coherent doc set covering grammar, semantics, type system, stdlib, toolchain, bootstrap trajectory, and stability/RFC process — same orchestrator, same 11 phases, same 6 subagents, same 16-check auditor; new project-type taxonomy entries, new templates, new questioning paths, new decision axes.
+
+### Added
+
+- **6 programming-language sub_types**: `general_purpose_language`, `domain_specific_language`, `query_language`, `configuration_language`, `educational_language`, `transpiler_target`. Registered in `state-schema.md`; emitted by Phase 1 routing in `questioning-flow.md`.
+- **7 PL design templates** under `references/templates/`:
+  - `LANGUAGE_GRAMMAR.md` — lexer + parser + grammar design (EBNF, precedence, ambiguity resolution, error recovery).
+  - `SEMANTICS.md` — evaluation model (call-by-value/name/need), scoping (lexical/dynamic), memory model, concurrency model, side-effect discipline.
+  - `TYPE_SYSTEM.md` — static / dynamic / gradual choice, inference algorithm (HM, bidirectional, local), generics, subtyping, variance, dependent-type opt-in.
+  - `STDLIB.md` — module organization (batteries-included vs minimal core + community), namespacing, stable-vs-experimental tiers, packaging story.
+  - `TOOLCHAIN.md` — REPL, formatter, LSP, debugger, package manager, build tool, test runner, profiler — what ships in the box vs deferred.
+  - `BOOTSTRAP_PLAN.md` — host-language → self-hosted trajectory, v0.1 / v0.5 / v1.0 milestones, dogfooding gates.
+  - `STABILITY_AND_RFC.md` — versioning policy (Rust-style trains? Python-style PEPs? Go-style 1.x?), stability tiers (experimental / unstable / stable / deprecated), RFC process, breaking-change escape hatches.
+- **4 PL decision axes** in `state-schema.md`:
+  - `impl_strategy` — 5 values: `tree_walking_interpreter`, `bytecode_vm`, `jit_compiled`, `aot_compiled`, `transpiled`.
+  - `host_runtime` — 14 research-informed values (research dated 2026-05-13): `llvm` (22.x), `mlir_mojo`, `cranelift`, `qbe`, `truffle_graalvm` (24/25 LTS), `jvm` (25 LTS), `beam` (Erlang VM), `wasm` (W3C 3.0 — Sept 2025: WasmGC + EH + tail calls + multi-memory + memory64 + SIMD + WASI 0.2 stable / 0.3 RC + Component Model), `js_host` (transpiler target), `python_embedded` (Python 3.14, no-GIL opt-in + experimental JIT), `rust_host` (Rust as host language for the implementation), `native_no_runtime` (C-class), `custom_vm`, `other`.
+  - `paradigm` — 6 values: `imperative`, `functional` (pure/effect-typed/impure), `object_oriented`, `logic`, `array`, `multi_paradigm`.
+  - `type_system` — 6 values: `dynamic`, `static_nominal`, `static_structural`, `gradual`, `dependent` (Lean 4 + Mathlib4 >210K theorems), `none` (untyped target).
+- **Phase 1 PL-detection routing** in `questioning-flow.md` — gates the PL sub_type when Q1 indicates a language/DSL.
+- **Phase 2 + Phase 3 PL question batches** in `questioning-flow.md` — drives `impl_strategy` + `host_runtime` (Phase 2) and `paradigm` + `type_system` (Phase 3) decisions, each filed as an ADR.
+- **"PL implementation backends" comparison table** in `tech-stack-options.md` (research dated 2026-05-13) — covers LLVM 22.x, MLIR/Mojo, Cranelift, QBE, Truffle/GraalVM 24/25 LTS, JVM 25 LTS, BEAM, Wasm 3.0 (W3C standard since Sept 2025), Python 3.14, OCaml 5.4 (effect handlers production but still "experimental"), Lean 4, Koka 3.2.3, Gleam 1.16.
+- **2 e2e fixtures** under `tests/fixtures/`:
+  - `e2e-programming-language-interpreter/` — `lume`, a tree-walking interpreter implemented in Rust, educational sub_type. Exercises the full design doc set + ADR chain for the educational interpreter path.
+  - `e2e-programming-language-transpiler/` — `fern`, a static gradual-typed functional language transpiled to JavaScript, transpiler_target sub_type. Exercises the transpiler path with `host_runtime = js_host`.
+- **Catalog registration** for all 7 PL templates in `document-catalog.md` with `generate_when` predicates keyed on `sub_type ∈ programming_language_sub_types`.
+
+### Changed
+
+- `SKILL.md` frontmatter description list now includes "programming language design" alongside the existing 18+ project types.
+- `state-schema.md` documents the 6 PL sub_types + 4 decision axes.
+- `references/tech-stack-options.md` gains the PL backends section.
+- `marketplace.json` description refreshed for v2.3 PL capability.
+- README.md "Project types supported" list adds "programming language design (general-purpose, DSL, query, config, educational, transpiler target)".
+
+### Migration
+
+Forward-compatible. New fields default to safe absent values. Existing `state.json` from v2.2.x continues to work — projects bootstrapped before v2.3.0 won't see the new questioning paths because Phase 1 PL detection short-circuits to the existing non-PL flow when the sub_type isn't a language. No breaking changes.
+
+### Test coverage
+
+v2.3 added 14 new test files; suite grew from 54 (v2.2.1) → 68 (v2.3.0). Full TDD per CLAUDE.md — every template, every catalog registration, every questioning batch, every tech-stack section, every fixture has a corresponding `tests/test_v23_*.sh`. The `test_v22_version_bump.sh` release gate was retired (asserted plugin.json version `"2.2.1"`); replaced by `test_v23_version_bump.sh` asserting `"2.3.0"`.
+
+```bash
+bash tests/run_all.sh
+# Test files passed: 68 · All tests passed.
+```
+
 ## v2.2.1 — 2026-05-13
 
 Patch release that lands a development-workflow `CLAUDE.md`, captures the 8 documentation commits that drifted past the `v2.2.0` tag, and brings every project-internal file into attribution-convention compliance. No new features; everything below was either drift cleanup or workflow codification.
