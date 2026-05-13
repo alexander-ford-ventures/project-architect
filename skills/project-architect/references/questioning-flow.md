@@ -70,6 +70,8 @@ Infrastructure tool      → IaC | CLI for infra | platform / internal developer
 Claude Code plugin       → command-focused | skill-focused | agent-focused | full plugin
 MCP server               → stdio | HTTP/SSE | Cloudflare Workers | other host
                            | tool-focused | resource-focused | prompt-focused | full
+Programming language     → general-purpose | DSL | query language | configuration language
+                           | educational | transpiler target  (v2.3 — sketch F)
 Web3 / smart contracts   → EVM (Solidity) | Solana (Rust/Anchor) | Move (Aptos/Sui) | Cairo (Starknet)
 Scientific / research    → numerical sim | data analysis (notebooks) | reproducible study
                            | bioinformatics | geospatial/GIS
@@ -276,6 +278,43 @@ The per-language library picker (`ratatui` vs `bubbletea` vs `textual` vs `ink` 
 - Multi-user / shared sessions?
 - App-store distribution?
 
+### Programming language design (v2.3 — sketch F)
+
+This batch fires when the user's pitch (Phase 0) or any later answer mentions designing a **programming language**, a **compiler**, an **interpreter**, a **DSL**, or a **transpiler** — and the project type was either chosen as `Programming language` or routed here from `Library / SDK` (a language embedded as a host library) or `CLI tool` (a language shipped behind a `lang run …` CLI). The orchestrator should re-confirm the intent before drilling in: language design is a different shape of project than a normal library/CLI, with its own template set (Phase 4) and its own follow-up questions in Phases 2 and 3.
+
+#### Phase 1 → Programming language sub_type routing
+
+Ask via `AskUserQuestion` (single-select):
+
+**Q-pl-1:** Which best describes the **scope** of the language you want to design?
+
+| Option | One-line cue | Examples |
+|---|---|---|
+| **General-purpose language** | Full stdlib, broad use cases, you expect users to write whole applications in it. | Rust, Go, Python, Zig, Gleam |
+| **Domain-specific language** | Narrow grammar, embedded inside a host program or workflow; one problem domain. | HCL (Terraform), regex, jq, Cue, Dhall |
+| **Query language** | Reads/filters/aggregates over a data store; the runtime is a query engine, not a general VM. | SQL, GraphQL, KQL, PromQL, Cypher |
+| **Configuration language** | Declarative, deterministic, no general computation; outputs structured data. | Nix, Starlark, Jsonnet, KCL |
+| **Educational language** | Teaching-first; simplicity and pedagogy beat performance and ecosystem. | Scratch, Logo, Pyret, Hedy |
+| **Transpiler target** | You compile a *source* language **to** an existing target language (your output is code, not a binary). | TypeScript → JS, Elm → JS, Kotlin → JVM/JS/Native, ReScript → JS |
+
+The orchestrator saves the chosen variant to `state.decisions.project.sub_type` using the exact enum value from `references/state-schema.md` (see Task 1, v2.3):
+
+- `general_purpose_language`
+- `domain_specific_language`
+- `query_language`
+- `configuration_language`
+- `educational_language`
+- `transpiler_target`
+
+If the user describes something that straddles two variants (e.g. "a DSL that's also a query language"), pick the *narrower* one — DSL beats general-purpose, query beats DSL when the grammar is built around data retrieval. Edge cases are recorded as ADRs and surfaced to the user before Phase 4.
+
+**Cross-references:**
+- **Phase 2** picks up with the PL-specific batch (added v2.3 — Task 11): `impl_strategy` (tree-walking interpreter / bytecode VM / native compiler / transpiler / hosted-embedded) and, when `impl_strategy` is anything but a tree-walking interpreter, a follow-up `host_runtime` question (LLVM / MLIR / Cranelift / QBE / Truffle / JVM / BEAM / WASM / WASM component / JS host / Python-embedded / Rust-host / native-no-runtime / custom-VM). Compare table in `tech-stack-options.md` § PL implementation backends (v2.3 — Task 12).
+- **Phase 3** adds the `paradigm` and `type_system` axes (v2.3 — Task 11).
+- **Phase 4** generates the 7 PL templates registered in `document-catalog.md` (v2.3 — Task 9): `LANGUAGE_GRAMMAR.md`, `SEMANTICS.md`, `TYPE_SYSTEM.md`, `STDLIB.md`, `TOOLCHAIN.md`, `BOOTSTRAP_PLAN.md`, `STABILITY_AND_RFC.md`. Their `generate_when` filters key off `state.decisions.project.sub_type` being one of the 6 PL sub_types above.
+
+**Skip the rest of the per-type drill-down** (web-app questions, mobile questions, etc.) once a PL sub_type has been chosen — the language-design batches in Phases 2 and 3 take over.
+
 ---
 
 ## Tech Stack Drill-Downs (Phase 2)
@@ -481,6 +520,7 @@ Skip questions when prior answers make them irrelevant.
 | AI features = yes | AI/ML section, vector DB, embeddings |
 | Stage = greenfield | Commit on `main`; no branch strategy questions |
 | Stage = extending/rewriting/migrating | Create `bootstrap/architect-<date>` branch |
+| Project type = Programming language (v2.3) | Skip web/mobile/hosting/auth/payments; run Phase 1 PL sub_type routing → Phase 2 `impl_strategy` + `host_runtime` → Phase 3 `paradigm` + `type_system` → Phase 4 generates the 7 PL templates |
 
 ---
 
