@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Test for v2.2 task 48: E2E validator chain for bad shell hooks (sketch A).
 #
 # This test validates that the shellcheck command from the Validation section

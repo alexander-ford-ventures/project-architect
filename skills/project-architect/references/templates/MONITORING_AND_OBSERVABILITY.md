@@ -8,8 +8,8 @@ revision_triggers: [monitoring.*, analytics.product]
 ---
 
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -52,4 +52,4 @@ Brief summary of frontend / backend / DB performance targets. Link to PERFORMANC
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

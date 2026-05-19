@@ -22,8 +22,8 @@ revision_triggers:
 ---
 
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -71,4 +71,4 @@ How to measure if the project achieves its goals.
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

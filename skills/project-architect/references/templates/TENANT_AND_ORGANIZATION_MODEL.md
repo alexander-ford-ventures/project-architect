@@ -8,8 +8,8 @@ revision_triggers: [multi_tenancy.isolation_model, multi_tenancy.identification]
 ---
 
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -56,4 +56,4 @@ Provisioning at create time (resources allocated, default data, plan defaults), 
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

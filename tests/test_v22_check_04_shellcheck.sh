@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Tests for check_04_shellcheck.sh (Sketch B, check ID B04, BLOCKER).
 
 source "$(dirname "$0")/lib/test_helpers.sh"

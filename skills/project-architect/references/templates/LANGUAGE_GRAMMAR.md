@@ -1,6 +1,6 @@
-<!-- Author: Vladimir Dukelic <vladimir@dukelic.com> -->
+<!-- Author: Alexander Ford <alex@pseudo-lang.com> -->
 <!-- License: MIT -->
-<!-- Project: project-architect (https://github.com/siliconyouth/project-architect) -->
+<!-- Project: project-architect (https://github.com/alexander-ford-ventures/project-architect) -->
 
 ---
 template_name: LANGUAGE_GRAMMAR
@@ -203,4 +203,4 @@ When `document-author` consumes this template at Phase 4:
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

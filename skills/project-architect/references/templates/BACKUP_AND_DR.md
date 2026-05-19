@@ -8,8 +8,8 @@ revision_triggers: [database.engine, database.host, backup.frequency, backup.ret
 ---
 
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -52,4 +52,4 @@ Schedule for proving backups actually restore (table-top monthly, real restore q
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

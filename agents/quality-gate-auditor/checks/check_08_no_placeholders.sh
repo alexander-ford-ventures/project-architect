@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Check 8 (B08): no docs/**/*.md contains an unfilled {{placeholder}} literal.
 # Pattern: \{\{[a-z_]+\}\} (lowercase + underscores; case-sensitive).
 # Severity: BLOCKER — shipping a generated doc with unsubstituted

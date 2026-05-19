@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 """Check 12 (B12): every known timestamp field in state.json must parse as a
 full ISO8601 *datetime* (date + time, optionally with timezone).
 

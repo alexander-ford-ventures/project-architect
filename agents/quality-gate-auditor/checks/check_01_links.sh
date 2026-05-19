@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Check 1 (B01): every markdown link target in docs/*.md resolves to an existing file.
 #
 # Known limitations (documented for downstream consumers):

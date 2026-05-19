@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Check 13 (B13): state.last_updated_at must be no more than 60s older than
 # git HEAD's commit timestamp. Catches drift where someone committed code but
 # forgot to refresh state.json — a class of bug where state and history fall

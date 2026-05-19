@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Test for STABILITY_AND_RFC.md template (v2.3, Task 8 — closes the 7-template PL design arc).
 
 source "$(dirname "$0")/lib/test_helpers.sh"

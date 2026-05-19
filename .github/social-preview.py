@@ -2,8 +2,8 @@
 """
 Generates the GitHub social-preview image for project-architect.
 
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 
 Usage:
@@ -17,13 +17,13 @@ then commit both the script change (if any) and the new social-preview.png.
 
 Dependencies:
     - Pillow: canvas drawing, text rendering, PNG output.
-    - cairosvg: rasterizes the Silicon Youth logo SVG into a PIL Image so
+    - cairosvg: rasterizes the Alexander Ford Ventures logo SVG into a PIL Image so
       it can be composited as the top-left publisher mark. Required only
       for regenerating the preview — the deployed plugin itself has zero
       runtime dependencies.
 
 Assets:
-    - .github/assets/silicon-youth-logo.svg — the source mark, three
+    - .github/assets/alexander-ford-ventures-logo.svg — the source mark, three
       parallelogram-clipped rectangles filled `#1a1918`. The script
       re-tints the fill to the accent blue (`#58a6ff`) at render time so
       the mark sits cleanly on the dark canvas without needing a second
@@ -31,8 +31,8 @@ Assets:
 
 Notes on glyph substitutions:
     - v2.1.3: The top-left "▲" Unicode placeholder is replaced by the
-      actual Silicon Youth logo (rasterized SVG, re-tinted to accent).
-      The "Silicon Youth" wordmark text sits to the right of the logo.
+      actual Alexander Ford Ventures logo (rasterized SVG, re-tinted to accent).
+      The "Alexander Ford Ventures" wordmark text sits to the right of the logo.
     - v2.1.2: The footer right-side uses "★" (U+2605 BLACK STAR), which
       renders as a real shape out of Menlo / Arial Unicode / Apple
       Symbols (verified via PIL bbox + lit-pixel inspection).
@@ -63,7 +63,7 @@ try:
 except ImportError as exc:  # pragma: no cover - import-time guard only
     sys.stderr.write(
         "error: cairosvg is not installed. This script needs cairosvg to\n"
-        "rasterize the Silicon Youth logo SVG. Install with:\n"
+        "rasterize the Alexander Ford Ventures logo SVG. Install with:\n"
         "    python3 -m pip install --user cairosvg\n"
     )
     raise SystemExit(1) from exc
@@ -143,7 +143,7 @@ def load_fonts() -> dict[str, tuple[ImageFont.FreeTypeFont, str]]:
     """Load every font weight/size used by the renderer."""
     return {
         # Title block.
-        "publisher":     _load_first(SANS_REGULAR_CANDIDATES, 22),  # "Silicon Youth"
+        "publisher":     _load_first(SANS_REGULAR_CANDIDATES, 22),  # "Alexander Ford Ventures"
         "title":         _load_first(SANS_BOLD_CANDIDATES,    92),  # "project-architect"
         "tagline":       _load_first(SANS_REGULAR_CANDIDATES, 30),
 
@@ -231,7 +231,7 @@ def draw_dot_grid(img: Image.Image, color: tuple[int, int, int], spacing: int = 
 
 # Path to the source SVG. Computed relative to this script so the generator
 # stays portable (no absolute paths from the author's machine).
-LOGO_SVG_PATH = Path(__file__).resolve().parent / "assets" / "silicon-youth-logo.svg"
+LOGO_SVG_PATH = Path(__file__).resolve().parent / "assets" / "alexander-ford-ventures-logo.svg"
 
 # The source logo's fill color in its raw form. Replaced with the accent
 # blue at render time so the mark stands out on the dark canvas.
@@ -240,7 +240,7 @@ LOGO_SOURCE_FILL = "#1a1918"
 
 def load_logo(target_height_px: int, tint_hex: str) -> Image.Image:
     """
-    Rasterize the Silicon Youth logo SVG to a PIL Image of approximately
+    Rasterize the Alexander Ford Ventures logo SVG to a PIL Image of approximately
     `target_height_px` pixels tall, re-tinted to `tint_hex` (e.g. '#58a6ff').
 
     The source SVG fills its 1024x1024 viewBox sparsely — content occupies
@@ -253,7 +253,7 @@ def load_logo(target_height_px: int, tint_hex: str) -> Image.Image:
 
     Chosen logo height: 56 px (see callsite). At this height, after content-
     bbox cropping, the visible logo is about 38 px tall — taller than the
-    "Silicon Youth" 22 px text baseline by enough that it reads as a
+    "Alexander Ford Ventures" 22 px text baseline by enough that it reads as a
     publisher mark, not as an inline glyph. Heights 48/52/60 were also
     tested; 56 felt the most balanced against the wordmark.
     """
@@ -308,13 +308,13 @@ def render() -> Image.Image:
     # -------------------------------------------------------------------
     x_left = 80
 
-    # Publisher line: [Silicon Youth logo]  Silicon Youth
+    # Publisher line: [Alexander Ford Ventures logo]  Alexander Ford Ventures
     #
     # The logo is the actual SVG mark rasterized + re-tinted to accent
     # blue. Height = 56 px is tested empirically against the 22 px
     # wordmark — large enough to read as a publisher mark, small enough
     # to sit comfortably in the negative space above the 92 px title.
-    publisher_text = "Silicon Youth"
+    publisher_text = "Alexander Ford Ventures"
     pub_font, _ = fonts["publisher"]
     # Baseline of the wordmark. Chosen so the logo and the wordmark share
     # a common visual center near y ~ 88, well clear of the title baseline
@@ -496,7 +496,7 @@ def render() -> Image.Image:
     # Left: repo URL in mono, muted.
     draw.text(
         (80, footer_y),
-        "github.com/siliconyouth/project-architect",
+        "github.com/alexander-ford-ventures/project-architect",
         fill=COLORS["fg_muted"],
         font=footer_mono_font,
         anchor="ls",

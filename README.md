@@ -1,6 +1,6 @@
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -17,9 +17,9 @@ License: MIT
 From _"I want to build X"_ to _"docs, CLAUDE.md, ADRs, and a `.claude/` config — all committed."_
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/siliconyouth/project-architect?include_prereleases&label=release)](https://github.com/siliconyouth/project-architect/releases)
-[![Stars](https://img.shields.io/github/stars/siliconyouth/project-architect?style=social)](https://github.com/siliconyouth/project-architect)
-[![Last commit](https://img.shields.io/github/last-commit/siliconyouth/project-architect)](https://github.com/siliconyouth/project-architect/commits/main)
+[![Release](https://img.shields.io/github/v/release/alexander-ford-ventures/project-architect?include_prereleases&label=release)](https://github.com/alexander-ford-ventures/project-architect/releases)
+[![Stars](https://img.shields.io/github/stars/alexander-ford-ventures/project-architect?style=social)](https://github.com/alexander-ford-ventures/project-architect)
+[![Last commit](https://img.shields.io/github/last-commit/alexander-ford-ventures/project-architect)](https://github.com/alexander-ford-ventures/project-architect/commits/main)
 [![Plugin validate](https://img.shields.io/badge/plugin%20validate-✓%20passing-success)](.claude-plugin/plugin.json)
 [![Tests](https://img.shields.io/badge/tests-68%20files%20·%20passing-success)](tests/)
 
@@ -27,30 +27,45 @@ From _"I want to build X"_ to _"docs, CLAUDE.md, ADRs, and a `.claude/` config �
 
 ---
 
-## What's new in v2.3.0 _(2026-05-13)_
+## What's new in v3.0.0 _(2026-05-19)_
 
-Minor release. **Programming language design** is now a first-class project sub_type. 6 PL sub_types, 7 dedicated design templates, 4 new decision axes, 2 end-to-end fixtures. Same orchestrator, same 11 phases, same 6 subagents, same 16-check auditor — just a new branch in the project-type taxonomy with type-aware questioning and templates.
+**Repository move + author handover.** Major release; identity change only — no behaviour, API, or schema changes. Same 11-phase orchestrator, same 6 specialised subagents, same 16-check quality-gate auditor, same 68 tests still green.
 
-Run `/skill project-architect:project-architect` and answer "design a new programming language" — the architect now drives `impl_strategy` (tree-walking / bytecode VM / JIT / AOT / transpiled), `host_runtime` (LLVM 22.x, Cranelift, QBE, Truffle/GraalVM 24/25 LTS, JVM 25, BEAM, Wasm 3.0 + Component Model, js_host, python_embedded, rust_host, native_no_runtime, custom_vm — 14 research-informed values), `paradigm` (imperative / functional / OO / logic / array / multi-paradigm), and `type_system` (dynamic / static-nominal / static-structural / gradual / dependent / none) decisions, files each as an ADR, then emits the 7 PL design docs: `LANGUAGE_GRAMMAR`, `SEMANTICS`, `TYPE_SYSTEM`, `STDLIB`, `TOOLCHAIN`, `BOOTSTRAP_PLAN`, `STABILITY_AND_RFC`. End-to-end fixtures: `lume` (Rust-host tree-walking educational interpreter) and `fern` (static gradual functional language transpiled to JS).
-
-| Area | What it ships |
+| Area | What changed |
 |---|---|
-| **6 PL sub_types** | `general_purpose_language`, `domain_specific_language`, `query_language`, `configuration_language`, `educational_language`, `transpiler_target` |
-| **7 PL templates** | `LANGUAGE_GRAMMAR` · `SEMANTICS` · `TYPE_SYSTEM` · `STDLIB` · `TOOLCHAIN` · `BOOTSTRAP_PLAN` · `STABILITY_AND_RFC` |
-| **4 PL decision axes** | `impl_strategy` (5 values) · `host_runtime` (14 values incl. LLVM 22.x, Wasm 3.0, JVM 25 LTS, BEAM, Truffle/GraalVM 24/25 LTS) · `paradigm` (6 values) · `type_system` (6 values incl. dependent for Lean 4-class) |
-| **Phase 1 routing** | PL-detection gate in `questioning-flow.md` — short-circuits non-PL projects to existing flow |
-| **Phase 2 / 3 batches** | impl_strategy + host_runtime batch in Phase 2; paradigm + type_system batch in Phase 3; both ADR-tracked |
-| **Tech-stack table** | New "PL implementation backends" comparison in `tech-stack-options.md` (research dated 2026-05-13) |
-| **2 e2e fixtures** | `lume` Rust-host tree-walking interpreter (educational) · `fern` transpiler-to-JS (static-gradual functional) |
+| **Canonical repository** | `siliconyouth/project-architect` → [`alexander-ford-ventures/project-architect`](https://github.com/alexander-ford-ventures/project-architect). The old GitHub repo is kept as a mirror but new installs should target the alexander-ford-ventures org. |
+| **Marketplace identifier** | `project-architect@siliconyouth` → `project-architect@alexander-ford-ventures`. The marketplace `name` field in `.claude-plugin/marketplace.json` was renamed. |
+| **Author / maintainer** | Vladimir Dukelic `<vladimir@dukelic.com>` → **Alexander Ford** `<alex@pseudo-lang.com>`. All attribution headers, owner metadata, and the `LICENSE` copyright line updated. |
+| **Organization** | Silicon Youth → **Alexander Ford Ventures** in `LICENSE`, `README.md`, marketplace metadata, and the explainer PDF cover. |
+| **Sweep scope** | 293 repo-path replacements + 187 author replacements + 185 email replacements across 185 live files. Frozen historical docs (`docs/superpowers/{plans,specs,test-plans}/*`, `docs/tests/*`, pre-v3 `CHANGELOG.md` entries, `tests/fixtures/*`) intentionally preserved per the CLAUDE.md "don't tweak history in passing" rule. |
 
-**Migration from v2.2.x** — Forward-compatible. New fields default to safe absent values. Existing `state.json` from v2.2.x continues to work. No breaking changes.
+**Migration.** Existing installs continue to work from the `siliconyouth` mirror; to switch to the new canonical home:
 
-**Test coverage** — 68 test files (was 54 at v2.2.1). v2.3 added 14 new tests covering each template, each catalog registration, each questioning batch, each tech-stack section, and both fixtures.
+```bash
+claude plugin uninstall project-architect@siliconyouth
+claude plugin marketplace remove siliconyouth      # optional — keep if you want the mirror
+claude plugin marketplace add alexander-ford-ventures/project-architect
+claude plugin install project-architect@alexander-ford-ventures
+/reload-plugins
+```
+
+**Test coverage** — 68 test files (unchanged from v2.3.0). The version-bump release gate was retired-and-replaced (`test_v23_version_bump.sh` → `test_v30_version_bump.sh`) per the canonical retire/replace pattern.
 
 ```bash
 bash tests/run_all.sh
 # Test files passed: 68 · All tests passed.
 ```
+
+<details>
+<summary>v2.3.0 — programming language design as a first-class project sub_type _(2026-05-13)_</summary>
+
+Minor release. **Programming language design** is now a first-class project sub_type. 6 PL sub_types, 7 dedicated design templates, 4 new decision axes, 2 end-to-end fixtures. Same orchestrator, same 11 phases, same 6 subagents, same 16-check auditor — just a new branch in the project-type taxonomy with type-aware questioning and templates.
+
+Run `/skill project-architect:project-architect` and answer "design a new programming language" — the architect now drives `impl_strategy` (tree-walking / bytecode VM / JIT / AOT / transpiled), `host_runtime` (LLVM 22.x, Cranelift, QBE, Truffle/GraalVM 24/25 LTS, JVM 25, BEAM, Wasm 3.0 + Component Model, js_host, python_embedded, rust_host, native_no_runtime, custom_vm — 14 research-informed values), `paradigm` (imperative / functional / OO / logic / array / multi-paradigm), and `type_system` (dynamic / static-nominal / static-structural / gradual / dependent / none) decisions, files each as an ADR, then emits the 7 PL design docs: `LANGUAGE_GRAMMAR`, `SEMANTICS`, `TYPE_SYSTEM`, `STDLIB`, `TOOLCHAIN`, `BOOTSTRAP_PLAN`, `STABILITY_AND_RFC`. End-to-end fixtures: `lume` (Rust-host tree-walking educational interpreter) and `fern` (static gradual functional language transpiled to JS).
+
+6 PL sub_types: `general_purpose_language`, `domain_specific_language`, `query_language`, `configuration_language`, `educational_language`, `transpiler_target`. 7 PL templates: `LANGUAGE_GRAMMAR` · `SEMANTICS` · `TYPE_SYSTEM` · `STDLIB` · `TOOLCHAIN` · `BOOTSTRAP_PLAN` · `STABILITY_AND_RFC`. Forward-compatible with v2.2.x state files; no breaking changes within the v2 series.
+
+</details>
 
 <details>
 <summary>v2.2.0 — sketches B/C/D/A/E + CLI-UX picker _(2026-05-13)_</summary>
@@ -99,10 +114,10 @@ Under the hood it dispatches **6 specialized subagents** (research-scout, docume
 
 ```bash
 # 1. Add this marketplace to your Claude Code installation
-claude plugin marketplace add siliconyouth/project-architect
+claude plugin marketplace add alexander-ford-ventures/project-architect
 
 # 2. Install the plugin
-claude plugin install project-architect@siliconyouth
+claude plugin install project-architect@alexander-ford-ventures
 
 # 3. Verify (optional)
 claude plugin validate
@@ -127,7 +142,7 @@ Then inside Claude:
 ```console
 $ /project-architect
 
-✓ Preflight (v2.3.0)
+✓ Preflight (v3.0.0)
   ✓ Model: claude-opus-4-7[1m]   ✓ Effort: max
   ✓ Recommended plugins: 6/6
   ✓ Version freshness: current
@@ -320,19 +335,19 @@ Run `/plugin` periodically in any Claude Code session — once a week, or when s
 
 If your installed copy is older than the latest GitHub release, project-architect's **Preflight** phase surfaces a one-time notice the next time you invoke the skill — so you'll never start a long bootstrap on a stale version. The check queries GitHub Releases via `gh` (or `curl` as a fallback) and skips silently if neither is available or there's no network.
 
-On older Claude Code builds without the `/plugin` slash command, the CLI form works the same way — substitute whichever marketplace name you installed from (`local`, `siliconyouth`, etc.):
+On older Claude Code builds without the `/plugin` slash command, the CLI form works the same way — substitute whichever marketplace name you installed from (`local`, `alexander-ford-ventures`, etc.; the legacy `siliconyouth` marketplace is kept as a mirror but new installs should target `alexander-ford-ventures`):
 
 ```bash
-claude plugin marketplace update siliconyouth
-claude plugin install project-architect@siliconyouth
+claude plugin marketplace update alexander-ford-ventures
+claude plugin install project-architect@alexander-ford-ventures
 /reload-plugins
 ```
 
-For zero-poll notification, click **Watch → Releases only** on the [GitHub repo](https://github.com/siliconyouth/project-architect). GitHub emails you on every release.
+For zero-poll notification, click **Watch → Releases only** on the [GitHub repo](https://github.com/alexander-ford-ventures/project-architect). GitHub emails you on every release.
 
 ## Tests
 
-`tests/` ships with the plugin. **68 test files** cover every v2.1.5 fix, every v2.2 sketch, and every v2.3 PL design surface. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`; v2.2 work has `tests/test_v22_*.sh` (16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, CLI-UX picker, three end-to-end language fixtures); v2.3 work has `tests/test_v23_*.sh` (7 PL templates, catalog registration, Phase 1 PL-routing, Phase 2/3 PL question batches, PL implementation backends in tech-stack-options, two e2e PL fixtures, version-bump gate).
+`tests/` ships with the plugin. **68 test files** cover every v2.1.5 fix, every v2.2 sketch, every v2.3 PL design surface, and the v3.0.0 release gate. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`; v2.2 work has `tests/test_v22_*.sh` (16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, CLI-UX picker, three end-to-end language fixtures); v2.3 work has `tests/test_v23_*.sh` (7 PL templates, catalog registration, Phase 1 PL-routing, Phase 2/3 PL question batches, PL implementation backends in tech-stack-options, two e2e PL fixtures). The v3.0.0 release-bundle gate lives at `tests/test_v30_version_bump.sh` (asserts new manifest identity + CHANGELOG entry).
 
 ```text
 tests/
@@ -408,8 +423,8 @@ tests/
 ├── test_v23_e2e_pl_interpreter.sh                   ← `lume` Rust-host tree-walking interpreter
 ├── test_v23_e2e_pl_transpiler.sh                    ← `fern` transpiler-to-JS DSL
 │
-│  # v2.3 release gate
-└── test_v23_version_bump.sh                         ← asserts plugin.json + CHANGELOG content
+│  # v3.0 release gate (replaces test_v23_version_bump.sh per retire/replace pattern)
+└── test_v30_version_bump.sh                         ← asserts plugin.json identity + CHANGELOG v3.0.0 entry + LICENSE + marketplace name
 ```
 
 Run the full suite:
@@ -429,20 +444,20 @@ Procedure for maintainers:
 
 ```bash
 # 1. Bump plugin.json
-python3 -c "import json,sys; p='.claude-plugin/plugin.json'; d=json.load(open(p)); d['version']=sys.argv[1]; open(p,'w').write(json.dumps(d,indent=2)+'\n')" 2.3.0
+python3 -c "import json,sys; p='.claude-plugin/plugin.json'; d=json.load(open(p)); d['version']=sys.argv[1]; open(p,'w').write(json.dumps(d,indent=2)+'\n')" 3.0.0
 
 # 2. Add a [<version>] block to CHANGELOG.md
 
 # 3. Commit, tag, push
 git add .claude-plugin/plugin.json CHANGELOG.md
-git commit -m "chore(release): bump to 2.3.0"
-git tag -a v2.3.0 -m "..."
-git push origin main && git push origin v2.3.0
+git commit -m "chore(release): bump to 3.0.0"
+git tag -a v3.0.0 -m "..."
+git push origin main && git push origin v3.0.0
 
 # 4. Refresh local cache (only needed if you're testing your own change locally)
-claude plugin marketplace update siliconyouth
-claude plugin uninstall project-architect@siliconyouth
-claude plugin install project-architect@siliconyouth
+claude plugin marketplace update alexander-ford-ventures
+claude plugin uninstall project-architect@alexander-ford-ventures
+claude plugin install project-architect@alexander-ford-ventures
 ```
 
 Semver rules: **patch** = bug fix / doc / refactor; **minor** = backward-compatible feature; **major** = breaking change.
@@ -455,7 +470,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow. PRs welcome; for s
 
 When you use `project-architect`, the generated docs end with:
 
-> *★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+> *★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
 
 This is a social-norm attribution — please keep it visible in `PROJECT_OVERVIEW.md`, `CLAUDE.md`, and other top-level docs so others can discover the tool. The MIT license doesn't legally require this, but it's a polite norm and costs you nothing.
 
@@ -465,7 +480,7 @@ If you fork the skill itself or build on top of it, the source-file attribution 
 
 ## License
 
-[MIT](LICENSE) — © 2026 Vladimir Dukelic / Silicon Youth.
+[MIT](LICENSE) — © 2026 Alexander Ford / Alexander Ford Ventures.
 
 ## Source
 

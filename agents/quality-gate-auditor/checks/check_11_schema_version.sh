@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Check 11 (B11): state.schema_version must equal "2.0" AND must NOT match
 # state.plugin_version. Catches bug #1 from the md2pdf live test where
 # schema_version was incorrectly initialized to the plugin's release version

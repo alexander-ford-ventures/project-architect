@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 #
 # E2E fixture test (Go gh-style CLI with subcommands + interactive prompts).
 # Exercises the full Phase 4 → 5 → 6 → 7 → 8 audit chain by running run_all.sh

@@ -1,6 +1,6 @@
-<!-- Author: Vladimir Dukelic <vladimir@dukelic.com> -->
+<!-- Author: Alexander Ford <alex@pseudo-lang.com> -->
 <!-- License: MIT -->
-<!-- Project: project-architect (https://github.com/siliconyouth/project-architect) -->
+<!-- Project: project-architect (https://github.com/alexander-ford-ventures/project-architect) -->
 
 ---
 template_name: CLAUDE_MD_PLAN
@@ -82,4 +82,4 @@ When `claude-md-author` consumes this plan in Phase 7:
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

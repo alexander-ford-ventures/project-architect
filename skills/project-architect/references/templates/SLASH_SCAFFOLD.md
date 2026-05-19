@@ -1,6 +1,6 @@
-<!-- Author: Vladimir Dukelic <vladimir@dukelic.com> -->
+<!-- Author: Alexander Ford <alex@pseudo-lang.com> -->
 <!-- License: MIT -->
-<!-- Project: project-architect (https://github.com/siliconyouth/project-architect) -->
+<!-- Project: project-architect (https://github.com/alexander-ford-ventures/project-architect) -->
 
 ---
 template_name: SLASH_SCAFFOLD
@@ -40,4 +40,4 @@ Fallback: if `superpowers:writing-plans` isn't installed, see `docs/NEXT_STEP_PL
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

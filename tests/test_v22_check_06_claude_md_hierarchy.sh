@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Tests for check_06_claude_md_hierarchy.sh (Sketch B, check ID B06, WARNING).
 # Covers the bug-#8 anti-pattern: multi-subfolder project with only a root
 # CLAUDE.md and no per-subfolder CLAUDE.mds.

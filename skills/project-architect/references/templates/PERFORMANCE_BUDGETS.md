@@ -8,8 +8,8 @@ revision_triggers: [frontend.framework, frontend.rendering, backend.framework, p
 ---
 
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -56,4 +56,4 @@ CI gates (Lighthouse CI thresholds, bundle-size regressions, k6 thresholds) and 
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

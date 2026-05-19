@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 #
 # Test: quality-gate-auditor wired into Phase 4 → Phase 5 transition (v2.2, sketch B)
 source "$(dirname "$0")/lib/test_helpers.sh"

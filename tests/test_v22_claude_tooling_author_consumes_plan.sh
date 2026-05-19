@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Test for v2.2 task 43: claude-tooling-author consumes CLAUDE_TOOLING_PLAN.md
 # and writes the 3 router slash commands from SLASH_* templates (sketch D).
 

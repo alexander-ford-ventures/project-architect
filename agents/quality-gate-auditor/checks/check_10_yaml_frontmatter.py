@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 """Check 10 (B10): every docs/**/*.md frontmatter parses via yaml.safe_load.
 
 YAML frontmatter is the `---`-bounded block at the top of a markdown file,

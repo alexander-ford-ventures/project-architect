@@ -8,8 +8,8 @@ revision_triggers: [hosting.backend, database.host, dr.rto, dr.rpo]
 ---
 
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -48,4 +48,4 @@ Internal incident-response activation (see INCIDENT_RESPONSE.md) plus DR-specifi
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

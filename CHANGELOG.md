@@ -1,6 +1,6 @@
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -9,6 +9,40 @@ License: MIT
 All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## v3.0.0 — 2026-05-19
+
+**Canonical home moves to [`alexander-ford-ventures/project-architect`](https://github.com/alexander-ford-ventures/project-architect); authorship transfers to Alexander Ford `<alex@pseudo-lang.com>` (Alexander Ford Ventures).**
+
+Identity-only change. No behaviour changes, no API changes, no schema changes. Every test still green (`bash tests/run_all.sh` → 68 / 68).
+
+### Changed
+
+- **Repository path** — every reference to `siliconyouth/project-architect` retargeted to `alexander-ford-ventures/project-architect`. Live code, manifests, READMEs, agent prompts, references, templates, test attribution headers — 293 occurrences across 185 files.
+- **Marketplace identifier** — `claude plugin install project-architect@siliconyouth` becomes `claude plugin install project-architect@alexander-ford-ventures`. The marketplace `name` field in `.claude-plugin/marketplace.json` updated.
+- **Author** — all attribution headers, owner metadata in `.claude-plugin/*.json`, and `LICENSE` copyright line updated to Alexander Ford `<alex@pseudo-lang.com>`.
+- **Organization** — `Silicon Youth` → `Alexander Ford Ventures` in `LICENSE`, `README.md`, marketplace metadata, and the explainer PDF cover (no legal-form suffix on the organization name).
+- **CLAUDE.md plugin-namespace gotcha** rewritten — published namespace is now `alexander-ford-ventures:project-architect`; `siliconyouth` GitHub repo remains reachable as a mirror but new installs should target `alexander-ford-ventures`.
+
+### Preserved
+
+- **Frozen historical docs** — `docs/superpowers/{plans,specs,test-plans}/*`, `docs/tests/*`, and pre-v3 `CHANGELOG.md` entries continue to reference the original identity (per the CLAUDE.md "don't tweak history in passing" rule).
+- **Test fixtures** — `tests/fixtures/e2e-*/docs/*` retain whatever identity strings their generated content originally had (intentionally minimal per CLAUDE.md).
+- **Both GitHub repos remain reachable** — the `siliconyouth/project-architect` repo is kept as a mirror; the canonical source-of-truth is now `alexander-ford-ventures/project-architect`.
+
+### Migration
+
+Existing installs continue to work from the `siliconyouth` mirror; to switch to the new canonical home:
+
+```bash
+claude plugin uninstall project-architect@siliconyouth
+claude plugin marketplace remove siliconyouth      # optional — keep if you want the mirror
+claude plugin marketplace add alexander-ford-ventures/project-architect
+claude plugin install project-architect@alexander-ford-ventures
+/reload-plugins
+```
+
+The Preflight version-freshness check will surface a notice in any session whose installed copy predates this entry once the next tag is cut on the alexander-ford-ventures repo.
 
 ## v2.3.0 — 2026-05-13
 

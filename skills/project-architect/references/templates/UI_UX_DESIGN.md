@@ -8,8 +8,8 @@ revision_triggers: [frontend.framework, frontend.styling, frontend.component_lib
 ---
 
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -64,4 +64,4 @@ Core Web Vitals targets (LCP, INP, CLS), JS bundle budget, and image strategy. L
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

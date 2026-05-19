@@ -1,11 +1,11 @@
 {
   "$schema": "https://code.claude.com/schemas/marketplace.json",
-  "name": "siliconyouth",
-  "description": "Public marketplace by Silicon Youth, featuring project-architect — an orchestrator skill that bootstraps any project type with research-augmented questioning, ADR-tracked decisions, parallel doc generation, and project-local Claude Code configuration.",
+  "name": "alexander-ford-ventures",
+  "description": "Public marketplace by Alexander Ford Ventures, featuring project-architect — an orchestrator skill that bootstraps any project type with research-augmented questioning, ADR-tracked decisions, parallel doc generation, and project-local Claude Code configuration.",
   "owner": {
-    "name": "Vladimir Dukelic",
-    "email": "vladimir@dukelic.com",
-    "url": "https://github.com/siliconyouth/project-architect"
+    "name": "Alexander Ford",
+    "email": "alex@pseudo-lang.com",
+    "url": "https://github.com/alexander-ford-ventures/project-architect"
   },
   "plugins": [
     {

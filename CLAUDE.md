@@ -1,6 +1,6 @@
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -12,7 +12,7 @@ License: MIT
 
 A **Claude Code plugin** that orchestrates the interactive bootstrap of a new software project. The user invokes the `project-architect` skill; it walks 11 phases (Preflight → Repo Init → Universal Kickoff → Vision → Tech Stack → Cost → Architecture → Doc Generation → Iteration → Lock → Tooling Execution → Handoff), dispatching 6 specialised subagents and emitting design docs, ADRs, `CLAUDE.md`, `.claude/` tooling, and a scaffolded skeleton.
 
-Published at <https://github.com/siliconyouth/project-architect>. Current tag: `git describe --tags --abbrev=0`.
+Published at <https://github.com/alexander-ford-ventures/project-architect>. Current tag: `git describe --tags --abbrev=0`.
 
 ## Commands you'll actually run
 
@@ -147,7 +147,7 @@ If a Claude session has `project-architect` loaded as a skill, modifying `skills
 - **`gh release view --json tagName` returns Releases, not tags.** A pushed tag without a Release object is invisible to the Preflight version-freshness check. Always `gh release create` after `git push origin <tag>`.
 - **`_lib.sh` is sourced, not invoked.** Mode `644`, no shebang line, no `chmod +x`. Sourced by every shell check via `source "$(dirname "$0")/_lib.sh"`.
 - **Python check scripts can't source `_lib.sh`** (bash-only). They use `json.dumps()` directly. Wire contract is identical: one JSON object on stdout per check.
-- **Plugin namespace `siliconyouth:` vs `local:`.** `SKILL.md` Phase 7 dispatches use `subagent_type: "project-architect:claude-md-author"`. The prefix depends on which marketplace the user installed from. `siliconyouth` is the published marketplace; `local` is dev. Confirmed working for `siliconyouth`; untested live for `local`.
+- **Plugin namespace `alexander-ford-ventures:` vs `local:`.** `SKILL.md` Phase 7 dispatches use `subagent_type: "project-architect:claude-md-author"`. The prefix depends on which marketplace the user installed from. `alexander-ford-ventures` is the canonical published marketplace going forward (the move from `siliconyouth` is staged in the Unreleased CHANGELOG entry — `siliconyouth/project-architect` is kept as a mirror, but new installs should target `alexander-ford-ventures`); `local` is dev. Confirmed working for `alexander-ford-ventures`; untested live for `local`.
 - **`{{placeholder}}` literals in `references/templates/*.md` are intentional.** Substitution markers consumed by `claude-md-author` / `document-author` / `claude-tooling-author` at generation time. Auditor check 8 (`no_placeholders`) scans the user's `docs/`, NOT our `references/templates/`, so it doesn't false-positive on us.
 - **Our `docs/superpowers/*` files contain `{{...}}` examples in prose.** When the auditor self-audits this repo, it flags those as INFO findings. They are real findings *for a user's project* but non-issues *for ours*. Acceptable noise.
 
@@ -159,8 +159,8 @@ Every project-internal file carries author + license + repo attribution. The for
 
 ````markdown
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -168,16 +168,16 @@ License: MIT
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
 ````
 
 **Shell + Python (`.sh`, `.py`)** — bash-comment header after shebang, no footer:
 
 ````bash
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 ````
 
 **Files that are exceptions:**
@@ -230,4 +230,4 @@ Update these when patterns change. Don't store ephemeral conversation state — 
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 """Check 15 (B15): performance_targets in state.decisions.architecture must not
 be more than 30% better than their baseline_typical counterparts unless an
 explicit stretch_disclaimer is recorded.

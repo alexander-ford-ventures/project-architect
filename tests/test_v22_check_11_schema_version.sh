@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
+# Author: Alexander Ford <alex@pseudo-lang.com>
 # License: MIT
-# Project: project-architect (https://github.com/siliconyouth/project-architect)
+# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 # Tests for check_11_schema_version.sh (Sketch B, check ID B11, WARNING).
 # Covers bug #1 from the v2.1.5 md2pdf live test: state.schema_version was
 # incorrectly initialized to the plugin's release version, conflating the

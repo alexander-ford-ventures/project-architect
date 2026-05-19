@@ -8,8 +8,8 @@ revision_triggers: [web3.chain, web3.contract_language, web3.dev_framework, web3
 ---
 
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -68,4 +68,4 @@ Bug-bounty program (Immunefi, HackerOne), severity ladder, payout schedule, disc
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

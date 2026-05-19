@@ -8,8 +8,8 @@ revision_triggers: [scientific.compute_backend, scientific.reproducibility, scie
 ---
 
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
-Repository: https://github.com/siliconyouth/project-architect
+Author: Alexander Ford <alex@pseudo-lang.com>
+Repository: https://github.com/alexander-ford-ventures/project-architect
 License: MIT
 -->
 
@@ -60,4 +60,4 @@ Provenance capture (W3C PROV, OpenLineage, Snakemake reports, nf-core MultiQC), 
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

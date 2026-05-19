@@ -1,7 +1,7 @@
 <!--
-Author: Vladimir Dukelic <vladimir@dukelic.com>
+Author: Alexander Ford <alex@pseudo-lang.com>
 License: MIT
-Project: project-architect (https://github.com/siliconyouth/project-architect)
+Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
 -->
 
 # Memory Persistence Reference (v2.2, sketch D)
@@ -135,4 +135,4 @@ The `MEMORY.md` index is the source of truth for "which memory files exist"; the
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*

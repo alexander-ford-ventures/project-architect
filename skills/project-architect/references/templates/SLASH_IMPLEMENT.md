@@ -1,6 +1,6 @@
-<!-- Author: Vladimir Dukelic <vladimir@dukelic.com> -->
+<!-- Author: Alexander Ford <alex@pseudo-lang.com> -->
 <!-- License: MIT -->
-<!-- Project: project-architect (https://github.com/siliconyouth/project-architect) -->
+<!-- Project: project-architect (https://github.com/alexander-ford-ventures/project-architect) -->
 
 ---
 template_name: SLASH_IMPLEMENT
@@ -41,4 +41,4 @@ If `superpowers:writing-plans` is unavailable, fall back to a manual TDD loop: w
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/siliconyouth/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
