@@ -8,8 +8,8 @@ revision_triggers: [analytics.product, analytics.event_schema, analytics.consent
 ---
 
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -56,4 +56,4 @@ The set of canonical dashboards (executive, growth, product, reliability, billin
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

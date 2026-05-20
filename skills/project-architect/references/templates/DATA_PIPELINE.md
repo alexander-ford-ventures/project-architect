@@ -15,8 +15,8 @@ revision_triggers:
 ---
 
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -67,4 +67,4 @@ Retry semantics per task (exponential backoff, max attempts), idempotency strate
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

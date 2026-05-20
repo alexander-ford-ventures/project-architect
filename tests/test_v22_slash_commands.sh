@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 # Test for slash command templates (sketch D, task 40).
 # Verifies SLASH_SCAFFOLD, SLASH_IMPLEMENT, SLASH_ITERATE_DESIGN templates exist
 # and contain the required structural elements.

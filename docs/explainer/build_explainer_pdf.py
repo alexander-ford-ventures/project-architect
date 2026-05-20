@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Author: Alexander Ford <alex@pseudo-lang.com>
-# Repository: https://github.com/alexander-ford-ventures/project-architect
+# Author: Alexander Ford <alex@alexfordlabs.com>
+# Repository: https://github.com/alexfordlabs/project-architect
 # License: MIT
 """Render the project-architect explainer PDF in the .pseudo brand style.
 
@@ -961,8 +961,8 @@ def build():
     )
     story.append(
         code_block(
-            "claude plugin marketplace add alexander-ford-ventures/project-architect\n"
-            "claude plugin install project-architect@alexander-ford-ventures\n"
+            "claude plugin marketplace add alexfordlabs/project-architect\n"
+            "claude plugin install project-architect@alexfordlabs\n"
             "claude",
             styles,
         )

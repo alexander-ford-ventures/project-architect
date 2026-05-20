@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 # Check 3 (B03): every state.decisions leaf (non-metadata) is mentioned by key OR value in docs/.
 # Catches decisions that exist in state but are silently undocumented.
 #

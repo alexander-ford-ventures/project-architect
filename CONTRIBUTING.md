@@ -1,6 +1,6 @@
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -30,9 +30,9 @@ Thank you for considering a contribution! This project is open source under the 
 This repo is its own marketplace. To install your in-progress changes locally:
 
 ```bash
-claude plugin marketplace update alexander-ford-ventures
-claude plugin uninstall project-architect@alexander-ford-ventures
-claude plugin install project-architect@alexander-ford-ventures
+claude plugin marketplace update alexfordlabs
+claude plugin uninstall project-architect@alexfordlabs
+claude plugin install project-architect@alexfordlabs
 /reload-plugins
 ```
 
@@ -44,7 +44,7 @@ Use the [bug report issue template](.github/ISSUE_TEMPLATE/bug_report.yml). Incl
 
 ## Suggesting features
 
-Use the [feature request issue template](.github/ISSUE_TEMPLATE/feature_request.yml) or open a [Discussion](https://github.com/alexander-ford-ventures/project-architect/discussions) for open-ended ideas.
+Use the [feature request issue template](.github/ISSUE_TEMPLATE/feature_request.yml) or open a [Discussion](https://github.com/alexfordlabs/project-architect/discussions) for open-ended ideas.
 
 ## License
 
@@ -52,4 +52,4 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

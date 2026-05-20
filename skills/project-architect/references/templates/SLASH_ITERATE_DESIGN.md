@@ -1,6 +1,6 @@
-<!-- Author: Alexander Ford <alex@pseudo-lang.com> -->
+<!-- Author: Alexander Ford <alex@alexfordlabs.com> -->
 <!-- License: MIT -->
-<!-- Project: project-architect (https://github.com/alexander-ford-ventures/project-architect) -->
+<!-- Project: project-architect (https://github.com/alexfordlabs/project-architect) -->
 
 ---
 template_name: SLASH_ITERATE_DESIGN
@@ -38,4 +38,4 @@ If the state is already unlocked (mid-iteration), this command resumes the in-pr
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

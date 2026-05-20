@@ -8,8 +8,8 @@ revision_triggers: [hardware.pcb_design, hardware.manufacturing, hardware.certif
 ---
 
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -60,4 +60,4 @@ Hardware-firmware contract: pin assignments, register maps, version-detect strat
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

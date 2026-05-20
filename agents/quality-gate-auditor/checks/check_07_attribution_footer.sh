@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 # Check 7 (B07): every docs/*.md file ends with the project-architect
 # attribution footer in its last 3 lines.
 # Severity: INFO (cosmetic; never blocks Phase 5).
 #
 # The footer string (canonical):
-#   *★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+#   *★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*
 #
 # Inputs:
 #   $1 = PROJECT_ROOT (project directory to scan; defaults to ".")
@@ -119,5 +119,5 @@ DETAIL="${#MISSING[@]} doc(s) missing attribution footer: ${JOINED}"
 # UTF-8-safe character truncation via the _lib.sh helper.
 DETAIL_TRUNC=$(truncate_json_string "$DETAIL" 300 | jq -r .)
 emit_fail "B07" "INFO" "attribution_footer" "$DETAIL_TRUNC" \
-  "append the attribution footer ('*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*') as the last line of each listed doc" \
+  "append the attribution footer ('*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*') as the last line of each listed doc" \
   true

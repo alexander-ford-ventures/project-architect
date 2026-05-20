@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 # Tests for check_09_no_todos.sh (Sketch B, check ID B09, WARNING).
 # Covers the TODO/FIXME/XXX scanner over docs/**/*.md, including the
 # BACKLOG.md exclusion (BACKLOG.md is the canonical place for parked

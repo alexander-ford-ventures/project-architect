@@ -8,8 +8,8 @@ revision_triggers: [ml.training_framework, ml.serving, ml.experiment_tracking]
 ---
 
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -60,4 +60,4 @@ Internal eval suites + external benchmarks (MMLU, HumanEval, GSM8K, custom), gat
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

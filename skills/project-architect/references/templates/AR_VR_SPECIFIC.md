@@ -8,8 +8,8 @@ revision_triggers: [ar_vr.device, ar_vr.engine, ar_vr.tracking]
 ---
 
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -56,4 +56,4 @@ Distribution channel (Meta Horizon Store, App Lab, visionOS App Store, SteamVR, 
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

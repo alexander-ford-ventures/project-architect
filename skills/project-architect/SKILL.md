@@ -4,8 +4,8 @@ description: Use when the user wants to set up a new project, scaffold project d
 ---
 
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -145,10 +145,10 @@ Detect if the loaded skill is older than the latest release at the source repo, 
 
    ```bash
    # Try gh first (fastest, lowest rate-limit impact)
-   LATEST=$(gh release view --repo alexander-ford-ventures/project-architect --json tagName --jq .tagName 2>/dev/null | sed 's/^v//')
+   LATEST=$(gh release view --repo alexfordlabs/project-architect --json tagName --jq .tagName 2>/dev/null | sed 's/^v//')
    # Fall back to public GitHub API via curl (no auth needed for public repos)
    if [ -z "$LATEST" ]; then
-     LATEST=$(curl -fsSL --max-time 5 https://api.github.com/repos/alexander-ford-ventures/project-architect/releases/latest 2>/dev/null \
+     LATEST=$(curl -fsSL --max-time 5 https://api.github.com/repos/alexfordlabs/project-architect/releases/latest 2>/dev/null \
                 | jq -r '.tag_name // empty' 2>/dev/null \
                 | sed 's/^v//')
    fi
@@ -985,4 +985,4 @@ When resuming from `state.json`:
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

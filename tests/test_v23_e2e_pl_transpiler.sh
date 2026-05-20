@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 #
 # E2E fixture test (programming-language transpiler-to-JS DSL, Rust-host
 # transpiler emitting ES2026 JavaScript for a functional DSL called "fern").

@@ -1,6 +1,6 @@
-<!-- Author: Alexander Ford <alex@pseudo-lang.com> -->
+<!-- Author: Alexander Ford <alex@alexfordlabs.com> -->
 <!-- License: MIT -->
-<!-- Project: project-architect (https://github.com/alexander-ford-ventures/project-architect) -->
+<!-- Project: project-architect (https://github.com/alexfordlabs/project-architect) -->
 
 ---
 template_name: CLAUDE_MD_ROOT
@@ -62,7 +62,7 @@ Each slash command is defined in `.claude/commands/`. If a command appears missi
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*
 ```
 
 ## Notes for the executor

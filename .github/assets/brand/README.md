@@ -1,5 +1,5 @@
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
+Author: Alexander Ford <alex@alexfordlabs.com>
 Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->

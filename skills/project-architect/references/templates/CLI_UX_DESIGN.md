@@ -1,6 +1,6 @@
-<!-- Author: Alexander Ford <alex@pseudo-lang.com> -->
+<!-- Author: Alexander Ford <alex@alexfordlabs.com> -->
 <!-- License: MIT -->
-<!-- Project: project-architect (https://github.com/alexander-ford-ventures/project-architect) -->
+<!-- Project: project-architect (https://github.com/alexfordlabs/project-architect) -->
 
 ---
 template_name: CLI_UX_DESIGN
@@ -108,4 +108,4 @@ This is a design doc (not a plan). It's generated in Phase 4 like any other arch
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

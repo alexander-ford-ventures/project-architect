@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 
 # Runs all 16 quality-gate-auditor checks and aggregates results into a single JSON.
 # Usage: run_all.sh <project_root> <state_path> [catalog_path] [adr_dir]

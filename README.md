@@ -1,6 +1,6 @@
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -17,17 +17,50 @@ License: MIT
 From _"I want to build X"_ to _"docs, CLAUDE.md, ADRs, and a `.claude/` config — all committed."_
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/alexander-ford-ventures/project-architect?include_prereleases&label=release)](https://github.com/alexander-ford-ventures/project-architect/releases)
-[![Stars](https://img.shields.io/github/stars/alexander-ford-ventures/project-architect?style=social)](https://github.com/alexander-ford-ventures/project-architect)
-[![Last commit](https://img.shields.io/github/last-commit/alexander-ford-ventures/project-architect)](https://github.com/alexander-ford-ventures/project-architect/commits/main)
+[![Release](https://img.shields.io/github/v/release/alexfordlabs/project-architect?include_prereleases&label=release)](https://github.com/alexfordlabs/project-architect/releases)
+[![Stars](https://img.shields.io/github/stars/alexfordlabs/project-architect?style=social)](https://github.com/alexfordlabs/project-architect)
+[![Last commit](https://img.shields.io/github/last-commit/alexfordlabs/project-architect)](https://github.com/alexfordlabs/project-architect/commits/main)
 [![Plugin validate](https://img.shields.io/badge/plugin%20validate-✓%20passing-success)](.claude-plugin/plugin.json)
-[![Tests](https://img.shields.io/badge/tests-68%20files%20·%20passing-success)](tests/)
+[![Tests](https://img.shields.io/badge/tests-69%20files%20·%20passing-success)](tests/)
 
 </div>
 
 ---
 
-## What's new in v3.1.0 _(2026-05-20)_
+## What's new in v4.0.0 _(2026-05-20)_
+
+**Repository move to [`alexfordlabs/project-architect`](https://github.com/alexfordlabs/project-architect) + pseudo-workspace consolidation under Alex Ford Labs.**
+
+Identity-only major release. No behaviour changes, no API changes, no schema changes. Same 11-phase orchestrator, same 6 subagents, same 16-check quality-gate auditor, same 69 tests still green.
+
+| Area | What changed |
+|---|---|
+| **Canonical repository** | `alexander-ford-ventures/project-architect` → [`alexfordlabs/project-architect`](https://github.com/alexfordlabs/project-architect). The v3.x repo is kept as a legacy mirror (archived with a MOVED notice); new installs target the alexfordlabs org. |
+| **Marketplace identifier** | `project-architect@alexander-ford-ventures` → `project-architect@alexfordlabs`. The marketplace `name` field in `.claude-plugin/marketplace.json` renamed. |
+| **Author email** | `alex@pseudo-lang.com` → `alex@alexfordlabs.com` across all attribution headers, `plugin.json` author metadata, `marketplace.json` owner metadata, and the `LICENSE` copyright line. Brings the author email under the brand domain. |
+| **Organization** | `Alexander Ford Ventures` → **Alex Ford Labs** in `LICENSE`, `README.md`, marketplace metadata, and explainer documents. |
+| **Pre-commit + gitleaks** | NEW `.gitleaks.toml` + `.pre-commit-config.yaml` — every future commit scanned against the default gitleaks ruleset (~100 patterns) + four workspace-canonical identity-correlation deny rules. |
+| **Sweep scope** | 522 replacements across 188 live files. Frozen historical docs (`docs/superpowers/{plans,specs,test-plans}/*`, `docs/tests/*`, pre-v4 `CHANGELOG.md` entries, `tests/fixtures/*`, `_archive/*`) intentionally preserved per the CLAUDE.md "don't tweak history in passing" rule. `HANDOFF.md` retained as historical record of the migration plan with a "MIGRATION COMPLETE" banner. |
+
+**Migration for existing installs:**
+
+```bash
+claude plugin uninstall project-architect@alexander-ford-ventures
+claude plugin marketplace remove alexander-ford-ventures      # optional — keep if you want the mirror
+claude plugin marketplace add alexfordlabs/project-architect
+claude plugin install project-architect@alexfordlabs
+/reload-plugins
+```
+
+The Preflight version-freshness check will surface a notice in any session whose installed copy predates this entry once the next tag is cut on the alexfordlabs repo.
+
+```bash
+bash tests/run_all.sh
+# Test files passed: 69 · All tests passed.
+```
+
+<details>
+<summary>v3.1.0 — Universal research checklist + Alex Ford Labs brand-asset kit _(2026-05-20)_</summary>
 
 Minor release. **Universal research checklist** for every `research-scout` dispatch (no more relying on stale training data for vendor facts) + the full **Alex Ford Labs brand-asset kit** at `.github/assets/brand/`. Backward-compatible — same 11-phase orchestrator, same 6 subagents, same 16-check auditor, same state schema.
 
@@ -36,17 +69,12 @@ Minor release. **Universal research checklist** for every `research-scout` dispa
 | **Universal research checklist** | Every research-scout dispatch (phase + ad-hoc) MUST cover four bases: (1) latest official docs, (2) `<docs-root>/llms.txt` + `llms-full.txt` per [llmstxt.org](https://llmstxt.org/), (3) best practices via web search, (4) 3–5 similar projects / prior art. Encoded in `agents/research-scout.md` (new "Universal first-pass" section) and `skills/project-architect/references/research-prompts.md` (new "Universal research checklist" ToC entry). |
 | **Alex Ford Labs brand kit** | 50 files at `.github/assets/brand/` — lockup, mark, wordmark, social-preview, in light + dark. Geist Mono ExtraBold display, V5 palette (pure B&W). SVGs outline-converted via fontTools (no font dependency at render time); PNGs at standard resolutions (favicon 16–512, Apple touch 180, GitHub avatar 460, social 1280×640). |
 | **Test coverage** | **69 test files** (was 68 at v3.0.0). +1 for the universal-checklist rule. The version-bump release gate retired-and-replaced (`test_v30_version_bump.sh` → `test_v31_version_bump.sh`). |
-| **Removed** | `.github/assets/alexander-ford-ventures-logo.svg`, `.github/social-preview.py`, `.github/social-preview.png` — all superseded by the new brand kit. |
+| **Removed** | `.github/assets/alexfordlabs-logo.svg`, `.github/social-preview.py`, `.github/social-preview.png` — all superseded by the new brand kit. |
 | **Archived** | `.github/assets/logo-concepts/` → `.github/assets/_archive/logo-concepts/` (7 concepts + AF/LABS font-width matrix, parked for later reference). |
 
 **Why the research rule?** Vendor docs and best practices evolve faster than any LLM's training data. Mandating `llms.txt` / `llms-full.txt` as the first `WebFetch` shifts the scout from "recall from training" to "fetch current source-of-truth". Downstream ADRs become defensible against "you wrote this from stale training data" objections.
 
-**Migration from v3.0.0** — Forward-compatible. Existing `state.json` files work without modification. The new research rule applies to **new** dispatches; cached findings from older runs are not retroactively re-fetched.
-
-```bash
-bash tests/run_all.sh
-# Test files passed: 69 · All tests passed.
-```
+</details>
 
 <details>
 <summary>v3.0.0 — Repository move + author handover _(2026-05-19)_</summary>
@@ -55,10 +83,10 @@ bash tests/run_all.sh
 
 | Area | What changed |
 |---|---|
-| **Canonical repository** | `siliconyouth/project-architect` → [`alexander-ford-ventures/project-architect`](https://github.com/alexander-ford-ventures/project-architect). The old GitHub repo is kept as a mirror but new installs should target the alexander-ford-ventures org. |
-| **Marketplace identifier** | `project-architect@siliconyouth` → `project-architect@alexander-ford-ventures`. The marketplace `name` field in `.claude-plugin/marketplace.json` was renamed. |
-| **Author / maintainer** | Vladimir Dukelic `<vladimir@dukelic.com>` → **Alexander Ford** `<alex@pseudo-lang.com>`. All attribution headers, owner metadata, and the `LICENSE` copyright line updated. |
-| **Organization** | Silicon Youth → **Alexander Ford Ventures** in `LICENSE`, `README.md`, marketplace metadata, and the explainer PDF cover. |
+| **Canonical repository** | `siliconyouth/project-architect` → [`alexfordlabs/project-architect`](https://github.com/alexfordlabs/project-architect). The old GitHub repo is kept as a mirror but new installs should target the alexfordlabs org. |
+| **Marketplace identifier** | `project-architect@siliconyouth` → `project-architect@alexfordlabs`. The marketplace `name` field in `.claude-plugin/marketplace.json` was renamed. |
+| **Author / maintainer** | Alex Ford `<alex@alexfordlabs.com>` → **Alexander Ford** `<alex@alexfordlabs.com>`. All attribution headers, owner metadata, and the `LICENSE` copyright line updated. |
+| **Organization** | Silicon Youth → **Alex Ford Labs** in `LICENSE`, `README.md`, marketplace metadata, and the explainer PDF cover. |
 | **Sweep scope** | 293 repo-path replacements + 187 author replacements + 185 email replacements across 185 live files. Frozen historical docs (`docs/superpowers/{plans,specs,test-plans}/*`, `docs/tests/*`, pre-v3 `CHANGELOG.md` entries, `tests/fixtures/*`) intentionally preserved per the CLAUDE.md "don't tweak history in passing" rule. |
 
 **Migration.** Existing installs continue to work from the `siliconyouth` mirror; to switch to the new canonical home:
@@ -66,8 +94,8 @@ bash tests/run_all.sh
 ```bash
 claude plugin uninstall project-architect@siliconyouth
 claude plugin marketplace remove siliconyouth      # optional — keep if you want the mirror
-claude plugin marketplace add alexander-ford-ventures/project-architect
-claude plugin install project-architect@alexander-ford-ventures
+claude plugin marketplace add alexfordlabs/project-architect
+claude plugin install project-architect@alexfordlabs
 /reload-plugins
 ```
 
@@ -138,10 +166,10 @@ Under the hood it dispatches **6 specialized subagents** (research-scout, docume
 
 ```bash
 # 1. Add this marketplace to your Claude Code installation
-claude plugin marketplace add alexander-ford-ventures/project-architect
+claude plugin marketplace add alexfordlabs/project-architect
 
 # 2. Install the plugin
-claude plugin install project-architect@alexander-ford-ventures
+claude plugin install project-architect@alexfordlabs
 
 # 3. Verify (optional)
 claude plugin validate
@@ -359,15 +387,15 @@ Run `/plugin` periodically in any Claude Code session — once a week, or when s
 
 If your installed copy is older than the latest GitHub release, project-architect's **Preflight** phase surfaces a one-time notice the next time you invoke the skill — so you'll never start a long bootstrap on a stale version. The check queries GitHub Releases via `gh` (or `curl` as a fallback) and skips silently if neither is available or there's no network.
 
-On older Claude Code builds without the `/plugin` slash command, the CLI form works the same way — substitute whichever marketplace name you installed from (`local`, `alexander-ford-ventures`, etc.; the legacy `siliconyouth` marketplace is kept as a mirror but new installs should target `alexander-ford-ventures`):
+On older Claude Code builds without the `/plugin` slash command, the CLI form works the same way — substitute whichever marketplace name you installed from (`local`, `alexfordlabs`, etc.; the legacy `siliconyouth` marketplace is kept as a mirror but new installs should target `alexfordlabs`):
 
 ```bash
-claude plugin marketplace update alexander-ford-ventures
-claude plugin install project-architect@alexander-ford-ventures
+claude plugin marketplace update alexfordlabs
+claude plugin install project-architect@alexfordlabs
 /reload-plugins
 ```
 
-For zero-poll notification, click **Watch → Releases only** on the [GitHub repo](https://github.com/alexander-ford-ventures/project-architect). GitHub emails you on every release.
+For zero-poll notification, click **Watch → Releases only** on the [GitHub repo](https://github.com/alexfordlabs/project-architect). GitHub emails you on every release.
 
 ## Tests
 
@@ -485,9 +513,9 @@ git tag -a v3.1.0 -m "..."
 git push origin main && git push origin v3.1.0
 
 # 4. Refresh local cache (only needed if you're testing your own change locally)
-claude plugin marketplace update alexander-ford-ventures
-claude plugin uninstall project-architect@alexander-ford-ventures
-claude plugin install project-architect@alexander-ford-ventures
+claude plugin marketplace update alexfordlabs
+claude plugin uninstall project-architect@alexfordlabs
+claude plugin install project-architect@alexfordlabs
 ```
 
 Semver rules: **patch** = bug fix / doc / refactor; **minor** = backward-compatible feature; **major** = breaking change.
@@ -500,7 +528,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow. PRs welcome; for s
 
 When you use `project-architect`, the generated docs end with:
 
-> *★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+> *★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*
 
 This is a social-norm attribution — please keep it visible in `PROJECT_OVERVIEW.md`, `CLAUDE.md`, and other top-level docs so others can discover the tool. The MIT license doesn't legally require this, but it's a polite norm and costs you nothing.
 
@@ -510,7 +538,7 @@ If you fork the skill itself or build on top of it, the source-file attribution 
 
 ## License
 
-[MIT](LICENSE) — © 2026 Alexander Ford / Alexander Ford Ventures.
+[MIT](LICENSE) — © 2026 Alexander Ford / Alex Ford Labs.
 
 ## Source
 

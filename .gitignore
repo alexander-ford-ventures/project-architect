@@ -1,6 +1,16 @@
-# Author: Vladimir Dukelic <vladimir@dukelic.com>
-# Repository: https://github.com/siliconyouth/project-architect
+# Author: Alex Ford <alex@alexfordlabs.com>
+# Repository: https://github.com/alexfordlabs/project-architect
 # License: MIT
+
+# Inner repo: workspace-side metadata files are gitignored (workspace tracks them,
+# not the published repo). These predate-or-postdate this gitignore rule per file:
+# git rm --cached <file> to untrack ones already in HEAD.
+CLAUDE.md
+PRIVATE.md
+project.yaml
+product.yaml
+software-source-code.yaml
+creative-work.yaml
 
 # OS files
 .DS_Store

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 # Check 9 (B09): no docs/**/*.md contains a TODO/FIXME/XXX marker.
 # Pattern: \b(TODO|FIXME|XXX)\b (case-sensitive, word-boundary).
 # Severity: WARNING — TODOs in delivered docs are workflow hints, not broken

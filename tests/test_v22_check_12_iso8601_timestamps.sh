@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 # Tests for check_12_iso8601_timestamps.py (Sketch B, check ID B12, WARNING).
 #
 # Covers bug #2 from the v2.1.5 md2pdf live test: state.started_at was

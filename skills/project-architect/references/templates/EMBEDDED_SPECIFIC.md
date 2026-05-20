@@ -8,8 +8,8 @@ revision_triggers: [embedded.mcu_class, embedded.language, embedded.rtos, embedd
 ---
 
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -60,4 +60,4 @@ Bootloader choice (MCUboot, native ROM bootloader, custom), recovery mode entry,
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

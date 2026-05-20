@@ -1,11 +1,12 @@
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect (current canonical)
-                → https://github.com/alexfordlabs/project-architect (post-migration target)
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
 # HANDOFF — `project-architect` → `alexfordlabs/project-architect`
+
+> **MIGRATION COMPLETE (2026-05-20)** — This document is preserved as a historical record of the v3.1.0 → v4.0.0 migration plan. The plan was executed during the pseudo-workspace consolidation session 2026-05-20: identity sweep landed in v4.0.0 (see CHANGELOG), repo moved to `alexfordlabs/project-architect`, `alexander-ford-ventures/project-architect` retained as v3.x legacy mirror, `siliconyouth/project-architect` retained as deeper-history mirror. Identity-correlation references in the body below are intentionally preserved verbatim — they document the migration's source and target states accurately as the plan was written, not the post-migration end state.
 
 > Migration plan for moving this folder into a `pseudo-workspace` consolidation under **Alex Ford Labs**, and shifting the canonical GitHub home from `alexander-ford-ventures/project-architect` to `alexfordlabs/project-architect`.
 

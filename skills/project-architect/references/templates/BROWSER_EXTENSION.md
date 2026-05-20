@@ -8,8 +8,8 @@ revision_triggers: [extension.browsers, extension.manifest_version, extension.pe
 ---
 
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -60,4 +60,4 @@ Distribution targets (Chrome Web Store, Edge Add-ons, Firefox AMO, Safari App St
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

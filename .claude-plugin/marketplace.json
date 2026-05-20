@@ -1,11 +1,11 @@
 {
   "$schema": "https://code.claude.com/schemas/marketplace.json",
-  "name": "alexander-ford-ventures",
-  "description": "Public marketplace by Alexander Ford Ventures, featuring project-architect — an orchestrator skill that bootstraps any project type with research-augmented questioning, ADR-tracked decisions, parallel doc generation, and project-local Claude Code configuration.",
+  "name": "alexfordlabs",
+  "description": "Public marketplace by Alex Ford Labs, featuring project-architect — an orchestrator skill that bootstraps any project type with research-augmented questioning, ADR-tracked decisions, parallel doc generation, and project-local Claude Code configuration.",
   "owner": {
     "name": "Alexander Ford",
-    "email": "alex@pseudo-lang.com",
-    "url": "https://github.com/alexander-ford-ventures/project-architect"
+    "email": "alex@alexfordlabs.com",
+    "url": "https://github.com/alexfordlabs/project-architect"
   },
   "plugins": [
     {

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 """Check 16 (B16): every state.phase_progress entry with logged work must have
 prerequisites_satisfied=true.
 

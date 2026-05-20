@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 # Tests for check_16_phase_gates.py (Sketch B, check ID B16, BLOCKER).
 #
 # Covers bug #4 from the v2.1.5 md2pdf live test: an agent (document-author)

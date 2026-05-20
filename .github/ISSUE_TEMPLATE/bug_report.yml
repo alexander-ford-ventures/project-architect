@@ -28,7 +28,7 @@ body:
     id: version
     attributes:
       label: Plugin version
-      description: e.g. 2.1.0 (run `cat ~/.claude/plugins/cache/alexander-ford-ventures/project-architect/*/.claude-plugin/plugin.json | grep version`)
+      description: e.g. 2.1.0 (run `cat ~/.claude/plugins/cache/alexfordlabs/project-architect/*/.claude-plugin/plugin.json | grep version`)
     validations:
       required: true
   - type: input

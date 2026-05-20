@@ -1,6 +1,6 @@
-<!-- Author: Alexander Ford <alex@pseudo-lang.com> -->
+<!-- Author: Alexander Ford <alex@alexfordlabs.com> -->
 <!-- License: MIT -->
-<!-- Project: project-architect (https://github.com/alexander-ford-ventures/project-architect) -->
+<!-- Project: project-architect (https://github.com/alexfordlabs/project-architect) -->
 
 ---
 template_name: SCAFFOLD_PLAN
@@ -324,4 +324,4 @@ If any bootstrap command in §5 fails, stop and surface to the user — do not r
 
 ---
 
-*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*
+*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*

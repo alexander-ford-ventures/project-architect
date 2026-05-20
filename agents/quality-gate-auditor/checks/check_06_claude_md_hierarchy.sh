@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 # Check 6 (B06): if state.decisions.project.has_subfolders==true, the project
 # must have BOTH a root CLAUDE.md AND >=1 subfolder CLAUDE.md. Catches the
 # "root-only CLAUDE.md" anti-pattern (bug #8 from the v2.1.5 md2pdf live test).

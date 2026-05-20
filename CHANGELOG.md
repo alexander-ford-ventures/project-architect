@@ -1,6 +1,6 @@
 <!--
-Author: Alexander Ford <alex@pseudo-lang.com>
-Repository: https://github.com/alexander-ford-ventures/project-architect
+Author: Alexander Ford <alex@alexfordlabs.com>
+Repository: https://github.com/alexfordlabs/project-architect
 License: MIT
 -->
 
@@ -9,6 +9,51 @@ License: MIT
 All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## v4.0.0 — 2026-05-20
+
+**Repository move to [`alexfordlabs/project-architect`](https://github.com/alexfordlabs/project-architect) + pseudo-workspace consolidation under Alex Ford Labs.**
+
+Identity-only major release. No behaviour changes, no API changes, no schema changes. Every test still green (`bash tests/run_all.sh` → 69 / 69 after retiring `test_v31_version_bump.sh` and replacing it with `test_v40_version_bump.sh`).
+
+### Changed
+
+- **Repository path** — every reference to `alexander-ford-ventures/project-architect` retargeted to `alexfordlabs/project-architect`. Live code, manifests, READMEs, agent prompts, references, templates, test attribution headers — 522 occurrences across 188 files. (Mirrors the v3.0.0 sweep pattern; CHANGELOG/HANDOFF/docs/superpowers/docs/tests/tests/fixtures/_archive preserved as historical record.)
+- **Marketplace identifier** — `claude plugin install project-architect@alexander-ford-ventures` becomes `claude plugin install project-architect@alexfordlabs`. The marketplace `name` field in `.claude-plugin/marketplace.json` renamed.
+- **Author email** — `alex@pseudo-lang.com` → `alex@alexfordlabs.com` across all attribution headers, `plugin.json` author metadata, `marketplace.json` owner metadata, and the `LICENSE` copyright line. Brings the author email under the brand domain (matches `alexfordlabs.com` brand-asset kit shipped in v3.1.0).
+- **Organization** — `Alexander Ford Ventures` → `Alex Ford Labs` in `LICENSE`, `README.md`, marketplace metadata, and explainer documents. Alex Ford Labs is the brand under which the project ships.
+- **Legacy attribution headers** — two pre-v3.0.0 leftovers (`README.md` § footer line and `.gitignore` header) still referenced `Vladimir Dukelic <vladimir@dukelic.com>` from the original siliconyouth-era authorship. These are now updated to the brand identity.
+- **`CLAUDE.md` "MIGRATION IN FLIGHT" banner removed** — the migration is complete.
+- **Plugin-namespace gotcha rewritten** — the published namespace is now `alexfordlabs:project-architect`; the `alexander-ford-ventures` repo becomes a legacy mirror; the older `siliconyouth` repo remains as a deeper-history mirror. New installs target `alexfordlabs`.
+
+### Added
+
+- **`.gitleaks.toml`** — gitleaks config with default rules + four identity-correlation deny rules (`vladimir-dukelic` / `vladimir-emails` / `silicon-youth` / `pseudo-lang`). Matches the workspace-canonical pattern enforced across every alexfordlabs repo.
+- **`.pre-commit-config.yaml`** — pre-commit hook running gitleaks v8.30.1 on every commit. Future contributions will be scanned automatically.
+
+### Preserved
+
+- **Frozen historical docs** — `docs/superpowers/{plans,specs,test-plans}/*`, `docs/tests/*`, pre-v4 `CHANGELOG.md` entries, and `_archive/*` continue to reference the original identities (per the CLAUDE.md "don't tweak history in passing" rule).
+- **Test fixtures** — `tests/fixtures/e2e-*/docs/*` retain whatever identity strings their generated content originally had (intentionally minimal per CLAUDE.md).
+- **HANDOFF.md** — kept as historical record of the migration plan; a "MIGRATION COMPLETE" banner added at the top, body unchanged.
+- **All three GitHub repos remain reachable** — `siliconyouth/project-architect` (oldest mirror, already archived with redirect README) + `alexander-ford-ventures/project-architect` (v3.0–v3.1 mirror, will be archived with MOVED notice as part of this release) + `alexfordlabs/project-architect` (NEW canonical source-of-truth).
+
+### Test rotation
+
+- `tests/test_v31_version_bump.sh` retired (replaced by `tests/test_v40_version_bump.sh`).
+- New test asserts: `plugin.json` version=4.0.0, author.email=alex@alexfordlabs.com, repository=alexfordlabs URL, `marketplace.json` name=alexfordlabs, CHANGELOG has v4.0.0 entry mentioning the move, brand-asset kit sentinel files still exist, `.gitleaks.toml` + `.pre-commit-config.yaml` present.
+
+### Migration for existing installs
+
+```bash
+claude plugin uninstall project-architect@alexander-ford-ventures
+claude plugin marketplace remove alexander-ford-ventures      # optional — keep if you want the mirror
+claude plugin marketplace add alexfordlabs/project-architect
+claude plugin install project-architect@alexfordlabs
+/reload-plugins
+```
+
+The Preflight version-freshness check will surface a notice in any session whose installed copy predates this entry once the next tag is cut on the alexfordlabs repo.
 
 ## v3.1.0 — 2026-05-20
 

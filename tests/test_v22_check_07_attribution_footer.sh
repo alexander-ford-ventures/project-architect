@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Author: Alexander Ford <alex@pseudo-lang.com>
+# Author: Alexander Ford <alex@alexfordlabs.com>
 # License: MIT
-# Project: project-architect (https://github.com/alexander-ford-ventures/project-architect)
+# Project: project-architect (https://github.com/alexfordlabs/project-architect)
 # Tests for check_07_attribution_footer.sh (Sketch B, check ID B07, INFO).
 # Covers the cosmetic-attribution check that lists docs/*.md files missing the
 # canonical project-architect footer in their last 3 lines.
@@ -21,7 +21,7 @@ if ! command -v jq >/dev/null 2>&1; then
 fi
 
 # Canonical footer used in pass-path fixtures.
-FOOTER='*★ Skillfully made with [project-architect](https://github.com/alexander-ford-ventures/project-architect).*'
+FOOTER='*★ Skillfully made with [project-architect](https://github.com/alexfordlabs/project-architect).*'
 
 # (1) No docs/ directory: a fresh tempdir with no docs/ subtree → INFO pass.
 NODOCS_TMP=$(mktemp -d)
