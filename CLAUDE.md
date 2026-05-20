@@ -8,11 +8,15 @@ License: MIT
 
 > Auto-loaded by Claude Code when working in this repo. Captures what this project is, where things live, how we develop it, and the non-obvious gotchas the next session shouldn't have to rediscover.
 
+> **⚡ MIGRATION IN FLIGHT** — `alexander-ford-ventures/project-architect` is the *current* canonical home; the *next major release* will move it to [`alexfordlabs/project-architect`](https://github.com/alexfordlabs) as part of a `pseudo-workspace` consolidation under **Alex Ford Labs**. Concrete migration plan in [`HANDOFF.md`](HANDOFF.md). Until then, all v3.1.x work happens against the alexander-ford-ventures repo.
+
 ## What this project is
 
 A **Claude Code plugin** that orchestrates the interactive bootstrap of a new software project. The user invokes the `project-architect` skill; it walks 11 phases (Preflight → Repo Init → Universal Kickoff → Vision → Tech Stack → Cost → Architecture → Doc Generation → Iteration → Lock → Tooling Execution → Handoff), dispatching 6 specialised subagents and emitting design docs, ADRs, `CLAUDE.md`, `.claude/` tooling, and a scaffolded skeleton.
 
 Published at <https://github.com/alexander-ford-ventures/project-architect>. Current tag: `git describe --tags --abbrev=0`.
+
+Brand identity (since v3.1.0): **Alex Ford Labs** — see [`.github/assets/brand/README.md`](.github/assets/brand/README.md). Author of record: Alexander Ford `<alex@pseudo-lang.com>` (the legal entity is Alexander Ford Ventures).
 
 ## Commands you'll actually run
 
