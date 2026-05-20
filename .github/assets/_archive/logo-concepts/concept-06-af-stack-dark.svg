@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#0A0A0A"/>
+  <text x="512.0" y="348" font-family="Geist Mono, monospace" font-weight="800" font-size="520" letter-spacing="-18" text-anchor="middle" dominant-baseline="central" fill="#FFFFFF">AF</text>
+  <rect x="286" y="675" width="452" height="3" fill="#FFFFFF"/>
+  <text x="512.0" y="760.0" font-family="Geist Mono, monospace" font-weight="500" font-size="88" letter-spacing="22" text-anchor="middle" dominant-baseline="central" fill="#FFFFFF">LABS</text>
+</svg>

@@ -72,6 +72,21 @@ recency_floor: {{YYYY-MM-DD}}
 
 The **Implications for this project** section is the most important — keep it crisp, action-oriented, one bullet per implication, and explicitly name the decision or question each implication should drive.
 
+## Universal first-pass (runs BEFORE topic-specific research)
+
+For **every** tool, vendor, framework, service, API, schema, or integration in scope of the dispatch, you MUST complete the following four discovery steps before any topic-specific work. These steps are the floor of every research dispatch — not optional, not skippable without a documented reason.
+
+1. **Latest official documentation.** Locate the current/latest official docs (not Stack Overflow, not blog tutorials, not your training data). Where the vendor publishes versioned docs, prefer the latest **stable** release; if researching emerging features, also note the **canary / nightly / next** docs. Cite the documentation URL + the version + the page's last-updated date in your findings.
+2. **`llms.txt` and `llms-full.txt`.** Many modern vendors publish a [`llms.txt`](https://llmstxt.org/) and an `llms-full.txt` at their documentation root — these are markdown indexes formatted specifically for LLM consumption and are usually more accurate / current than scraped sitemaps. Always probe these URLs as your first `WebFetch`:
+   - `https://<docs-root>/llms.txt`
+   - `https://<docs-root>/llms-full.txt`
+   - Worked examples: `https://docs.anthropic.com/llms.txt`, `https://docs.cloudflare.com/llms.txt`, `https://supabase.com/docs/llms.txt`, `https://nextjs.org/llms.txt`. If unsure of the docs root, try the bare domain (`https://<vendor>.com/llms.txt`) as a fallback.
+   - If the vendor doesn't publish these files, note that in your findings (`llms.txt: not published as of <date>`) and fall back to the docs sitemap or main docs index.
+3. **Best practices via web search.** Search for `<topic> best practices 2026`, `<topic> production patterns`, `<topic> postmortems`. Pull from engineering blogs, conference talks, and authoritative GitHub repos. Cite specific URLs.
+4. **Similar projects / prior art.** Find 3–5 projects (commercial or OSS) that have built something analogous to the user's project. Note what they did, what worked, what didn't. Cite specific URLs.
+
+Treat steps 1–4 as **a floor, not a ceiling**. The phase-specific prompts the orchestrator hands you add topic-specific questions on top of this floor. Your findings file MUST cite the official-docs URL + the `llms.txt` source (if any) for each tool you researched. Skip a step only when you have a documented reason (e.g., "no `llms.txt` published as of `2026-05-20` — fell back to docs sitemap").
+
 ## Research methodology
 
 1. **Plan queries first.** Write down 3–6 distinct search queries before searching. Cover: prior art, current best practices, recent production issues, deprecation status.

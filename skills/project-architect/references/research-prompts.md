@@ -9,10 +9,24 @@ License: MIT
 Prompt templates the orchestrator hands to the `research-scout` agent. The agent substitutes `{{...}}` placeholders with values from `state.decisions` and the current phase summary.
 
 ## Table of Contents
+- [Universal research checklist](#universal-research-checklist)
 - [Phase-level prompts](#phase-level-prompts)
 - [Ad-hoc red-flag prompts](#ad-hoc-red-flag-prompts)
 - [Output format the scout returns](#output-format-the-scout-returns)
 - [Recency policy per phase](#recency-policy-per-phase)
+
+---
+
+## Universal research checklist
+
+This checklist applies to **every dispatch** — phase-level (Phase 0/1/2/2.5/3) and ad-hoc red-flag alike. Every research-scout dispatch MUST cover these four bases before topic-specific work begins:
+
+1. **Latest official docs.** For each vendor / tool / framework / service / API / schema in scope, locate the **latest official** docs (latest stable release; canary/nightly if emerging features are in question). Cite docs URL + version + page last-updated date.
+2. **`llms.txt` and `llms-full.txt`.** Probe `<docs-root>/llms.txt` and `<docs-root>/llms-full.txt` as the FIRST `WebFetch` for every tool — the [`llms.txt` standard](https://llmstxt.org/) is widely supported by modern vendors (Anthropic, Cloudflare, Supabase, Vercel, Next.js, etc.) and provides markdown content formatted specifically for LLM consumption. Fall back to the docs sitemap if not published; note absence in findings.
+3. **Current best practices.** Search the open web for `<topic> best practices 2026`, `<topic> production patterns`, `<topic> postmortems`. Pull from engineering blogs, conference talks, advocacy posts. Cite URLs.
+4. **Similar projects / prior art.** 3–5 commercial or OSS projects building something analogous, with one-line summary + link each.
+
+The phase-specific prompts below ADD topic-specific questions ON TOP of this universal floor. The scout's findings file MUST cite the official-docs URL plus any `llms.txt` source for each tool researched. The orchestrator's review of every dispatch confirms the universal checklist was honoured before reading topic-specific findings.
 
 ---
 

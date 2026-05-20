@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 720" width="1600" height="720">
+  <rect width="1600" height="720" fill="#FFFFFF"/>
+  <rect x="220" y="240" width="1160" height="4" fill="#0A0A0A"/>
+  <text x="800.0" y="386.5" font-family="Geist Mono, monospace" font-weight="800" font-size="260" letter-spacing="-4" text-anchor="middle" dominant-baseline="central" fill="#0A0A0A">FORD</text>
+  <rect x="220" y="543" width="1160" height="2" fill="#0A0A0A"/>
+  <text x="800.0" y="591.0" font-family="Geist Mono, monospace" font-weight="500" font-size="48" letter-spacing="6" text-anchor="middle" dominant-baseline="central" fill="#0A0A0A">ALEXANDER  ·  VENTURES  ·  EST 2026</text>
+</svg>

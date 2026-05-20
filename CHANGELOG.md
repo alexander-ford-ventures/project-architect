@@ -10,6 +10,60 @@ All notable changes to the `project-architect` plugin.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v3.1.0 — 2026-05-20
+
+**Universal research checklist for every `research-scout` dispatch + the full Alex Ford Labs brand-asset kit.**
+
+Minor release. Backward-compatible. Same 11-phase orchestrator, same 6 subagents, same 16-check auditor, same state schema. The new rule changes WHAT the scout does (always fetches `llms.txt`/`llms-full.txt` + cites latest official docs), not WHO calls it or HOW the orchestrator dispatches it.
+
+### Added — universal research checklist
+
+- **Every `research-scout` dispatch** (phase-level Phase 0/1/2/2.5/3 and ad-hoc red-flag alike) now MUST cover four bases before topic-specific work begins: (1) **latest official docs**, (2) **`llms.txt` + `llms-full.txt`** per the [`llmstxt.org`](https://llmstxt.org/) standard, (3) **current best practices** via web search, (4) **3–5 similar projects / prior art**. Findings files MUST cite the official-docs URL plus any `llms.txt` source for each tool researched.
+- **`agents/research-scout.md`** — adds a "Universal first-pass" section before the existing "Research methodology" section. Includes worked `llms.txt` URL examples (`docs.anthropic.com/llms.txt`, `docs.cloudflare.com/llms.txt`, `supabase.com/docs/llms.txt`, `nextjs.org/llms.txt`) and a documented fallback when `llms.txt` is absent.
+- **`skills/project-architect/references/research-prompts.md`** — adds a top-level "Universal research checklist" section, listed in the ToC, applied to "every dispatch". The phase-specific prompts now add topic-specific questions ON TOP of this universal floor.
+- **`tests/test_v31_research_llms_txt.sh`** (17 assertions) — asserts the rule survives in both the agent prompt and the prompt-template reference, including the `llmstxt.org` standard URL, the literal phrase "latest official", the "Universal first-pass" section heading, the "Universal research checklist" section heading, the "every dispatch" applicability statement, and the four-bullet floor.
+
+### Added — Alex Ford Labs brand-asset kit
+
+- **`.github/assets/brand/`** — full visual identity for the Alex Ford Labs umbrella entity. **Geist Mono ExtraBold** (display) + **Geist Mono Medium** (subtext), **V5 palette** (pure B&W, no colour at the umbrella level). 50 files, 588 KB total. Every SVG is outline-converted via `fontTools` — Geist Mono glyphs become vector paths embedded directly in the SVG, no font dependency at render time.
+  - `lockup/` — AF / LABS matched-width stack, the **primary mark** (SVG + PNG @ 256/512/1024/2048, light + dark)
+  - `mark/` — just AF, favicon-grade (SVG + PNG @ 16/32/48/64/128/180/192/256/460/512/1024, light + dark)
+  - `wordmark/` — AF · LABS inline horizontal (SVG + PNG @ 400/800/1600/3200, light + dark)
+  - `social/` — pre-composed 1280×640 GitHub social preview (SVG + PNG, light + dark)
+  - `source/build_brand.py` — `fontTools` outline conversion + `cairosvg` rasterizer, regenerable
+  - `README.md` — usage guide (which asset for which surface, light/dark `<picture>` toggle pattern, future colour variants per sub-brand)
+
+### Changed
+
+- **README hero image** now references `.github/assets/brand/social/light-1280x640.png` (Alex Ford Labs umbrella mark) instead of the retired `.github/social-preview.png`. README attribution note rewritten to point at the brand-asset directory and describe the V5 colour-restraint rule.
+- **`test_v30_version_bump.sh` → `test_v31_version_bump.sh`** per the canonical retire-and-replace pattern. New test asserts `plugin.json` version = `3.1.0`, CHANGELOG v3.1.0 entry exists and references the research checklist + the brand kit, manifest identity intact, LICENSE intact.
+
+### Removed
+
+- **`.github/assets/alexander-ford-ventures-logo.svg`** — inherited Silicon Youth geometric mark, obsoleted by the new brand kit's outline-converted AF/LABS marks.
+- **`.github/social-preview.py`** + **`.github/social-preview.png`** — Pillow-based per-release social-preview generator, superseded by `.github/assets/brand/social/` (which produces a cleaner, vector-true 1280×640 composition via `fontTools` + `cairosvg`).
+
+### Archived (not removed)
+
+- **`.github/assets/logo-concepts/`** moved to **`.github/assets/_archive/logo-concepts/`** — 50 exploration artifacts from the 7-concept design pass + the AF/LABS font-width matrix (Geist Mono / Inter / Helvetica / Helvetica Neue). Parked for later reference; not active branding.
+
+### Why (research checklist)
+
+Skill behaviour drift: vendor docs and best practices evolve faster than any LLM's training data. Without an enforced rule, the scout can default to whatever it already "knows" about a vendor from training — which is, by construction, stale by some unknown number of months. Mandating `llms.txt` / `llms-full.txt` as the first `WebFetch` shifts the scout from "recall from training" to "fetch current source-of-truth", which is what makes downstream ADRs defensible against "you wrote this from stale training data" objections.
+
+### Why (brand kit)
+
+The prior identity (Silicon Youth → Alexander Ford Ventures) never had a coherent visual asset kit — the GitHub social preview, README hero, and any favicon were ad-hoc. The new kit ships every asset needed for `alexfordlabs.com`, `github.com/alexfordlabs`, and downstream repos (including `alexfordlabs/project-architect`) as scale-infinite SVG masters + PNGs at every standard resolution. Light + dark variants. Zero font dependency at render time.
+
+### Test coverage
+
+- 69 test files (was 68 at v3.0.0). +1 for the universal-research-checklist rule. The version-bump release gate retired-and-replaced (`test_v30_version_bump.sh` → `test_v31_version_bump.sh`). Same net count.
+
+```bash
+bash tests/run_all.sh
+# Test files passed: 69 · All tests passed.
+```
+
 ## v3.0.0 — 2026-05-19
 
 **Canonical home moves to [`alexander-ford-ventures/project-architect`](https://github.com/alexander-ford-ventures/project-architect); authorship transfers to Alexander Ford `<alex@pseudo-lang.com>` (Alexander Ford Ventures).**

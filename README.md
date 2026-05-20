@@ -5,7 +5,7 @@ License: MIT
 -->
 
 <p align="center">
-  <img src=".github/social-preview.png" alt="project-architect — Bootstrap any project end-to-end inside Claude Code · Skillfully made with Claude Code" width="100%" />
+  <img src=".github/assets/brand/social/light-1280x640.png" alt="Alex Ford Labs · project-architect — Bootstrap any project end-to-end inside Claude Code" width="100%" />
 </p>
 
 <div align="center">
@@ -27,7 +27,29 @@ From _"I want to build X"_ to _"docs, CLAUDE.md, ADRs, and a `.claude/` config �
 
 ---
 
-## What's new in v3.0.0 _(2026-05-19)_
+## What's new in v3.1.0 _(2026-05-20)_
+
+Minor release. **Universal research checklist** for every `research-scout` dispatch (no more relying on stale training data for vendor facts) + the full **Alex Ford Labs brand-asset kit** at `.github/assets/brand/`. Backward-compatible — same 11-phase orchestrator, same 6 subagents, same 16-check auditor, same state schema.
+
+| Area | What it ships |
+|---|---|
+| **Universal research checklist** | Every research-scout dispatch (phase + ad-hoc) MUST cover four bases: (1) latest official docs, (2) `<docs-root>/llms.txt` + `llms-full.txt` per [llmstxt.org](https://llmstxt.org/), (3) best practices via web search, (4) 3–5 similar projects / prior art. Encoded in `agents/research-scout.md` (new "Universal first-pass" section) and `skills/project-architect/references/research-prompts.md` (new "Universal research checklist" ToC entry). |
+| **Alex Ford Labs brand kit** | 50 files at `.github/assets/brand/` — lockup, mark, wordmark, social-preview, in light + dark. Geist Mono ExtraBold display, V5 palette (pure B&W). SVGs outline-converted via fontTools (no font dependency at render time); PNGs at standard resolutions (favicon 16–512, Apple touch 180, GitHub avatar 460, social 1280×640). |
+| **Test coverage** | **69 test files** (was 68 at v3.0.0). +1 for the universal-checklist rule. The version-bump release gate retired-and-replaced (`test_v30_version_bump.sh` → `test_v31_version_bump.sh`). |
+| **Removed** | `.github/assets/alexander-ford-ventures-logo.svg`, `.github/social-preview.py`, `.github/social-preview.png` — all superseded by the new brand kit. |
+| **Archived** | `.github/assets/logo-concepts/` → `.github/assets/_archive/logo-concepts/` (7 concepts + AF/LABS font-width matrix, parked for later reference). |
+
+**Why the research rule?** Vendor docs and best practices evolve faster than any LLM's training data. Mandating `llms.txt` / `llms-full.txt` as the first `WebFetch` shifts the scout from "recall from training" to "fetch current source-of-truth". Downstream ADRs become defensible against "you wrote this from stale training data" objections.
+
+**Migration from v3.0.0** — Forward-compatible. Existing `state.json` files work without modification. The new research rule applies to **new** dispatches; cached findings from older runs are not retroactively re-fetched.
+
+```bash
+bash tests/run_all.sh
+# Test files passed: 69 · All tests passed.
+```
+
+<details>
+<summary>v3.0.0 — Repository move + author handover _(2026-05-19)_</summary>
 
 **Repository move + author handover.** Major release; identity change only — no behaviour, API, or schema changes. Same 11-phase orchestrator, same 6 specialised subagents, same 16-check quality-gate auditor, same 68 tests still green.
 
@@ -55,6 +77,8 @@ claude plugin install project-architect@alexander-ford-ventures
 bash tests/run_all.sh
 # Test files passed: 68 · All tests passed.
 ```
+
+</details>
 
 <details>
 <summary>v2.3.0 — programming language design as a first-class project sub_type _(2026-05-13)_</summary>
@@ -142,7 +166,7 @@ Then inside Claude:
 ```console
 $ /project-architect
 
-✓ Preflight (v3.0.0)
+✓ Preflight (v3.1.0)
   ✓ Model: claude-opus-4-7[1m]   ✓ Effort: max
   ✓ Recommended plugins: 6/6
   ✓ Version freshness: current
@@ -347,7 +371,7 @@ For zero-poll notification, click **Watch → Releases only** on the [GitHub rep
 
 ## Tests
 
-`tests/` ships with the plugin. **68 test files** cover every v2.1.5 fix, every v2.2 sketch, every v2.3 PL design surface, and the v3.0.0 release gate. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`; v2.2 work has `tests/test_v22_*.sh` (16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, CLI-UX picker, three end-to-end language fixtures); v2.3 work has `tests/test_v23_*.sh` (7 PL templates, catalog registration, Phase 1 PL-routing, Phase 2/3 PL question batches, PL implementation backends in tech-stack-options, two e2e PL fixtures). The v3.0.0 release-bundle gate lives at `tests/test_v30_version_bump.sh` (asserts new manifest identity + CHANGELOG entry).
+`tests/` ships with the plugin. **69 test files** cover every v2.1.5 fix, every v2.2 sketch, every v2.3 PL design surface, the v3.0.0 identity move, and the v3.1.0 universal-research-checklist rule. Each v2.1.5 bug fix has a corresponding `tests/test_v215_*.sh`; v2.2 work has `tests/test_v22_*.sh` (16 auditor checks, runtime budgets, plan templates, slash commands, state lifecycle, memory persistence, CLI-UX picker, three end-to-end language fixtures); v2.3 work has `tests/test_v23_*.sh` (7 PL templates, catalog registration, Phase 1 PL-routing, Phase 2/3 PL question batches, PL implementation backends in tech-stack-options, two e2e PL fixtures); v3.1 work has `tests/test_v31_research_llms_txt.sh` (universal research checklist: latest official docs + `llms.txt` + best practices + similar projects, asserted on the research-scout agent prompt and the prompt-template reference). The v3.1.0 release-bundle gate lives at `tests/test_v31_version_bump.sh` (asserts plugin.json identity + CHANGELOG v3.1.0 entry + brand-kit sentinel files + retired legacy assets).
 
 ```text
 tests/
@@ -424,7 +448,13 @@ tests/
 ├── test_v23_e2e_pl_transpiler.sh                    ← `fern` transpiler-to-JS DSL
 │
 │  # v3.0 release gate (replaces test_v23_version_bump.sh per retire/replace pattern)
-└── test_v30_version_bump.sh                         ← asserts plugin.json identity + CHANGELOG v3.0.0 entry + LICENSE + marketplace name
+├── test_v30_version_bump.sh                         ← (retired at v3.1, replaced below)
+│
+│  # v3.1 — universal research checklist (llms.txt requirement)
+├── test_v31_research_llms_txt.sh
+│
+│  # v3.1 release gate (replaces test_v30_version_bump.sh per retire/replace pattern)
+└── test_v31_version_bump.sh                         ← asserts plugin.json v3.1.0 + CHANGELOG v3.1.0 entry + brand-kit sentinels + retired legacy assets
 ```
 
 Run the full suite:
@@ -444,15 +474,15 @@ Procedure for maintainers:
 
 ```bash
 # 1. Bump plugin.json
-python3 -c "import json,sys; p='.claude-plugin/plugin.json'; d=json.load(open(p)); d['version']=sys.argv[1]; open(p,'w').write(json.dumps(d,indent=2)+'\n')" 3.0.0
+python3 -c "import json,sys; p='.claude-plugin/plugin.json'; d=json.load(open(p)); d['version']=sys.argv[1]; open(p,'w').write(json.dumps(d,indent=2)+'\n')" 3.1.0
 
 # 2. Add a [<version>] block to CHANGELOG.md
 
 # 3. Commit, tag, push
 git add .claude-plugin/plugin.json CHANGELOG.md
-git commit -m "chore(release): bump to 3.0.0"
-git tag -a v3.0.0 -m "..."
-git push origin main && git push origin v3.0.0
+git commit -m "chore(release): bump to 3.1.0"
+git tag -a v3.1.0 -m "..."
+git push origin main && git push origin v3.1.0
 
 # 4. Refresh local cache (only needed if you're testing your own change locally)
 claude plugin marketplace update alexander-ford-ventures
@@ -476,7 +506,7 @@ This is a social-norm attribution — please keep it visible in `PROJECT_OVERVIE
 
 If you fork the skill itself or build on top of it, the source-file attribution comments must remain per the MIT terms (the LICENSE file must be included in any redistribution).
 
-> **Note:** the social-preview image (`.github/social-preview.png`) carries a different attribution line — `★ Skillfully made with Claude Code` — to credit the underlying platform. That line is image-only; the markdown footer that ships in generated docs uses "project-architect" as shown above.
+> **Note:** the hero image above (`.github/assets/brand/social/light-1280x640.png`) shows the **Alex Ford Labs** umbrella mark — the publisher of project-architect. The mark, its sizing guide, and all light/dark variants live under [`.github/assets/brand/`](.github/assets/brand/). The umbrella is locked to V5 (pure black + white, no colour); per-project sub-brands may add one accent later.
 
 ## License
 
